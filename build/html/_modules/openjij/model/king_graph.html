@@ -1,0 +1,354 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>openjij.model.king_graph &mdash; OpenJij  documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
+    <link rel="top" title="OpenJij  documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> OpenJij
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../1-Introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../2-Install.html">Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../3-Minimum_sample.html">Minimum sample code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../4-Parameters_customize.html">Parameters customize</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">OpenJij</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>openjij.model.king_graph</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for openjij.model.king_graph</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2019 Jij Inc.</span>
+
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+
+<span class="c1">#     http://www.apache.org/licenses/LICENSE-2.0</span>
+
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+
+<span class="kn">import</span> <span class="nn">openjij</span>
+<span class="kn">from</span> <span class="nn">.model</span> <span class="k">import</span> <span class="n">BinaryQuadraticModel</span>
+
+
+<div class="viewcode-block" id="KingGraph"><a class="viewcode-back" href="../../../apis/openjij.model.html#openjij.model.king_graph.KingGraph">[docs]</a><span class="k">class</span> <span class="nc">KingGraph</span><span class="p">(</span><span class="n">BinaryQuadraticModel</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    BQM for king graph of HITACHI CMOS Annealer</span>
+<span class="sd">    Attributes</span>
+<span class="sd">    ---------</span>
+<span class="sd">    xrange : list of int</span>
+<span class="sd">        represents hardware (CMOS) restricts for coordinate. [xmin, xmax]</span>
+<span class="sd">    yrange : list of int</span>
+<span class="sd">        represents hardware (CMOS) restricts for coordinate. [ymin, ymax]</span>
+<span class="sd">    prange : list of int</span>
+<span class="sd">        represents hardware (CMOS) restricts for the strength of interactions &#39;p&#39;. [pmin, pmax]</span>
+<span class="sd">    king_graph : list of list of int</span>
+<span class="sd">        Annealing cloud Web API format representation of interaction coefficients</span>
+<span class="sd">        Quadratic term [x1, y1, x2, y2, value]</span>
+<span class="sd">        Linear term    [x1, y1, x1, y1, value]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">linear</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">quadratic</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+                 <span class="n">king_graph</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">var_type</span><span class="o">=</span><span class="n">openjij</span><span class="o">.</span><span class="n">SPIN</span><span class="p">,</span> <span class="n">machine_type</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The constructor reformat interactions to Web API format (ising king graph),</span>
+<span class="sd">        and validates that the interaction is in King Graph. </span>
+<span class="sd">        ----------</span>
+<span class="sd">        machine_type : str</span>
+<span class="sd">            choose &#39;ASIC&#39; or &#39;FPGA&#39;</span>
+<span class="sd">        king_graph : list of list</span>
+<span class="sd">            represents ising or QUBO interaction.</span>
+<span class="sd">            Each spins are decided by 2-d corrdinate x, y.</span>
+<span class="sd">            Quadratic term [x1, y1, x2, y2, value]</span>
+<span class="sd">            Linear term    [x1, y1, x1, y1, value]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">var_type</span> <span class="o">=</span> <span class="n">openjij</span><span class="o">.</span><span class="n">cast_var_type</span><span class="p">(</span><span class="n">var_type</span><span class="p">)</span>
+
+        <span class="c1"># set parameter ranges</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">machine_type</span> <span class="o">=</span> <span class="n">machine_type</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">machine_type</span> <span class="o">==</span> <span class="s2">&quot;ASIC&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">xrange</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">351</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">yrange</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">175</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">prange</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">machine_type</span> <span class="o">==</span> <span class="s2">&quot;FPGA&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">xrange</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">79</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">yrange</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">79</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">prange</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">127</span><span class="p">,</span> <span class="mi">127</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;machine type should be ASIC or FPGA&#39;</span><span class="p">)</span>
+
+        <span class="c1"># convert format h, J, Q and initilize BQM</span>
+        <span class="k">if</span> <span class="n">king_graph</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">linear</span><span class="p">,</span> <span class="n">quadratic</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_convert_to_BQM_format</span><span class="p">(</span>
+                <span class="n">king_graph</span><span class="p">,</span> <span class="n">var_type</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">linear</span><span class="p">,</span> <span class="n">quadratic</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">,</span> <span class="n">var_type</span><span class="o">=</span><span class="n">var_type</span><span class="p">)</span>
+
+        <span class="c1"># reformat to ising king graph (which is Web API format)</span>
+        <span class="k">if</span> <span class="n">king_graph</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">var_type</span> <span class="o">==</span> <span class="n">openjij</span><span class="o">.</span><span class="n">SPIN</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_ising_king_graph</span> <span class="o">=</span> <span class="n">king_graph</span>
+        <span class="k">elif</span> <span class="n">var_type</span> <span class="o">==</span> <span class="n">openjij</span><span class="o">.</span><span class="n">SPIN</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_ising_king_graph</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">h</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">linear</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">h</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_convert_to_xy</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_ising_king_graph</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">h</span><span class="p">])</span>
+            <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">),</span> <span class="n">J</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">quadratic</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">J</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_convert_to_xy</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                    <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_convert_to_xy</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_ising_king_graph</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">J</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ising_int</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ising_interactions</span><span class="p">()</span>
+            <span class="n">sys_size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ising_int</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_ising_king_graph</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">sys_size</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">sys_size</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">ising_int</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="k">continue</span>
+                    <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_convert_to_xy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">indices</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                    <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_convert_to_xy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">indices</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_ising_king_graph</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="p">[</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">ising_int</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_validation_ising_king_graph</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_convert_to_BQM_format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">king_graph</span><span class="p">,</span> <span class="n">var_type</span><span class="p">):</span>
+        <span class="n">linear</span><span class="p">,</span> <span class="n">quad</span> <span class="o">=</span> <span class="p">{},</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">king_graph</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">)</span> <span class="o">==</span> <span class="p">(</span><span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">):</span>
+                <span class="n">linear</span><span class="p">[(</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">)]</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">quad</span><span class="p">[(</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">),</span> <span class="p">(</span><span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">)]</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">return</span> <span class="n">linear</span><span class="p">,</span> <span class="n">quad</span>
+
+<div class="viewcode-block" id="KingGraph.get_ising_king_graph"><a class="viewcode-back" href="../../../apis/openjij.model.html#openjij.model.king_graph.KingGraph.get_ising_king_graph">[docs]</a>    <span class="k">def</span> <span class="nf">get_ising_king_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ising_king_graph</span></div>
+
+<div class="viewcode-block" id="KingGraph.king_indices"><a class="viewcode-back" href="../../../apis/openjij.model.html#openjij.model.king_graph.KingGraph.king_indices">[docs]</a>    <span class="k">def</span> <span class="nf">king_indices</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">indices</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">tuple</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">indices</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_convert_to_xy</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">indices</span><span class="p">]</span></div>
+
+    <span class="k">def</span> <span class="nf">_convert_to_xy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">index</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">index</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">xrange</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">index</span> <span class="o">-</span> <span class="n">y</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">xrange</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">y</span>
+
+<div class="viewcode-block" id="KingGraph.convert_to_index"><a class="viewcode-back" href="../../../apis/openjij.model.html#openjij.model.king_graph.KingGraph.convert_to_index">[docs]</a>    <span class="k">def</span> <span class="nf">convert_to_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">y</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">xrange</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">x</span></div>
+
+    <span class="k">def</span> <span class="nf">_validation_ising_king_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">xi</span><span class="p">,</span> <span class="n">yi</span><span class="p">,</span> <span class="n">xj</span><span class="p">,</span> <span class="n">yj</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ising_king_graph</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">yi</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">yrange</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">or</span> <span class="n">yj</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">yrange</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Graph is incomplete xi: </span><span class="si">{}</span><span class="s1">, yi: </span><span class="si">{}</span><span class="s1">, xj: </span><span class="si">{}</span><span class="s1">, yj: </span><span class="si">{}</span><span class="s1">, p:</span><span class="si">{}</span><span class="s1">&#39;</span>
+                                 <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">xi</span><span class="p">,</span> <span class="n">yi</span><span class="p">,</span> <span class="n">xj</span><span class="p">,</span> <span class="n">yj</span><span class="p">,</span> <span class="n">p</span><span class="p">))</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">xi</span> <span class="ow">in</span> <span class="p">[</span><span class="n">xj</span><span class="p">,</span> <span class="n">xj</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">xj</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span> <span class="ow">or</span> <span class="ow">not</span> <span class="p">(</span><span class="n">yi</span> <span class="ow">in</span> <span class="p">[</span><span class="n">yj</span><span class="p">,</span> <span class="n">yj</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">yj</span><span class="o">+</span><span class="mi">1</span><span class="p">]):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Graph is incomplete xi: </span><span class="si">{}</span><span class="s1">, yi: </span><span class="si">{}</span><span class="s1">, xj: </span><span class="si">{}</span><span class="s1">, yj: </span><span class="si">{}</span><span class="s1">, p:</span><span class="si">{}</span><span class="s1">&#39;</span>
+                                 <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">xi</span><span class="p">,</span> <span class="n">yi</span><span class="p">,</span> <span class="n">xj</span><span class="p">,</span> <span class="n">yj</span><span class="p">,</span> <span class="n">p</span><span class="p">))</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prange</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">p</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">prange</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Graph is incomplete xi: </span><span class="si">{}</span><span class="s1">, yi: </span><span class="si">{}</span><span class="s1">, xj: </span><span class="si">{}</span><span class="s1">, yj: </span><span class="si">{}</span><span class="s1">, p: </span><span class="si">{}</span><span class="s1">&#39;</span>
+                                 <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">xi</span><span class="p">,</span> <span class="n">yi</span><span class="p">,</span> <span class="n">xj</span><span class="p">,</span> <span class="n">yj</span><span class="p">,</span> <span class="n">p</span><span class="p">))</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Jij Inc..
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> and ❤️  using a custom <a href="https://github.com/LinxiFan/Sphinx-theme">theme</a> based on <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+      <script type="text/javascript" src="../../../_static/language_data.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -1,0 +1,457 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>openjij.utils.benchmark &mdash; OpenJij  documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
+    <link rel="top" title="OpenJij  documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> OpenJij
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../1-Introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../2-Install.html">Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../3-Minimum_sample.html">Minimum sample code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../4-Parameters_customize.html">Parameters customize</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">OpenJij</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>openjij.utils.benchmark</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for openjij.utils.benchmark</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright 2019 Jij Inc.</span>
+
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+
+<span class="c1">#     http://www.apache.org/licenses/LICENSE-2.0</span>
+
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">inspect</span>
+<span class="kn">from</span> <span class="nn">logging</span> <span class="k">import</span> <span class="n">getLogger</span>
+<span class="kn">import</span> <span class="nn">scipy</span> <span class="k">as</span> <span class="nn">sp</span>
+
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="solver_benchmark"><a class="viewcode-back" href="../../../apis/openjij.utils.html#openjij.utils.benchmark.solver_benchmark">[docs]</a><span class="k">def</span> <span class="nf">solver_benchmark</span><span class="p">(</span><span class="n">solver</span><span class="p">,</span> <span class="n">time_list</span><span class="p">,</span> <span class="n">solutions</span><span class="o">=</span><span class="p">[],</span> <span class="n">args</span><span class="o">=</span><span class="p">{},</span> <span class="n">p_r</span><span class="o">=</span><span class="mf">0.99</span><span class="p">,</span> <span class="n">ref_energy</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">measure_with_energy</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">time_name</span><span class="o">=</span><span class="s1">&#39;execution_time&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Calculate &#39;success probability&#39;, &#39;TTS&#39;, &#39;Residual energy&#39;,&#39;Standard Error&#39; with computation time</span>
+<span class="sd">    Args:</span>
+<span class="sd">        solver (callable): returns openjij.Response, and solver has arguments &#39;time&#39; and &#39;**args&#39;</span>
+<span class="sd">        time_list (list):</span>
+<span class="sd">        solutions (list(list(int)), list(int)): true solution or list of solution (if solutions are degenerated).</span>
+<span class="sd">        args (dict): Arguments for solver.</span>
+<span class="sd">        p_r (float): Thereshold probability for time to solutions.</span>
+<span class="sd">        ref_energy (float): The ground (reference to calculate success probability and the residual energy) energy.</span>
+<span class="sd">        measure_with_energy (bool): use a energy as measure for success</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        dict: {</span>
+<span class="sd">                &quot;time&quot;: list of compuation time,</span>
+<span class="sd">                &quot;success_prob&quot; list of success probability at each computation time</span>
+<span class="sd">                &quot;tts&quot;: list of time to solusion at each computation time</span>
+<span class="sd">                &quot;residual_energy&quot;: list of residual energy at each computation time</span>
+<span class="sd">                &quot;se_lower_tts&quot;: list of tts&#39;s lower standard error at each computation time</span>
+<span class="sd">                &quot;se_upper_tts&quot;: list of tts&#39;s upper standard error at each computation time</span>
+<span class="sd">                &quot;se_success_prob&quot;: list of success probability&#39;s standard error at each computation time</span>
+<span class="sd">                &quot;se_residual_energy&quot;: list of residual_energy&#39;s standard error at each computation time</span>
+<span class="sd">                &quot;info&quot; (dict): Parameter information for the benchmark</span>
+<span class="sd">            }</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">measure_with_energy</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">solutions</span> <span class="o">==</span> <span class="p">[]:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;need input &#39;solutions&#39;: (list(list))&quot;</span><span class="p">)</span>
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;function &#39;</span> <span class="o">+</span> <span class="n">inspect</span><span class="o">.</span><span class="n">currentframe</span><span class="p">()</span><span class="o">.</span><span class="n">f_code</span><span class="o">.</span><span class="n">co_name</span> <span class="o">+</span> <span class="s1">&#39; start&#39;</span><span class="p">)</span>
+
+    <span class="n">computation_times</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">success_probabilities</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">tts_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">residual_energies</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="n">se_lower_tts_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">se_upper_tts_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">se_success_prob_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">se_residual_energy_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">time</span> <span class="ow">in</span> <span class="n">time_list</span><span class="p">:</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">solver</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="o">**</span><span class="n">args</span><span class="p">)</span>
+
+        <span class="n">comp_time</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="n">time_name</span><span class="p">]</span>
+        <span class="n">computation_times</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">comp_time</span><span class="p">)</span>
+
+        <span class="n">ps</span> <span class="o">=</span> <span class="n">success_probability</span><span class="p">(</span>
+            <span class="n">response</span><span class="p">,</span> <span class="n">solutions</span><span class="p">,</span> <span class="n">ref_energy</span><span class="p">,</span> <span class="n">measure_with_energy</span><span class="p">)</span>
+        <span class="n">tts</span> <span class="o">=</span> <span class="n">time_to_solution</span><span class="p">(</span><span class="n">ps</span><span class="p">,</span> <span class="n">comp_time</span><span class="p">,</span> <span class="n">p_r</span><span class="p">)</span>
+
+        <span class="n">success_probabilities</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ps</span><span class="p">)</span>
+        <span class="n">tts_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tts</span><span class="p">)</span>
+        <span class="n">residual_energies</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">residual_energy</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="n">ref_energy</span><span class="p">))</span>
+
+        <span class="n">se_ps</span> <span class="o">=</span> <span class="n">se_success_probability</span><span class="p">(</span>
+            <span class="n">response</span><span class="p">,</span> <span class="n">solutions</span><span class="p">,</span> <span class="n">ref_energy</span><span class="p">,</span> <span class="n">measure_with_energy</span><span class="p">)</span>
+
+        <span class="n">se_success_prob_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">se_ps</span><span class="p">)</span>
+        <span class="n">se_lower_tts_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">se_lower_tts</span><span class="p">(</span><span class="n">tts</span><span class="p">,</span> <span class="n">ps</span><span class="p">,</span> <span class="n">comp_time</span><span class="p">,</span> <span class="n">p_r</span><span class="p">,</span> <span class="n">se_ps</span><span class="p">))</span>
+        <span class="n">se_upper_tts_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">se_upper_tts</span><span class="p">(</span><span class="n">tts</span><span class="p">,</span> <span class="n">ps</span><span class="p">,</span> <span class="n">comp_time</span><span class="p">,</span> <span class="n">p_r</span><span class="p">,</span> <span class="n">se_ps</span><span class="p">))</span>
+        <span class="n">se_residual_energy_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">se_residual_energy</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="n">ref_energy</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">computation_times</span><span class="p">,</span>
+        <span class="s2">&quot;success_prob&quot;</span><span class="p">:</span> <span class="n">success_probabilities</span><span class="p">,</span>
+        <span class="s2">&quot;tts&quot;</span><span class="p">:</span> <span class="n">tts_list</span><span class="p">,</span>
+        <span class="s2">&quot;residual_energy&quot;</span><span class="p">:</span> <span class="n">residual_energies</span><span class="p">,</span>
+        <span class="s2">&quot;se_lower_tts&quot;</span><span class="p">:</span> <span class="n">se_lower_tts_list</span><span class="p">,</span>
+        <span class="s2">&quot;se_upper_tts&quot;</span><span class="p">:</span> <span class="n">se_upper_tts_list</span><span class="p">,</span>
+        <span class="s2">&quot;se_success_prob&quot;</span><span class="p">:</span> <span class="n">se_success_prob_list</span><span class="p">,</span>
+        <span class="s2">&quot;se_residual_energy&quot;</span><span class="p">:</span> <span class="n">se_residual_energy_list</span><span class="p">,</span>
+        <span class="s2">&quot;info&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;tts_threshold_prob&quot;</span><span class="p">:</span> <span class="n">p_r</span><span class="p">,</span>
+            <span class="s2">&quot;ref_energy&quot;</span><span class="p">:</span> <span class="n">ref_energy</span><span class="p">,</span>
+            <span class="s2">&quot;measure_with_energy&quot;</span><span class="p">:</span> <span class="n">measure_with_energy</span>
+        <span class="p">}</span>
+    <span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="residual_energy"><a class="viewcode-back" href="../../../apis/openjij.utils.html#openjij.utils.benchmark.residual_energy">[docs]</a><span class="k">def</span> <span class="nf">residual_energy</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="n">ref_energy</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Calculate redisual energy from measure energy</span>
+<span class="sd">    Args:</span>
+<span class="sd">        response (openjij.Response): response from solver (or sampler).</span>
+<span class="sd">        ref_energy (float): the reference energy (usually use the ground energy)</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        float: Residual energy which is defined as follow</span>
+<span class="sd">               &lt;E&gt; - E_0</span>
+<span class="sd">               (&lt;...&gt; represents average, E_0 is the reference energy (usually use the ground energy)).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">energies</span><span class="p">)</span> <span class="o">-</span> <span class="n">ref_energy</span></div>
+
+
+<div class="viewcode-block" id="se_residual_energy"><a class="viewcode-back" href="../../../apis/openjij.utils.html#openjij.utils.benchmark.se_residual_energy">[docs]</a><span class="k">def</span> <span class="nf">se_residual_energy</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="n">ref_energy</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Calculate redisual energy&#39;s standard error from measure energy</span>
+<span class="sd">    Args:</span>
+<span class="sd">        response (openjij.Response): response from solver (or sampler).</span>
+<span class="sd">        ref_energy (float): the reference energy (usually use the ground energy)</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        float: redisual energy&#39;s standard error from measure energy</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">sp</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">energies</span><span class="p">,</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="success_probability"><a class="viewcode-back" href="../../../apis/openjij.utils.html#openjij.utils.benchmark.success_probability">[docs]</a><span class="k">def</span> <span class="nf">success_probability</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="n">solutions</span><span class="p">,</span> <span class="n">ref_energy</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">measure_with_energy</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Calculate success probability from openjij.response</span>
+<span class="sd">    Args:</span>
+<span class="sd">        response (openjij.Response): response from solver (or sampler).</span>
+<span class="sd">        solutions (list[int]): true solutions.</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        float: Success probability.</span>
+<span class="sd">              When measure_with_energy is False, success is defined as getting the same state as solutions.</span>
+<span class="sd">              When measure_with_energy is True, success is defined as getting a state which energy is below reference energy</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">measure_with_energy</span><span class="p">:</span>
+        <span class="n">suc_prob</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">count_nonzero</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">energies</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">ref_energy</span><span class="p">)</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">energies</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">solutions</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="n">sampled_states</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">samples</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">sampled_states</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">states</span>
+        <span class="n">suc_prob</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span>
+            <span class="p">[</span><span class="mi">1</span> <span class="k">if</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">solutions</span> <span class="k">else</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">sampled_states</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">suc_prob</span></div>
+
+
+<div class="viewcode-block" id="se_success_probability"><a class="viewcode-back" href="../../../apis/openjij.utils.html#openjij.utils.benchmark.se_success_probability">[docs]</a><span class="k">def</span> <span class="nf">se_success_probability</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="n">solutions</span><span class="p">,</span> <span class="n">ref_energy</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">measure_with_energy</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Calculate success probability&#39;s standard error from openjij.response</span>
+<span class="sd">    Args:</span>
+<span class="sd">        response (openjij.Response): response from solver (or sampler).</span>
+<span class="sd">        solutions (list[int]): true solutions.</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        float: Success probability&#39;s standard error.</span>
+<span class="sd">              When measure_with_energy is False, success is defined as getting the same state as solutions.</span>
+<span class="sd">              When measure_with_energy is True, success is defined as getting a state which energy is below reference energy</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">measure_with_energy</span><span class="p">:</span>
+        <span class="n">se_suc_prob</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">count_nonzero</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">energies</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">ref_energy</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">energies</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">solutions</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="n">sampled_states</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">samples</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">sampled_states</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">states</span>
+        <span class="n">se_suc_prob</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">std</span><span class="p">(</span>
+            <span class="p">[</span><span class="mi">1</span> <span class="k">if</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">solutions</span> <span class="k">else</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">sampled_states</span><span class="p">],</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">se_suc_prob</span></div>
+
+
+<div class="viewcode-block" id="time_to_solution"><a class="viewcode-back" href="../../../apis/openjij.utils.html#openjij.utils.benchmark.time_to_solution">[docs]</a><span class="k">def</span> <span class="nf">time_to_solution</span><span class="p">(</span><span class="n">success_prob</span><span class="p">,</span> <span class="n">computation_time</span><span class="p">,</span> <span class="n">p_r</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Args:</span>
+<span class="sd">        success_prob (float): success probability.</span>
+<span class="sd">        computation_time (float):</span>
+<span class="sd">        p_r (float): thereshold probability to calculate time to solution.</span>
+<span class="sd">    Returens:</span>
+<span class="sd">        float: time to solution `tau * log(1-pr)/log(1-ps)` which pr is thereshold probability, ps is success probability and tau is computation time.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">success_prob</span> <span class="o">==</span> <span class="mf">1.0</span><span class="p">:</span>
+        <span class="n">tts</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="k">elif</span> <span class="n">success_prob</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
+        <span class="n">tts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">tts</span> <span class="o">=</span> <span class="n">computation_time</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">p_r</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">success_prob</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">tts</span></div>
+
+
+<div class="viewcode-block" id="se_lower_tts"><a class="viewcode-back" href="../../../apis/openjij.utils.html#openjij.utils.benchmark.se_lower_tts">[docs]</a><span class="k">def</span> <span class="nf">se_lower_tts</span><span class="p">(</span><span class="n">tts</span><span class="p">,</span> <span class="n">success_prob</span><span class="p">,</span> <span class="n">computation_time</span><span class="p">,</span> <span class="n">p_r</span><span class="p">,</span> <span class="n">se_success_prob</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Args:</span>
+<span class="sd">        success_prob (float): success probability.</span>
+<span class="sd">        computation_time (float):</span>
+<span class="sd">        p_r (float): thereshold probability to calculate time to solution.</span>
+<span class="sd">    Returens:</span>
+<span class="sd">        float: time to solution `tau * log(1-pr)/log(1-ps)` &#39;s standard error which pr is thereshold probability, ps is success probability and tau is computation time.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="n">success_prob</span> <span class="o">+</span> <span class="n">se_success_prob</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mf">0.0</span><span class="p">:</span>
+        <span class="n">tts_low_error</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="k">elif</span> <span class="n">success_prob</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
+        <span class="n">tts_low_error</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">tts_low_error</span> <span class="o">=</span> <span class="n">computation_time</span> <span class="o">*</span> \
+            <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">p_r</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="n">success_prob</span> <span class="o">+</span> <span class="n">se_success_prob</span><span class="p">))</span>
+
+    <span class="n">se_lower_tts</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">tts_low_error</span> <span class="o">-</span> <span class="n">tts</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">se_lower_tts</span></div>
+
+
+<div class="viewcode-block" id="se_upper_tts"><a class="viewcode-back" href="../../../apis/openjij.utils.html#openjij.utils.benchmark.se_upper_tts">[docs]</a><span class="k">def</span> <span class="nf">se_upper_tts</span><span class="p">(</span><span class="n">tts</span><span class="p">,</span> <span class="n">success_prob</span><span class="p">,</span> <span class="n">computation_time</span><span class="p">,</span> <span class="n">p_r</span><span class="p">,</span> <span class="n">se_success_prob</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Args:</span>
+<span class="sd">        success_prob (float): success probability.</span>
+<span class="sd">        computation_time (float):</span>
+<span class="sd">        p_r (float): thereshold probability to calculate time to solution.</span>
+<span class="sd">    Returens:</span>
+<span class="sd">        float: time to solution `tau * log(1-pr)/log(1-ps)` &#39;s standard error which pr is thereshold probability, ps is success probability and tau is computation time.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">success_prob</span> <span class="o">==</span> <span class="mf">1.0</span><span class="p">:</span>
+        <span class="n">tts_up_error</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="k">elif</span> <span class="n">success_prob</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
+        <span class="n">tts_up_error</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">tts_up_error</span> <span class="o">=</span> <span class="n">computation_time</span> <span class="o">*</span> \
+            <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">p_r</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="n">success_prob</span> <span class="o">-</span> <span class="n">se_success_prob</span><span class="p">))</span>
+
+    <span class="n">se_upper_tts</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">tts_up_error</span> <span class="o">-</span> <span class="n">tts</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">se_upper_tts</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Jij Inc..
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> and ❤️  using a custom <a href="https://github.com/LinxiFan/Sphinx-theme">theme</a> based on <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+      <script type="text/javascript" src="../../../_static/language_data.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

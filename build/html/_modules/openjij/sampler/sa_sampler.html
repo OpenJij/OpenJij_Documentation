@@ -1,0 +1,446 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>openjij.sampler.sa_sampler &mdash; OpenJij  documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
+    <link rel="top" title="OpenJij  documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> OpenJij
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../1-Introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../2-Install.html">Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../3-Minimum_sample.html">Minimum sample code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../4-Parameters_customize.html">Parameters customize</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">OpenJij</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>openjij.sampler.sa_sampler</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for openjij.sampler.sa_sampler</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">openjij</span>
+<span class="kn">from</span> <span class="nn">openjij.sampler</span> <span class="k">import</span> <span class="n">measure_time</span>
+<span class="kn">from</span> <span class="nn">openjij.sampler</span> <span class="k">import</span> <span class="n">BaseSampler</span>
+<span class="kn">from</span> <span class="nn">openjij.utils.decorator</span> <span class="k">import</span> <span class="n">deprecated_alias</span>
+<span class="kn">import</span> <span class="nn">cxxjij</span>
+
+
+<div class="viewcode-block" id="SASampler"><a class="viewcode-back" href="../../../apis/openjij.sampler.html#openjij.sampler.sa_sampler.SASampler">[docs]</a><span class="k">class</span> <span class="nc">SASampler</span><span class="p">(</span><span class="n">BaseSampler</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Sampler with Simulated Annealing (SA).</span>
+
+<span class="sd">    Inherits from :class:`openjij.sampler.sampler.BaseSampler`.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        beta_min (float):</span>
+<span class="sd">            Minmum beta (inverse temperature).</span>
+<span class="sd">            You can overwrite in methods .sample_*.</span>
+
+<span class="sd">        beta_max (float):</span>
+<span class="sd">            Maximum beta (inverse temperature).</span>
+<span class="sd">            You can overwrite in methods .sample_*.</span>
+
+<span class="sd">        num_reads (int):</span>
+<span class="sd">            number of sampling (algorithm) runs. defaults None.</span>
+<span class="sd">            You can overwrite in methods .sample_*.</span>
+
+<span class="sd">        num_sweeps (int):</span>
+<span class="sd">            number of MonteCarlo steps during SA. defaults None.</span>
+<span class="sd">            You can overwrite in methods .sample_*.</span>
+
+<span class="sd">        schedule_info (dict):</span>
+<span class="sd">            Information about an annealing schedule.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        energy_bias (float):</span>
+<span class="sd">            Energy bias.</span>
+
+<span class="sd">        var_type (str):</span>
+<span class="sd">            Type of variables: &#39;SPIN&#39; or &#39;BINARY&#39; which mean {-1, 1} or {0, 1}.</span>
+
+<span class="sd">        indices (int):</span>
+<span class="sd">            Indices of `openjij.model.model.BinaryQuadraticModel` object.</span>
+
+<span class="sd">        N (int):</span>
+<span class="sd">            Number of the indices.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If schedules or variables violate as below.</span>
+<span class="sd">        - not list or numpy.array.</span>
+<span class="sd">        - not list of tuple (beta : float, step_length : int).</span>
+<span class="sd">        - beta is less than zero.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nd">@deprecated_alias</span><span class="p">(</span><span class="n">iteration</span><span class="o">=</span><span class="s1">&#39;num_reads&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">beta_min</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">beta_max</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">num_sweeps</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">schedule</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">num_reads</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                 <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">beta_min</span> <span class="o">=</span> <span class="n">beta_min</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">beta_max</span> <span class="o">=</span> <span class="n">beta_max</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_sweeps</span> <span class="o">=</span> <span class="n">num_sweeps</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">schedule</span> <span class="o">=</span> <span class="n">schedule</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_reads</span> <span class="o">=</span> <span class="n">num_reads</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_schedule_setting</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;beta_min&#39;</span><span class="p">:</span> <span class="n">beta_min</span><span class="p">,</span>
+            <span class="s1">&#39;beta_max&#39;</span><span class="p">:</span> <span class="n">beta_max</span><span class="p">,</span>
+            <span class="s1">&#39;num_sweeps&#39;</span><span class="p">:</span> <span class="n">num_sweeps</span><span class="p">,</span>
+            <span class="s1">&#39;num_reads&#39;</span><span class="p">:</span> <span class="n">num_reads</span><span class="p">,</span>
+        <span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">_setting_overwrite</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">value</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_schedule_setting</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="k">def</span> <span class="nf">_convert_validation_schedule</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">schedule</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">schedule</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;schedule should be list or numpy.array&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">schedule</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">cxxjij</span><span class="o">.</span><span class="n">utility</span><span class="o">.</span><span class="n">ClassicalSchedule</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">schedule</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">schedule</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;schedule is list of tuple or list (beta : float, step_length : int)&quot;</span><span class="p">)</span>
+
+        <span class="c1"># schedule validation  0 &lt;= beta</span>
+        <span class="n">beta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">schedule</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">beta</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;schedule beta range is &#39;0 &lt;= beta&#39;.&quot;</span><span class="p">)</span>
+
+        <span class="c1"># convert to cxxjij.utility.ClassicalSchedule</span>
+        <span class="n">cxxjij_schedule</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">beta</span><span class="p">,</span> <span class="n">step_length</span> <span class="ow">in</span> <span class="n">schedule</span><span class="p">:</span>
+            <span class="n">_schedule</span> <span class="o">=</span> <span class="n">cxxjij</span><span class="o">.</span><span class="n">utility</span><span class="o">.</span><span class="n">ClassicalSchedule</span><span class="p">()</span>
+            <span class="n">_schedule</span><span class="o">.</span><span class="n">one_mc_step</span> <span class="o">=</span> <span class="n">step_length</span>
+            <span class="n">_schedule</span><span class="o">.</span><span class="n">updater_parameter</span><span class="o">.</span><span class="n">beta</span> <span class="o">=</span> <span class="n">beta</span>
+            <span class="n">cxxjij_schedule</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_schedule</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">cxxjij_schedule</span>
+
+<div class="viewcode-block" id="SASampler.sample"><a class="viewcode-back" href="../../../apis/openjij.sampler.html#openjij.sampler.sa_sampler.SASampler.sample">[docs]</a>    <span class="nd">@deprecated_alias</span><span class="p">(</span><span class="n">iteration</span><span class="o">=</span><span class="s1">&#39;num_reads&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">beta_min</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">beta_max</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+               <span class="n">num_sweeps</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">num_reads</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">schedule</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+               <span class="n">initial_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">updater</span><span class="o">=</span><span class="s1">&#39;single spin flip&#39;</span><span class="p">,</span>
+               <span class="n">reinitialize_state</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+               <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+        <span class="n">model</span> <span class="o">=</span> <span class="n">openjij</span><span class="o">.</span><span class="n">BinaryQuadraticModel</span><span class="p">(</span>
+            <span class="n">linear</span><span class="o">=</span><span class="n">model</span><span class="o">.</span><span class="n">linear</span><span class="p">,</span> <span class="n">quadratic</span><span class="o">=</span><span class="n">model</span><span class="o">.</span><span class="n">quadratic</span><span class="p">,</span>
+            <span class="n">offset</span><span class="o">=</span><span class="n">model</span><span class="o">.</span><span class="n">offset</span><span class="p">,</span> <span class="n">var_type</span><span class="o">=</span><span class="n">model</span><span class="o">.</span><span class="n">vartype</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_setting_overwrite</span><span class="p">(</span>
+            <span class="n">beta_min</span><span class="o">=</span><span class="n">beta_min</span><span class="p">,</span> <span class="n">beta_max</span><span class="o">=</span><span class="n">beta_max</span><span class="p">,</span>
+            <span class="n">num_sweeps</span><span class="o">=</span><span class="n">num_sweeps</span><span class="p">,</span> <span class="n">num_reads</span><span class="o">=</span><span class="n">num_reads</span>
+        <span class="p">)</span>
+
+        <span class="n">ising_graph</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">get_cxxjij_ising_graph</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_reads</span> <span class="o">=</span> <span class="n">num_reads</span> <span class="k">if</span> <span class="n">num_reads</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_reads</span>
+
+        <span class="c1"># set annealing schedule -------------------------------</span>
+        <span class="k">if</span> <span class="n">schedule</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">schedule</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_schedule</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_convert_validation_schedule</span><span class="p">(</span>
+                <span class="n">schedule</span> <span class="k">if</span> <span class="n">schedule</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">schedule</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">schedule_info</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;schedule&#39;</span><span class="p">:</span> <span class="s1">&#39;custom schedule&#39;</span><span class="p">}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_schedule</span><span class="p">,</span> <span class="n">beta_range</span> <span class="o">=</span> <span class="n">geometric_ising_beta_schedule</span><span class="p">(</span>
+                <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+                <span class="n">beta_max</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_schedule_setting</span><span class="p">[</span><span class="s1">&#39;beta_max&#39;</span><span class="p">],</span>
+                <span class="n">beta_min</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_schedule_setting</span><span class="p">[</span><span class="s1">&#39;beta_min&#39;</span><span class="p">],</span>
+                <span class="n">num_sweeps</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_schedule_setting</span><span class="p">[</span><span class="s1">&#39;num_sweeps&#39;</span><span class="p">]</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">schedule_info</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;beta_max&#39;</span><span class="p">:</span> <span class="n">beta_range</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="s1">&#39;beta_min&#39;</span><span class="p">:</span> <span class="n">beta_range</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="s1">&#39;num_sweeps&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_schedule_setting</span><span class="p">[</span><span class="s1">&#39;num_sweeps&#39;</span><span class="p">]</span>
+            <span class="p">}</span>
+        <span class="c1"># ------------------------------- set annealing schedule</span>
+
+        <span class="c1"># make init state generator</span>
+        <span class="k">if</span> <span class="n">initial_state</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># if not reinitialize_state:</span>
+            <span class="c1">#     raise ValueError(</span>
+            <span class="c1">#         &#39;You need initial_state if reinitilize_state is False.&#39;)</span>
+
+            <span class="k">def</span> <span class="nf">_generate_init_state</span><span class="p">():</span> <span class="k">return</span> <span class="n">ising_graph</span><span class="o">.</span><span class="n">gen_spin</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># validate initial_state size</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">initial_state</span><span class="p">)</span> <span class="o">!=</span> <span class="n">ising_graph</span><span class="o">.</span><span class="n">size</span><span class="p">():</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;the size of the initial state should be </span><span class="si">{}</span><span class="s2">&quot;</span>
+                    <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ising_graph</span><span class="o">.</span><span class="n">size</span><span class="p">()))</span>
+            <span class="k">if</span> <span class="n">model</span><span class="o">.</span><span class="n">var_type</span> <span class="o">==</span> <span class="n">openjij</span><span class="o">.</span><span class="n">SPIN</span><span class="p">:</span>
+                <span class="n">_init_state</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">initial_state</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>  <span class="c1"># BINARY</span>
+                <span class="n">_init_state</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">initial_state</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">)</span>
+
+            <span class="k">def</span> <span class="nf">_generate_init_state</span><span class="p">():</span> <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">_init_state</span><span class="p">)</span>
+
+        <span class="c1"># choose updater</span>
+        <span class="n">_updater_name</span> <span class="o">=</span> <span class="n">updater</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">_updater_name</span> <span class="o">==</span> <span class="s1">&#39;singlespinflip&#39;</span><span class="p">:</span>
+            <span class="n">algorithm</span> <span class="o">=</span> <span class="n">cxxjij</span><span class="o">.</span><span class="n">algorithm</span><span class="o">.</span><span class="n">Algorithm_SingleSpinFlip_run</span>
+            <span class="n">sa_system</span> <span class="o">=</span> <span class="n">cxxjij</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">make_classical_ising_Eigen</span><span class="p">(</span>
+                <span class="n">_generate_init_state</span><span class="p">(),</span> <span class="n">ising_graph</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">_updater_name</span> <span class="o">==</span> <span class="s1">&#39;swendsenwang&#39;</span><span class="p">:</span>
+            <span class="c1"># swendsen-wang is not support Eigen system</span>
+            <span class="n">algorithm</span> <span class="o">=</span> <span class="n">cxxjij</span><span class="o">.</span><span class="n">algorithm</span><span class="o">.</span><span class="n">Algorithm_SwendsenWang_run</span>
+            <span class="n">sa_system</span> <span class="o">=</span> <span class="n">cxxjij</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">make_classical_ising</span><span class="p">(</span>
+                <span class="n">_generate_init_state</span><span class="p">(),</span> <span class="n">ising_graph</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s1">&#39;updater is one of &quot;single spin flip or swendsen wang&quot;&#39;</span><span class="p">)</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sampling</span><span class="p">(</span>
+            <span class="n">model</span><span class="p">,</span> <span class="n">_generate_init_state</span><span class="p">,</span>
+            <span class="n">algorithm</span><span class="p">,</span> <span class="n">sa_system</span><span class="p">,</span> <span class="n">initial_state</span><span class="p">,</span>
+            <span class="n">reinitialize_state</span><span class="p">,</span> <span class="n">seed</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span>
+
+        <span class="n">response</span><span class="o">.</span><span class="n">update_ising_states_energies</span><span class="p">(</span>
+            <span class="n">response</span><span class="o">.</span><span class="n">states</span><span class="p">,</span> <span class="n">response</span><span class="o">.</span><span class="n">energies</span><span class="p">)</span>
+
+        <span class="n">response</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;schedule&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">schedule_info</span>
+
+        <span class="k">return</span> <span class="n">response</span></div>
+
+    <span class="k">def</span> <span class="nf">_post_save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result_state</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
+        <span class="n">response</span><span class="o">.</span><span class="n">states</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result_state</span><span class="p">)</span>
+        <span class="n">response</span><span class="o">.</span><span class="n">energies</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">calc_energy</span><span class="p">(</span>
+            <span class="n">result_state</span><span class="p">,</span>
+            <span class="n">need_to_convert_from_spin</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="geometric_ising_beta_schedule"><a class="viewcode-back" href="../../../apis/openjij.sampler.html#openjij.sampler.sa_sampler.geometric_ising_beta_schedule">[docs]</a><span class="k">def</span> <span class="nf">geometric_ising_beta_schedule</span><span class="p">(</span><span class="n">model</span><span class="p">:</span> <span class="n">openjij</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">BinaryQuadraticModel</span><span class="p">,</span>
+                                  <span class="n">beta_max</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">beta_min</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                  <span class="n">num_sweeps</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;make geometric cooling beta schedule</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        model (openjij.BinaryQuadraticModel)</span>
+<span class="sd">        beta_max (float, optional): [description]. Defaults to None.</span>
+<span class="sd">        beta_min (float, optional): [description]. Defaults to None.</span>
+<span class="sd">        num_sweeps (int, optional): [description]. Defaults to 1000.</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        list of cxxjij.utility.ClassicalSchedule, list of beta range [max, min]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">beta_min</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">beta_max</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">ising_interaction</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">ising_interactions</span><span class="p">())</span>
+        <span class="n">abs_bias</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">ising_interaction</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">min_delta_energy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">ising_interaction</span><span class="p">[</span><span class="n">ising_interaction</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">])</span>
+        <span class="n">max_delta_energy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">abs_bias</span><span class="p">[</span><span class="n">abs_bias</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">])</span>
+
+    <span class="n">beta_min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="n">max_delta_energy</span> <span class="k">if</span> <span class="n">beta_min</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">beta_min</span>
+    <span class="n">beta_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span> <span class="o">/</span> <span class="n">min_delta_energy</span> <span class="k">if</span> <span class="n">beta_max</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">beta_max</span>
+
+    <span class="n">num_sweeps_per_beta</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_sweeps</span> <span class="o">//</span> <span class="mf">1000.0</span><span class="p">)</span>
+
+    <span class="n">schedule</span> <span class="o">=</span> <span class="n">cxxjij</span><span class="o">.</span><span class="n">utility</span><span class="o">.</span><span class="n">make_classical_schedule_list</span><span class="p">(</span>
+        <span class="n">beta_min</span><span class="o">=</span><span class="n">beta_min</span><span class="p">,</span> <span class="n">beta_max</span><span class="o">=</span><span class="n">beta_max</span><span class="p">,</span>
+        <span class="n">one_mc_step</span><span class="o">=</span><span class="n">num_sweeps_per_beta</span><span class="p">,</span>
+        <span class="n">num_call_updater</span><span class="o">=</span><span class="n">num_sweeps</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">schedule</span><span class="p">,</span> <span class="p">[</span><span class="n">beta_max</span><span class="p">,</span> <span class="n">beta_min</span><span class="p">]</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Jij Inc..
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> and ❤️  using a custom <a href="https://github.com/LinxiFan/Sphinx-theme">theme</a> based on <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+      <script type="text/javascript" src="../../../_static/language_data.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
