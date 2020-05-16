@@ -31,7 +31,7 @@ author = 'Jij Inc.'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    "sphinx.ext.autodoc", "sphinx.ext.napoleon"
+    "sphinx.ext.autodoc", "sphinx.ext.napoleon", "recommonmark"
 ]
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -74,11 +74,10 @@ html_theme_path = [sphinx_theme.get_html_theme_path()]
 
 
 # -- for Markdown ----------------------------------------
-source_suffix = ['.rst', '.md']
-
-
-source_parsers = {
-    '.md': CommonMarkParser,
+source_suffix = {
+    '.rst': 'restructuredtext',
+    '.txt': 'markdown',
+    '.md': 'markdown',
 }
 
 # for AutoStructity component

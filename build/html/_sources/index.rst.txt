@@ -7,6 +7,12 @@ Welcome to OpenJij's documentation!
 ===================================
 
 .. toctree::
+   :maxdepth: 1
+   :caption: References:
+
+   apis/openjij
+
+.. toctree::
    :maxdepth: 2
    :caption: Contents:
 
