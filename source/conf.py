@@ -15,7 +15,7 @@ from recommonmark.parser import CommonMarkParser
 import sphinx_theme
 import os
 import sys
-sys.path.insert(0, os.path.abspath('../../../'))
+sys.path.insert(0, os.path.abspath('../OpenJij/openjij'))
 
 
 # -- Project information -----------------------------------------------------
@@ -31,7 +31,7 @@ author = 'Jij Inc.'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    "sphinx.ext.autodoc"
+    "sphinx.ext.autodoc, sphinx.ext.napoleon"
 ]
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
