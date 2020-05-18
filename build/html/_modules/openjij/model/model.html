@@ -179,11 +179,11 @@
 <span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 
-<div class="viewcode-block" id="make_BinaryQuadraticModel"><a class="viewcode-back" href="../../../apis/openjij.model.html#openjij.model.model.make_BinaryQuadraticModel">[docs]</a><span class="k">def</span> <span class="nf">make_BinaryQuadraticModel</span><span class="p">(</span><span class="n">linear</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">quadratic</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">type</span><span class="p">:</span>
+<div class="viewcode-block" id="make_BinaryQuadraticModel"><a class="viewcode-back" href="../../../apis/openjij.model.html#openjij.model.model.make_BinaryQuadraticModel">[docs]</a><span class="k">def</span> <span class="nf">make_BinaryQuadraticModel</span><span class="p">(</span><span class="n">linear</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">quadratic</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;BinaryQuadraticModel factory.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        type: generated BinaryQuadraticModel class</span>
+<span class="sd">        generated BinaryQuadraticModel class</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">class</span> <span class="nc">BinaryQuadraticModel</span><span class="p">(</span><span class="n">cimod</span><span class="o">.</span><span class="n">make_BinaryQuadraticModel</span><span class="p">(</span><span class="n">linear</span><span class="p">,</span> <span class="n">quadratic</span><span class="p">)):</span>
@@ -258,11 +258,11 @@
 
     <span class="k">return</span> <span class="n">BinaryQuadraticModel</span></div>
 
-<div class="viewcode-block" id="make_BinaryQuadraticModel_from_JSON"><a class="viewcode-back" href="../../../apis/openjij.model.html#openjij.model.model.make_BinaryQuadraticModel_from_JSON">[docs]</a><span class="k">def</span> <span class="nf">make_BinaryQuadraticModel_from_JSON</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">type</span><span class="p">:</span>
+<div class="viewcode-block" id="make_BinaryQuadraticModel_from_JSON"><a class="viewcode-back" href="../../../apis/openjij.model.html#openjij.model.model.make_BinaryQuadraticModel_from_JSON">[docs]</a><span class="k">def</span> <span class="nf">make_BinaryQuadraticModel_from_JSON</span><span class="p">(</span><span class="n">obj</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;make BinaryQuadraticModel from JSON.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        type: corresponding BinaryQuadraticModel type</span>
+<span class="sd">        corresponding BinaryQuadraticModel type</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">label</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s1">&#39;variable_labels&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
@@ -275,17 +275,25 @@
     <span class="k">return</span> <span class="n">make_BinaryQuadraticModel</span><span class="p">(</span><span class="n">mock_linear</span><span class="p">,</span> <span class="p">{})</span></div>
 
 <div class="viewcode-block" id="BinaryQuadraticModel"><a class="viewcode-back" href="../../../apis/openjij.model.html#openjij.model.model.BinaryQuadraticModel">[docs]</a><span class="k">def</span> <span class="nf">BinaryQuadraticModel</span><span class="p">(</span><span class="n">linear</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">quadratic</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">offset</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-        <span class="n">var_type</span><span class="o">=</span><span class="n">dimod</span><span class="o">.</span><span class="n">SPIN</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">var_type</span><span class="o">=</span><span class="n">dimod</span><span class="o">.</span><span class="n">SPIN</span><span class="p">,</span> <span class="n">gpu</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;generate BinaryQuadraticModel object.</span>
 
+<span class="sd">    Attributes:</span>
+<span class="sd">        var_type (dimod.Vartype): variable type SPIN or BINARY</span>
+<span class="sd">        linear (dict): represents linear term</span>
+<span class="sd">        quadratic (dict): represents quadratic term</span>
+<span class="sd">        adj (dict): represents adjacency</span>
+<span class="sd">        indices (list): labels of each variables sorted by results variables</span>
+<span class="sd">        offset (float): represents constant energy term when convert to SPIN from BINARY</span>
 <span class="sd">    Args:</span>
 <span class="sd">        linear (dict): linear</span>
 <span class="sd">        quadratic (dict): quadratic</span>
 <span class="sd">        offset (float): offset</span>
-<span class="sd">        var_type (openjij.variable_type.Vartype): var_type</span>
+<span class="sd">        var_type (openjij.variable_type.Vartype): vartype (&#39;SPIN&#39; or &#39;BINARY&#39;)</span>
+<span class="sd">        gpu (bool): if true, this can be used for gpu samplers.</span>
 <span class="sd">        kwargs:</span>
 <span class="sd">    Returns:</span>
-<span class="sd">        BinaryQuadraticModel: generated BinaryQuadraticModel</span>
+<span class="sd">        generated BinaryQuadraticModel</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">Model</span> <span class="o">=</span> <span class="n">make_BinaryQuadraticModel</span><span class="p">(</span><span class="n">linear</span><span class="p">,</span> <span class="n">quadratic</span><span class="p">)</span>
