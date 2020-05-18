@@ -31,7 +31,13 @@ author = 'Jij Inc.'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    "sphinx.ext.autodoc", "sphinx.ext.napoleon", "recommonmark"
+    "sphinx.ext.autodoc",
+    "sphinx.ext.napoleon",
+    "recommonmark",
+    'sphinx.ext.autosummary',
+    'sphinx.ext.doctest',
+    'sphinx.ext.mathjax',
+    'sphinx.ext.viewcode',
 ]
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -70,7 +76,7 @@ html_static_path = ['_static']
 # html_sidebars = {}
 # ---sphinx-themes-----
 html_theme = 'neo_rtd_theme'
-html_theme_path = [sphinx_theme.get_html_theme_path()]
+html_theme_path = [sphinx_theme.get_html_theme_path('neo-rtd-theme')]
 
 
 # -- for Markdown ----------------------------------------

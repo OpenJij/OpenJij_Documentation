@@ -80,12 +80,18 @@
           
             
             
-                <p class="caption"><span class="caption-text">Contents:</span></p>
+                <p class="caption"><span class="caption-text">References:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../apis/openjij.html">openjij package</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../1-Introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../2-Install.html">Install</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../3-Minimum_sample.html">Minimum sample code</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../4-Parameters_customize.html">Parameters customize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../5-benchmark.html">Benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../6-HigherOrderModel.html">Higher order model</a></li>
 </ul>
 
             
@@ -166,12 +172,12 @@
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">cxxjij</span>
-<span class="kn">from</span> <span class="nn">openjij.model</span> <span class="k">import</span> <span class="n">BinaryQuadraticModel</span>
 <span class="kn">import</span> <span class="nn">openjij</span>
 <span class="kn">import</span> <span class="nn">dimod</span>
+<span class="kn">from</span> <span class="nn">dimod.core.sampler</span> <span class="kn">import</span> <span class="n">samplemixinmethod</span>
+<span class="kn">import</span> <span class="nn">cimod</span>
 
 <span class="kn">import</span> <span class="nn">time</span>
-
 
 <div class="viewcode-block" id="measure_time"><a class="viewcode-back" href="../../../apis/openjij.sampler.html#openjij.sampler.sampler.measure_time">[docs]</a><span class="k">def</span> <span class="nf">measure_time</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kargs</span><span class="p">):</span>
@@ -186,47 +192,113 @@
 
 
 <div class="viewcode-block" id="BaseSampler"><a class="viewcode-back" href="../../../apis/openjij.sampler.html#openjij.sampler.sampler.BaseSampler">[docs]</a><span class="k">class</span> <span class="nc">BaseSampler</span><span class="p">(</span><span class="n">dimod</span><span class="o">.</span><span class="n">Sampler</span><span class="p">):</span>
-    <span class="n">parameters</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">properties</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="sd">&quot;&quot;&quot;Base sampler class of python wrapper for cxxjij simulator</span>
 
-    <span class="k">def</span> <span class="nf">_set_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">indices</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">indices</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">size</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">energy_bias</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">energy_bias</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">var_type</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">var_type</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">parameters</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="n">properties</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">_sampling</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">init_generator</span><span class="p">,</span>
-                  <span class="n">algorithm</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span>
-                  <span class="n">initial_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">reinitialize_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                  <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_set_model</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_setting_overwrite</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Overwrite the settings</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            **kwargs: options</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_schedule_setting</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_reads</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;num_reads&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;num_reads&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">1</span>\
+            <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_reads</span>
+
+    <span class="k">def</span> <span class="nf">_sampling</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">_cxxjij_sampling</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">init_generator</span><span class="p">,</span>
+                         <span class="n">algorithm</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span>
+                         <span class="n">reinitialize_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                         <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">structure</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Basic sampling function: for cxxjij sampling</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            model (openjij.BinaryQuadraticModel): model has a information of instaunce (h, J, Q)</span>
+<span class="sd">            init_generator (callable): return initial state, must have argument structure</span>
+<span class="sd">            algorithm (callable): system algorithm of cxxjij</span>
+<span class="sd">            system (:obj:): [description]</span>
+<span class="sd">            reinitialize_state (bool, optional): [description]. Defaults to None.</span>
+<span class="sd">            seed (int, optional): seed for algorithm. Defaults to None.</span>
+<span class="sd">            structure (dict): structure dictionary that must have keys &quot;size&quot; and &quot;dict&quot;</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            [type]: [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># set algorithm function and set random seed ----</span>
         <span class="k">if</span> <span class="n">seed</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">def</span> <span class="nf">sampling_algorithm</span><span class="p">(</span><span class="n">system</span><span class="p">):</span> <span class="k">return</span> <span class="n">algorithm</span><span class="p">(</span>
-                <span class="n">system</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_schedule</span><span class="p">)</span>
+            <span class="k">def</span> <span class="nf">sampling_algorithm</span><span class="p">(</span><span class="n">system</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">algorithm</span><span class="p">(</span><span class="n">system</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_schedule</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">def</span> <span class="nf">sampling_algorithm</span><span class="p">(</span><span class="n">system</span><span class="p">):</span> <span class="k">return</span> <span class="n">algorithm</span><span class="p">(</span>
-                <span class="n">system</span><span class="p">,</span> <span class="n">seed</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_schedule</span><span class="p">)</span>
+            <span class="k">def</span> <span class="nf">sampling_algorithm</span><span class="p">(</span><span class="n">system</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">algorithm</span><span class="p">(</span><span class="n">system</span><span class="p">,</span> <span class="n">seed</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_schedule</span><span class="p">)</span>
+        <span class="c1"># ---- set algorithm function and set random seed</span>
 
-        <span class="c1"># run algorithm</span>
+        <span class="c1"># setting of response class</span>
         <span class="n">execution_time</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">response</span> <span class="o">=</span> <span class="n">openjij</span><span class="o">.</span><span class="n">Response</span><span class="p">(</span>
-            <span class="n">var_type</span><span class="o">=</span><span class="n">model</span><span class="o">.</span><span class="n">var_type</span><span class="p">,</span> <span class="n">indices</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">indices</span><span class="p">)</span>
 
+        <span class="c1"># define sampling execution function ---------------</span>
+        <span class="n">states</span><span class="p">,</span> <span class="n">energies</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+        <span class="n">system_info</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;system&#39;</span><span class="p">:</span> <span class="p">[]}</span>
         <span class="nd">@measure_time</span>
         <span class="k">def</span> <span class="nf">exec_sampling</span><span class="p">():</span>
-            <span class="n">previous_state</span> <span class="o">=</span> <span class="n">init_generator</span><span class="p">()</span>
             <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_reads</span><span class="p">):</span>
+                <span class="c1"># Re-initialize at each sampling</span>
+                <span class="c1"># In reverse annealing,</span>
+                <span class="c1"># user can use previous result (if re-initilize is set to False)</span>
                 <span class="k">if</span> <span class="n">reinitialize_state</span><span class="p">:</span>
                     <span class="n">system</span><span class="o">.</span><span class="n">reset_spins</span><span class="p">(</span><span class="n">init_generator</span><span class="p">())</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">system</span><span class="o">.</span><span class="n">reset_spins</span><span class="p">(</span><span class="n">previous_state</span><span class="p">)</span>
+                <span class="c1"># Run sampling algorithm</span>
+                <span class="c1"># and measure execution time</span>
                 <span class="n">_exec_time</span> <span class="o">=</span> <span class="n">measure_time</span><span class="p">(</span><span class="n">sampling_algorithm</span><span class="p">)(</span><span class="n">system</span><span class="p">)</span>
                 <span class="n">execution_time</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_exec_time</span><span class="p">)</span>
-                <span class="n">previous_state</span> <span class="o">=</span> <span class="n">cxxjij</span><span class="o">.</span><span class="n">result</span><span class="o">.</span><span class="n">get_solution</span><span class="p">(</span><span class="n">system</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_post_save</span><span class="p">(</span><span class="n">previous_state</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">response</span><span class="p">)</span>
 
+                <span class="c1"># get Ising result (state and system information)</span>
+                <span class="c1"># ex. _sys_info save trotterized quantum state.</span>
+                <span class="n">result_state</span><span class="p">,</span> <span class="n">_sys_info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_result</span><span class="p">(</span><span class="n">system</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
+
+                <span class="c1"># resize result_state if structure is not None.</span>
+                <span class="k">if</span> <span class="n">structure</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">temp_state</span> <span class="o">=</span> <span class="p">{}</span>
+                    <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">indices</span><span class="p">:</span>
+                        <span class="n">temp_state</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span> <span class="o">=</span> <span class="n">result_state</span><span class="p">[</span><span class="n">structure</span><span class="p">[</span><span class="s1">&#39;dict&#39;</span><span class="p">][</span><span class="n">ind</span><span class="p">]]</span>
+
+                    <span class="n">result_state</span> <span class="o">=</span> <span class="n">temp_state</span>
+
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># no structure</span>
+                    <span class="c1"># replace indices</span>
+                    <span class="n">temp_state</span> <span class="o">=</span> <span class="p">{}</span>
+                    <span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">indices</span><span class="p">)):</span>
+                        <span class="n">temp_state</span><span class="p">[</span><span class="n">model</span><span class="o">.</span><span class="n">indices</span><span class="p">[</span><span class="n">num</span><span class="p">]]</span> <span class="o">=</span> <span class="n">result_state</span><span class="p">[</span><span class="n">num</span><span class="p">]</span>
+                    <span class="n">result_state</span> <span class="o">=</span> <span class="n">temp_state</span>
+
+                <span class="c1"># store result (state and energy)</span>
+                <span class="n">states</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result_state</span><span class="p">)</span>
+                <span class="n">energies</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="n">result_state</span><span class="p">))</span>
+
+                <span class="k">if</span> <span class="n">_sys_info</span><span class="p">:</span>
+                    <span class="n">system_info</span><span class="p">[</span><span class="s1">&#39;system&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_sys_info</span><span class="p">)</span>
+        <span class="c1"># --------------- define sampling execution function</span>
+
+        <span class="c1"># Execute sampling function</span>
         <span class="n">sampling_time</span> <span class="o">=</span> <span class="n">exec_sampling</span><span class="p">()</span>
 
+        <span class="c1"># construct response instance</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">openjij</span><span class="o">.</span><span class="n">Response</span><span class="o">.</span><span class="n">from_samples</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">states</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">indices</span><span class="p">),</span> <span class="n">model</span><span class="o">.</span><span class="n">vartype</span><span class="p">,</span> <span class="n">energies</span><span class="p">,</span>
+            <span class="n">info</span><span class="o">=</span><span class="n">system_info</span>
+        <span class="p">)</span>
+
+        <span class="c1"># save execution time</span>
         <span class="n">response</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;sampling_time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sampling_time</span> <span class="o">*</span> <span class="mi">10</span><span class="o">**</span><span class="mi">6</span>  <span class="c1"># micro sec</span>
         <span class="n">response</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;execution_time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span>
             <span class="n">execution_time</span><span class="p">)</span> <span class="o">*</span> <span class="mi">10</span><span class="o">**</span><span class="mi">6</span>  <span class="c1"># micro sec</span>
@@ -235,96 +307,81 @@
 
         <span class="k">return</span> <span class="n">response</span>
 
-    <span class="k">def</span> <span class="nf">_dict_to_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">var_type</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">J</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">Q</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">var_type</span> <span class="o">==</span> <span class="n">openjij</span><span class="o">.</span><span class="n">SPIN</span><span class="p">:</span>
-            <span class="n">bqm</span> <span class="o">=</span> <span class="n">openjij</span><span class="o">.</span><span class="n">BinaryQuadraticModel</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">J</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">var_type</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">var_type</span> <span class="o">==</span> <span class="n">openjij</span><span class="o">.</span><span class="n">BINARY</span><span class="p">:</span>
-            <span class="n">bqm</span> <span class="o">=</span> <span class="n">openjij</span><span class="o">.</span><span class="n">BinaryQuadraticModel</span><span class="o">.</span><span class="n">from_qubo</span><span class="p">(</span><span class="n">Q</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_get_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">cxxjij</span><span class="o">.</span><span class="n">result</span><span class="o">.</span><span class="n">get_solution</span><span class="p">(</span><span class="n">system</span><span class="p">)</span>
+        <span class="n">sys_info</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">return</span> <span class="n">result</span><span class="p">,</span> <span class="n">sys_info</span>
+
+    
+<div class="viewcode-block" id="BaseSampler.sample"><a class="viewcode-back" href="../../../apis/openjij.sampler.html#openjij.sampler.sampler.BaseSampler.sample">[docs]</a>    <span class="nd">@samplemixinmethod</span>
+    <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bqm</span><span class="p">,</span> <span class="o">**</span><span class="n">parameters</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Sample from a binary quadratic model.</span>
+<span class="sd">        Args:</span>
+<span class="sd">            bqm (openjij.BinaryQuadraticModel):</span>
+<span class="sd">                Binary Qudratic Model</span>
+<span class="sd">            **kwargs:</span>
+<span class="sd">                See the implemented sampling for additional keyword definitions.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            :obj:`.SampleSet`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">bqm</span><span class="o">.</span><span class="n">vartype</span> <span class="o">==</span> <span class="n">openjij</span><span class="o">.</span><span class="n">SPIN</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sample_ising</span><span class="p">,</span> <span class="s1">&#39;__issamplemixin__&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+                <span class="c1"># sample_ising is implemented</span>
+                <span class="n">h</span><span class="p">,</span> <span class="n">J</span><span class="p">,</span> <span class="n">offset</span> <span class="o">=</span> <span class="n">bqm</span><span class="o">.</span><span class="n">to_ising</span><span class="p">()</span>
+                <span class="n">sampleset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_ising</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">J</span><span class="p">,</span> <span class="o">**</span><span class="n">parameters</span><span class="p">)</span>
+                <span class="n">sampleset</span><span class="o">.</span><span class="n">record</span><span class="o">.</span><span class="n">energy</span> <span class="o">+=</span> <span class="n">offset</span>
+                <span class="k">return</span> <span class="n">sampleset</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">Q</span><span class="p">,</span> <span class="n">offset</span> <span class="o">=</span> <span class="n">bqm</span><span class="o">.</span><span class="n">to_qubo</span><span class="p">()</span>
+                <span class="n">sampleset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_qubo</span><span class="p">(</span><span class="n">Q</span><span class="p">,</span> <span class="o">**</span><span class="n">parameters</span><span class="p">)</span>
+                <span class="n">sampleset</span><span class="o">.</span><span class="n">change_vartype</span><span class="p">(</span><span class="n">dimod</span><span class="o">.</span><span class="n">SPIN</span><span class="p">,</span> <span class="n">energy_offset</span><span class="o">=</span><span class="n">offset</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">sampleset</span>
+        <span class="k">elif</span> <span class="n">bqm</span><span class="o">.</span><span class="n">vartype</span> <span class="o">==</span> <span class="n">openjij</span><span class="o">.</span><span class="n">BINARY</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sample_qubo</span><span class="p">,</span> <span class="s1">&#39;__issamplemixin__&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+                <span class="c1"># sample_qubo is implemented</span>
+                <span class="n">Q</span><span class="p">,</span> <span class="n">offset</span> <span class="o">=</span> <span class="n">bqm</span><span class="o">.</span><span class="n">to_qubo</span><span class="p">()</span>
+                <span class="n">sampleset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_qubo</span><span class="p">(</span><span class="n">Q</span><span class="p">,</span> <span class="o">**</span><span class="n">parameters</span><span class="p">)</span>
+                <span class="n">sampleset</span><span class="o">.</span><span class="n">record</span><span class="o">.</span><span class="n">energy</span> <span class="o">+=</span> <span class="n">offset</span>
+                <span class="k">return</span> <span class="n">sampleset</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">h</span><span class="p">,</span> <span class="n">J</span><span class="p">,</span> <span class="n">offset</span> <span class="o">=</span> <span class="n">bqm</span><span class="o">.</span><span class="n">to_ising</span><span class="p">()</span>
+                <span class="n">sampleset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_ising</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">J</span><span class="p">,</span> <span class="o">**</span><span class="n">parameters</span><span class="p">)</span>
+                <span class="n">sampleset</span><span class="o">.</span><span class="n">change_vartype</span><span class="p">(</span><span class="n">dimod</span><span class="o">.</span><span class="n">BINARY</span><span class="p">,</span> <span class="n">energy_offset</span><span class="o">=</span><span class="n">offset</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">sampleset</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s1">&#39;var_type should be openjij.SPIN or openjij.BINARY&#39;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">bqm</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;binary quadratic model has an unknown vartype&quot;</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">_post_save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result_state</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
-        <span class="k">pass</span></div>
+    
+
+<div class="viewcode-block" id="BaseSampler.sample_ising"><a class="viewcode-back" href="../../../apis/openjij.sampler.html#openjij.sampler.sampler.BaseSampler.sample_ising">[docs]</a>    <span class="nd">@samplemixinmethod</span>
+    <span class="k">def</span> <span class="nf">sample_ising</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">J</span><span class="p">,</span> <span class="o">**</span><span class="n">parameters</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Sample from an Ising model using the implemented sample method.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            h (dict): Linear biases</span>
+<span class="sd">            J (dict): Quadratic biases</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            :obj: `.Sampleset`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">bqm</span> <span class="o">=</span> <span class="n">openjij</span><span class="o">.</span><span class="n">BinaryQuadraticModel</span><span class="o">.</span><span class="n">from_ising</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">J</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">bqm</span><span class="p">,</span> <span class="o">**</span><span class="n">parameters</span><span class="p">)</span></div>
 
 
-<span class="c1"># class BaseSampler:</span>
+<div class="viewcode-block" id="BaseSampler.sample_qubo"><a class="viewcode-back" href="../../../apis/openjij.sampler.html#openjij.sampler.sampler.BaseSampler.sample_qubo">[docs]</a>    <span class="nd">@samplemixinmethod</span>
+    <span class="k">def</span> <span class="nf">sample_qubo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="o">**</span><span class="n">parameters</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Sample from a QUBO model using the implemented sample method.</span>
 
-<span class="c1">#     def _set_model(self, model):</span>
-<span class="c1">#         self.indices = model.indices</span>
-<span class="c1">#         self.size = model.size</span>
-<span class="c1">#         self.energy_bias = model.energy_bias</span>
-<span class="c1">#         self.var_type = model.var_type</span>
+<span class="sd">        Args:</span>
+<span class="sd">            Q (dict): Coefficients of a quadratic unconstrained binary optimization</span>
 
-<span class="c1">#     def _make_dense_graph(self, h=None, J=None, Q=None, var_type=&#39;SPIN&#39;):</span>
-<span class="c1">#         if var_type == &#39;BINARY&#39;:</span>
-<span class="c1">#             if Q is None:</span>
-<span class="c1">#                 raise ValueError(&#39;Input QUBO matrix: Q&#39;)</span>
-<span class="c1">#             model = BinaryQuadraticModel(Q=Q, var_type=&#39;BINARY&#39;)</span>
-<span class="c1">#         elif var_type == &#39;SPIN&#39;:</span>
-<span class="c1">#             if h is None or J is None:</span>
-<span class="c1">#                 raise ValueError(&#39;Input h and J&#39;)</span>
-<span class="c1">#             model = BinaryQuadraticModel(h=h, J=J, var_type=&#39;SPIN&#39;)</span>
-<span class="c1">#         self.indices = model.indices</span>
-<span class="c1">#         self.N = len(model.indices)</span>
-<span class="c1">#         self.energy_bias = model.energy_bias</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            :obj: `.Sampleset`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">bqm</span> <span class="o">=</span> <span class="n">openjij</span><span class="o">.</span><span class="n">BinaryQuadraticModel</span><span class="o">.</span><span class="n">from_qubo</span><span class="p">(</span><span class="n">Q</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">bqm</span><span class="p">,</span> <span class="o">**</span><span class="n">parameters</span><span class="p">)</span></div></div>
 
-<span class="c1">#         self.var_type = model.var_type</span>
-
-<span class="c1">#         dense_graph = model.convert_to_dense_graph()</span>
-<span class="c1">#         self.model = model</span>
-<span class="c1">#         return dense_graph</span>
-
-<span class="c1">#     def _sampling_kwargs_setting(self, **kwargs):</span>
-<span class="c1">#         if &#39;iteration&#39; in kwargs:</span>
-<span class="c1">#             self.iteration = kwargs[&#39;iteration&#39;]</span>
-<span class="c1">#         elif &#39;num_reads&#39; in kwargs:</span>
-<span class="c1">#             self.iteration = kwargs[&#39;num_reads&#39;]</span>
-
-<span class="c1">#     def _sampling(self, model, init_generator, algorithm, system,</span>
-<span class="c1">#                   initial_state=None,</span>
-<span class="c1">#                   reinitialize_state=True, seed=None, **kwargs):</span>
-<span class="c1">#         self._sampling_kwargs_setting(**kwargs)</span>
-<span class="c1">#         self._set_model(model)</span>
-
-<span class="c1">#         # seed for MonteCarlo</span>
-<span class="c1">#         if seed is None:</span>
-<span class="c1">#             def sampling_algorithm(system): return algorithm(</span>
-<span class="c1">#                 system, self.schedule)</span>
-<span class="c1">#         else:</span>
-<span class="c1">#             def sampling_algorithm(system): return algorithm(</span>
-<span class="c1">#                 system, seed, self.schedule)</span>
-
-<span class="c1">#         # run algorithm</span>
-<span class="c1">#         execution_time = []</span>
-<span class="c1">#         response = openjij.Response(</span>
-<span class="c1">#             var_type=model.var_type, indices=self.indices)</span>
-
-<span class="c1">#         @measure_time</span>
-<span class="c1">#         def exec_sampling():</span>
-<span class="c1">#             previous_state = init_generator()</span>
-<span class="c1">#             for _ in range(self.iteration):</span>
-<span class="c1">#                 if reinitialize_state:</span>
-<span class="c1">#                     system.reset_spins(init_generator())</span>
-<span class="c1">#                 else:</span>
-<span class="c1">#                     system.reset_spins(previous_state)</span>
-<span class="c1">#                 _exec_time = measure_time(sampling_algorithm)(system)</span>
-<span class="c1">#                 execution_time.append(_exec_time)</span>
-<span class="c1">#                 previous_state = cxxjij.result.get_solution(system)</span>
-<span class="c1">#                 self._post_save(previous_state, system, model, response)</span>
-
-<span class="c1">#         sampling_time = exec_sampling()</span>
-<span class="c1">#         response.info[&#39;sampling_time&#39;] = sampling_time * 10**6  # micro sec</span>
-<span class="c1">#         response.info[&#39;execution_time&#39;] = np.mean(</span>
-<span class="c1">#             execution_time) * 10**6  # micro sec</span>
-<span class="c1">#         response.info[&#39;list_exec_times&#39;] = np.array(</span>
-<span class="c1">#             execution_time) * 10**6  # micro sec</span>
-
-<span class="c1">#         return response</span>
-
-<span class="c1">#     def _post_save(self, result_state, system, model, response):</span>
-<span class="c1">#         pass</span>
 </pre></div>
 
            </div>
@@ -369,6 +426,7 @@
       <script type="text/javascript" src="../../../_static/underscore.js"></script>
       <script type="text/javascript" src="../../../_static/doctools.js"></script>
       <script type="text/javascript" src="../../../_static/language_data.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

@@ -80,12 +80,18 @@
           
             
             
-                <p class="caption"><span class="caption-text">Contents:</span></p>
+                <p class="caption"><span class="caption-text">References:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../apis/openjij.html">openjij package</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../1-Introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../2-Install.html">Install</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../3-Minimum_sample.html">Minimum sample code</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../4-Parameters_customize.html">Parameters customize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../5-benchmark.html">Benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../6-HigherOrderModel.html">Higher order model</a></li>
 </ul>
 
             
@@ -172,13 +178,13 @@
         <span class="k">return</span> <span class="n">response</span>
 
     <span class="k">try</span><span class="p">:</span>
-        <span class="kn">from</span> <span class="nn">dimod.response</span> <span class="k">import</span> <span class="n">Response</span>
-        <span class="kn">from</span> <span class="nn">dimod.sampleset</span> <span class="k">import</span> <span class="n">SampleSet</span>
+        <span class="kn">from</span> <span class="nn">dimod.response</span> <span class="kn">import</span> <span class="n">Response</span>
+        <span class="kn">from</span> <span class="nn">dimod.sampleset</span> <span class="kn">import</span> <span class="n">SampleSet</span>
     <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s1">&#39;Import dwave dimod : &quot;pip install dimod&quot;&#39;</span><span class="p">)</span>
     
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="n">Response</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="n">SampleSet</span><span class="p">):</span>
-        <span class="kn">from</span> <span class="nn">dimod.vartypes</span> <span class="k">import</span> <span class="n">BINARY</span><span class="p">,</span> <span class="n">SPIN</span>
+        <span class="kn">from</span> <span class="nn">dimod.vartypes</span> <span class="kn">import</span> <span class="n">BINARY</span><span class="p">,</span> <span class="n">SPIN</span>
         <span class="n">var_type</span> <span class="o">=</span> <span class="s1">&#39;BINARY&#39;</span> <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">vartype</span> <span class="o">==</span> <span class="n">BINARY</span> <span class="k">else</span> <span class="s1">&#39;SPIN&#39;</span>
         <span class="n">o_res</span> <span class="o">=</span> <span class="n">openjij</span><span class="o">.</span><span class="n">Response</span><span class="p">(</span><span class="n">var_type</span><span class="o">=</span><span class="n">var_type</span><span class="p">,</span> <span class="n">indices</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">variables</span><span class="p">))</span>
         <span class="n">states</span> <span class="o">=</span> <span class="p">[]</span>
@@ -242,6 +248,7 @@
       <script type="text/javascript" src="../../../_static/underscore.js"></script>
       <script type="text/javascript" src="../../../_static/doctools.js"></script>
       <script type="text/javascript" src="../../../_static/language_data.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

@@ -80,12 +80,18 @@
           
             
             
-                <p class="caption"><span class="caption-text">Contents:</span></p>
+                <p class="caption"><span class="caption-text">References:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../apis/openjij.html">openjij package</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../1-Introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../2-Install.html">Install</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../3-Minimum_sample.html">Minimum sample code</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../4-Parameters_customize.html">Parameters customize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../5-benchmark.html">Benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../6-HigherOrderModel.html">Higher order model</a></li>
 </ul>
 
             
@@ -167,344 +173,130 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">cxxjij</span>
 <span class="kn">import</span> <span class="nn">openjij</span>
+<span class="kn">from</span> <span class="nn">openjij.utils.graph_utils</span> <span class="kn">import</span> <span class="n">qubo_to_ising</span>
+<span class="kn">import</span> <span class="nn">cimod</span>
 <span class="kn">import</span> <span class="nn">dimod</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">import</span> <span class="nn">sys</span>
 
-
-<div class="viewcode-block" id="BinaryQuadraticModel"><a class="viewcode-back" href="../../../apis/openjij.model.html#openjij.model.model.BinaryQuadraticModel">[docs]</a><span class="k">class</span> <span class="nc">BinaryQuadraticModel</span><span class="p">(</span><span class="n">dimod</span><span class="o">.</span><span class="n">BinaryQuadraticModel</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Represents Binary quadratic model</span>
-<span class="sd">    Attributes:</span>
-<span class="sd">        var_type (openjij.VariableType): variable type SPIN or BINARY</span>
-<span class="sd">        linear (dict): represents linear term</span>
-<span class="sd">        quad (dict): represents quadratic term</span>
-<span class="sd">        indices (list): labels of each variables sorted by results variables</span>
-<span class="sd">        energy_bias (float): represents constant energy term when convert to SPIN from BINARY</span>
-<span class="sd">        size (int): number of variables</span>
+<div class="viewcode-block" id="make_BinaryQuadraticModel"><a class="viewcode-back" href="../../../apis/openjij.model.html#openjij.model.model.make_BinaryQuadraticModel">[docs]</a><span class="k">def</span> <span class="nf">make_BinaryQuadraticModel</span><span class="p">(</span><span class="n">linear</span><span class="p">,</span> <span class="n">quadratic</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; BinaryQuadraticModel factory</span>
+<span class="sd">    Args:</span>
+<span class="sd">        linear (dict): linear biases</span>
+<span class="sd">        quadratic (dict): quadratic biases</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        generated BinaryQuadraticModel class</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">linear</span><span class="p">,</span> <span class="n">quadratic</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-                 <span class="n">var_type</span><span class="o">=</span><span class="n">openjij</span><span class="o">.</span><span class="n">SPIN</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">linear</span><span class="p">,</span> <span class="n">quadratic</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">var_type</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">var_type</span> <span class="o">=</span> <span class="n">var_type</span>
-
-        <span class="n">index_set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">linear</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-        <span class="k">for</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">quadratic</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="n">index_set</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">v1</span><span class="p">)</span>
-            <span class="n">index_set</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">v2</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">indices</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">index_set</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_interaction_matrix</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># calculated at interactions()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">indices</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="n">var_type</span> <span class="o">==</span> <span class="n">openjij</span><span class="o">.</span><span class="n">SPIN</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">energy_bias</span> <span class="o">=</span> <span class="mf">0.0</span>
-        <span class="k">else</span><span class="p">:</span>  <span class="c1"># BINARY</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">energy_bias</span> <span class="o">=</span> <span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">linear</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
-                                <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">quadratic</span><span class="o">.</span><span class="n">values</span><span class="p">())))</span><span class="o">/</span><span class="mi">4</span>
-
-<div class="viewcode-block" id="BinaryQuadraticModel.get_cxxjij_ising_graph"><a class="viewcode-back" href="../../../apis/openjij.model.html#openjij.model.model.BinaryQuadraticModel.get_cxxjij_ising_graph">[docs]</a>    <span class="k">def</span> <span class="nf">get_cxxjij_ising_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sparse</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Convert to cxxjij.graph.Dense or Sparse class from Python dictionary (h, J) or Q</span>
-<span class="sd">        Args:</span>
-<span class="sd">            sparse (bool): if true returns sparse graph</span>
-<span class="sd">        Returns:</span>
-<span class="sd">            openjij.graph.Dense openjij.graph.Sparse</span>
+    <span class="k">class</span> <span class="nc">BinaryQuadraticModel</span><span class="p">(</span><span class="n">cimod</span><span class="o">.</span><span class="n">make_BinaryQuadraticModel</span><span class="p">(</span><span class="n">linear</span><span class="p">,</span> <span class="n">quadratic</span><span class="p">)):</span>
+        <span class="sd">&quot;&quot;&quot;Represents Binary quadratic model. </span>
+<span class="sd">           Indices are listed in self.indices.</span>
+<span class="sd">        Attributes:</span>
+<span class="sd">            var_type (cimod.VariableType): variable type SPIN or BINARY</span>
+<span class="sd">            linear (dict): represents linear term</span>
+<span class="sd">            quadratic (dict): represents quadratic term</span>
+<span class="sd">            adj (dict): represents adjacency</span>
+<span class="sd">            indices (list): labels of each variables sorted by results variables</span>
+<span class="sd">            offset (float): represents constant energy term when convert to SPIN from BINARY</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">sparse</span><span class="p">:</span>
-            <span class="n">GraphClass</span> <span class="o">=</span> <span class="n">cxxjij</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">Dense</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">GraphClass</span> <span class="o">=</span> <span class="n">cxxjij</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">Sparse</span>
-
-        <span class="n">cxxjij_graph</span> <span class="o">=</span> <span class="n">GraphClass</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
-
-        <span class="n">ising_int</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ising_interactions</span><span class="p">()</span>
-        <span class="c1"># cxxjij.graph.dense</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">):</span>
-            <span class="k">if</span> <span class="n">ising_int</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="mf">0.0</span><span class="p">:</span>
-                <span class="n">cxxjij_graph</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">ising_int</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span>
-            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">):</span>
-                <span class="k">if</span> <span class="n">ising_int</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">!=</span> <span class="mf">0.0</span><span class="p">:</span>
-                    <span class="n">cxxjij_graph</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">ising_int</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
-
-        <span class="k">return</span> <span class="n">cxxjij_graph</span></div>
-
-<div class="viewcode-block" id="BinaryQuadraticModel.ising_interactions"><a class="viewcode-back" href="../../../apis/openjij.model.html#openjij.model.model.BinaryQuadraticModel.ising_interactions">[docs]</a>    <span class="k">def</span> <span class="nf">ising_interactions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Interactions in the Ising representation</span>
-<span class="sd">        QUBO formulation to the Ising formulation</span>
-<span class="sd">        We assumption Q is a triangular matrix.</span>
-<span class="sd">        H = q ^ T Q q</span>
-<span class="sd">          = 1/4 (1+s) ^ T Q(1+s)</span>
-<span class="sd">          = s ^ T Q/4 s + 1 ^ T Q/4 s + s ^ T Q/4 1 + 1 ^ T Q/4 1</span>
-<span class="sd">          = s ^ T nondiag(Q)/4 s + 1 ^ T Q/4 s + s ^ T Q/4 1 + 1 ^ T(Q + diag(Q))/4 1</span>
-<span class="sd">          = \sum_{i &lt; j} Q_{ij}/4 s_i s_j</span>
-<span class="sd">            + \sum{i &lt;= j}(Q_{ij} + Q_{ji}) s_i</span>
-<span class="sd">            + sum_{i &lt;= j}(Q_{ij} + Q_{ii})/4</span>
-<span class="sd">        Therefore</span>
-<span class="sd">          J_{ij} = Q_{ij}/4</span>
-<span class="sd">          h_i = sum{i &lt;= j}(Q_{ij} + Q_{ji})/4</span>
-<span class="sd">          constant_term = sum_{i &lt;= j} Q_{ij}/4 + Tr(Q)(energy bias)</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">var_type</span> <span class="o">==</span> <span class="n">openjij</span><span class="o">.</span><span class="n">SPIN</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">interactions</span><span class="p">()</span>
-        <span class="n">interactions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">interactions</span><span class="p">()</span><span class="o">/</span><span class="mi">4</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">var_type</span> <span class="o">==</span> <span class="n">openjij</span><span class="o">.</span><span class="n">BINARY</span><span class="p">:</span>
-            <span class="c1"># convert to the Ising interaction</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">energy_bias</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">triu</span><span class="p">(</span><span class="n">interactions</span><span class="p">))</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">trace</span><span class="p">(</span><span class="n">interactions</span><span class="p">))</span>
-            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">interactions</span><span class="p">)):</span>
-                <span class="n">interactions</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span>
-                    <span class="n">interactions</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:])</span> <span class="o">+</span> <span class="n">interactions</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span>
-        <span class="k">return</span> <span class="n">interactions</span></div>
-
-<div class="viewcode-block" id="BinaryQuadraticModel.interactions"><a class="viewcode-back" href="../../../apis/openjij.model.html#openjij.model.model.BinaryQuadraticModel.interactions">[docs]</a>    <span class="k">def</span> <span class="nf">interactions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">re_calculate</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;make interaction matrix</span>
-<span class="sd">        The Ising model: E = ΣJ_ij σiσj + Σhiσi</span>
-<span class="sd">            Interaction matrix -&gt; H_ij = J_ij + J_ji, H_ii = hi</span>
-<span class="sd">        QUBO: E = Σ1/2Q_ij q_iq_j + ΣQ_ii q_i</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            re_calculate(bool): Whether to force a recalculation</span>
-<span class="sd">        Returns:</span>
-<span class="sd">            numpy.ndarray: interactioin matrix H_{ij} or Q_{ij}</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_interaction_matrix</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="n">re_calculate</span><span class="p">):</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_interaction_matrix</span>
-
-        <span class="n">system_size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">indices</span><span class="p">)</span>
-        <span class="n">interactions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">system_size</span><span class="p">,</span> <span class="n">system_size</span><span class="p">))</span>
-
-        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">i_index</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">indices</span><span class="p">):</span>
-            <span class="n">interactions</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">linear</span><span class="p">[</span><span class="n">i_index</span><span class="p">]</span> <span class="k">if</span> <span class="n">i_index</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">linear</span> <span class="k">else</span> <span class="mf">0.0</span>
-            <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">j_index</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">indices</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">:]):</span>
-                <span class="n">j</span> <span class="o">+=</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span>
-                <span class="n">jval</span> <span class="o">=</span> <span class="mf">0.0</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">i_index</span><span class="p">,</span> <span class="n">j_index</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">quadratic</span><span class="p">:</span>
-                    <span class="n">jval</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">quadratic</span><span class="p">[(</span><span class="n">i_index</span><span class="p">,</span> <span class="n">j_index</span><span class="p">)]</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">j_index</span><span class="p">,</span> <span class="n">i_index</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">quadratic</span><span class="p">:</span>
-                    <span class="n">jval</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">quadratic</span><span class="p">[(</span><span class="n">j_index</span><span class="p">,</span> <span class="n">i_index</span><span class="p">)]</span>
-                <span class="n">interactions</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">jval</span>
-                <span class="n">interactions</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">jval</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">_interaction_matrix</span> <span class="o">=</span> <span class="n">interactions</span>
-
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_interaction_matrix</span></div>
-
-<div class="viewcode-block" id="BinaryQuadraticModel.calc_energy"><a class="viewcode-back" href="../../../apis/openjij.model.html#openjij.model.model.BinaryQuadraticModel.calc_energy">[docs]</a>    <span class="k">def</span> <span class="nf">calc_energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">need_to_convert_from_spin</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;calculate energy from state</span>
-<span class="sd">        Args:</span>
-<span class="sd">            state(list, numpy.array): BINARY or SPIN state</span>
-<span class="sd">            need_to_convet_to_spin(bool): if state is SPIN and need</span>
-<span class="sd">                                           to convert to BINARY from SPIN</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">_state</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">need_to_convert_from_spin</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">var_type</span> <span class="o">==</span> <span class="n">openjij</span><span class="o">.</span><span class="n">BINARY</span><span class="p">:</span>
-            <span class="n">_state</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">_state</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
-
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">var_type</span> <span class="o">==</span> <span class="n">openjij</span><span class="o">.</span><span class="n">BINARY</span><span class="p">:</span>
-            <span class="n">int_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">triu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">interactions</span><span class="p">())</span>
-            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">_state</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">int_mat</span><span class="p">,</span> <span class="n">_state</span><span class="p">))</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">var_type</span> <span class="o">==</span> <span class="n">openjij</span><span class="o">.</span><span class="n">SPIN</span><span class="p">:</span>
-            <span class="n">int_mat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ising_interactions</span><span class="p">()</span>
-            <span class="n">linear_term</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">int_mat</span><span class="p">)</span>
-            <span class="n">energy</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">_state</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">int_mat</span><span class="p">,</span> <span class="n">_state</span><span class="p">))</span> <span class="o">-</span>
-                      <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">linear_term</span><span class="p">))</span><span class="o">/</span><span class="mi">2</span>
-            <span class="n">energy</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">linear_term</span><span class="p">,</span> <span class="n">_state</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">energy</span></div>
-
-<div class="viewcode-block" id="BinaryQuadraticModel.ising_dictionary"><a class="viewcode-back" href="../../../apis/openjij.model.html#openjij.model.model.BinaryQuadraticModel.ising_dictionary">[docs]</a>    <span class="k">def</span> <span class="nf">ising_dictionary</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">var_type</span> <span class="o">==</span> <span class="n">openjij</span><span class="o">.</span><span class="n">SPIN</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">linear</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">quadratic</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">var_type</span> <span class="o">==</span> <span class="n">openjij</span><span class="o">.</span><span class="n">BINARY</span><span class="p">:</span>
-            <span class="n">ising_int</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ising_interactions</span><span class="p">()</span>
-            <span class="n">h</span> <span class="o">=</span> <span class="p">{}</span>
-            <span class="n">J</span> <span class="o">=</span> <span class="p">{(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">):</span> <span class="n">qij</span><span class="o">/</span><span class="mf">4.0</span> <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">),</span> <span class="n">qij</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">quadratic</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
-            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ising_int</span><span class="p">)):</span>
-                <span class="k">if</span> <span class="n">ising_int</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
-                    <span class="n">h</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">indices</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="n">ising_int</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
-        <span class="k">return</span> <span class="n">h</span><span class="p">,</span> <span class="n">J</span></div>
-
-<div class="viewcode-block" id="BinaryQuadraticModel.from_qubo"><a class="viewcode-back" href="../../../apis/openjij.model.html#openjij.model.model.BinaryQuadraticModel.from_qubo">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">from_qubo</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="n">linear</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="n">quadratic</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">for</span> <span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">),</span> <span class="n">bias</span> <span class="ow">in</span> <span class="n">Q</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="k">if</span> <span class="n">u</span> <span class="o">==</span> <span class="n">v</span><span class="p">:</span>
-                <span class="n">linear</span><span class="p">[</span><span class="n">u</span><span class="p">]</span> <span class="o">=</span> <span class="n">bias</span>
+    
+        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">linear</span><span class="p">,</span> <span class="n">quadratic</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+                     <span class="n">var_type</span><span class="o">=</span><span class="n">openjij</span><span class="o">.</span><span class="n">SPIN</span><span class="p">,</span> <span class="n">gpu</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    
+            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">linear</span><span class="p">,</span> <span class="n">quadratic</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">var_type</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gpu</span> <span class="o">=</span> <span class="n">gpu</span>
+    
+    
+        <span class="k">def</span> <span class="nf">get_cxxjij_ising_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sparse</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Convert to cxxjij.graph.Dense or Sparse class from Python dictionary (h, J) or Q</span>
+<span class="sd">            Args:</span>
+<span class="sd">                sparse (bool): if true returns sparse graph</span>
+<span class="sd">            Returns:</span>
+<span class="sd">                openjij.graph.Dense openjij.graph.Sparse</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+    
+            <span class="k">if</span> <span class="n">sparse</span><span class="p">:</span>
+                <span class="n">GraphClass</span> <span class="o">=</span> <span class="n">cxxjij</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">Sparse</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpu</span> <span class="o">==</span> <span class="kc">False</span> <span class="k">else</span> <span class="n">cxxjij</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">SparseGPU</span>
+                <span class="k">return</span> <span class="n">GraphClass</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">to_serializable</span><span class="p">())</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">quadratic</span><span class="p">[(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">)]</span> <span class="o">=</span> <span class="n">bias</span>
-        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">linear</span><span class="p">,</span> <span class="n">quadratic</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span>
-                   <span class="n">var_type</span><span class="o">=</span><span class="n">openjij</span><span class="o">.</span><span class="n">BINARY</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
+                <span class="n">GraphClass</span> <span class="o">=</span> <span class="n">cxxjij</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">Dense</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpu</span> <span class="o">==</span> <span class="kc">False</span> <span class="k">else</span> <span class="n">cxxjij</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">DenseGPU</span>
+                <span class="c1"># initialize with interaction matrix.</span>
+                <span class="n">mat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">interaction_matrix</span><span class="p">()</span>
+
+                <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vartype</span> <span class="o">==</span> <span class="n">openjij</span><span class="o">.</span><span class="n">BINARY</span><span class="p">):</span>
+                    <span class="c1"># convert to ising matrix</span>
+                    <span class="n">qubo_to_ising</span><span class="p">(</span><span class="n">mat</span><span class="p">)</span>
+
+                <span class="n">size</span> <span class="o">=</span> <span class="n">mat</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">dense</span> <span class="o">=</span> <span class="n">GraphClass</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
+                <span class="c1"># graph type is dense.</span>
+                <span class="c1"># reshape matrix</span>
+                <span class="n">temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">size</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+                <span class="n">temp</span><span class="p">[:</span><span class="n">size</span><span class="p">,</span> <span class="p">:</span><span class="n">size</span><span class="p">]</span> <span class="o">=</span> <span class="n">mat</span>
+                <span class="n">temp</span><span class="p">[:</span><span class="n">size</span><span class="p">,</span> <span class="n">size</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">mat</span><span class="p">)</span>
+                <span class="n">temp</span><span class="p">[</span><span class="n">size</span><span class="p">,</span> <span class="p">:</span><span class="n">size</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">mat</span><span class="p">)</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">fill_diagonal</span><span class="p">(</span><span class="n">temp</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="n">temp</span><span class="p">[</span><span class="n">size</span><span class="p">,</span> <span class="n">size</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+    
+                <span class="n">dense</span><span class="o">.</span><span class="n">set_interaction_matrix</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span>
+    
+                <span class="k">return</span> <span class="n">dense</span>
+    
+    
+        <span class="c1"># compatible with the previous version</span>
+        <span class="k">def</span> <span class="nf">calc_energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sample</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="n">sample</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">BinaryQuadraticModel</span></div>
+
+<div class="viewcode-block" id="make_BinaryQuadraticModel_from_JSON"><a class="viewcode-back" href="../../../apis/openjij.model.html#openjij.model.model.make_BinaryQuadraticModel_from_JSON">[docs]</a><span class="k">def</span> <span class="nf">make_BinaryQuadraticModel_from_JSON</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; BinaryQuadraticModel factory for JSON</span>
+<span class="sd">    Args:</span>
+<span class="sd">        obj (dict): JSON object</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        generated BinaryQuadraticModel class</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">label</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s1">&#39;variable_labels&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="c1">#convert to tuple</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
+
+    <span class="n">mock_linear</span> <span class="o">=</span> <span class="p">{</span><span class="n">label</span><span class="p">:</span><span class="mf">1.0</span><span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">make_BinaryQuadraticModel</span><span class="p">(</span><span class="n">mock_linear</span><span class="p">,</span> <span class="p">{})</span></div>
+
+<div class="viewcode-block" id="BinaryQuadraticModel"><a class="viewcode-back" href="../../../apis/openjij.model.html#openjij.model.model.BinaryQuadraticModel">[docs]</a><span class="k">def</span> <span class="nf">BinaryQuadraticModel</span><span class="p">(</span><span class="n">linear</span><span class="p">,</span> <span class="n">quadratic</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">var_type</span><span class="o">=</span><span class="n">dimod</span><span class="o">.</span><span class="n">SPIN</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+    <span class="n">Model</span> <span class="o">=</span> <span class="n">make_BinaryQuadraticModel</span><span class="p">(</span><span class="n">linear</span><span class="p">,</span> <span class="n">quadratic</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">Model</span><span class="p">(</span><span class="n">linear</span><span class="p">,</span> <span class="n">quadratic</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">var_type</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<span class="c1">#classmethods</span>
+<span class="n">BinaryQuadraticModel</span><span class="o">.</span><span class="n">from_qubo</span> <span class="o">=</span> \
+        <span class="k">lambda</span> <span class="n">Q</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">make_BinaryQuadraticModel</span><span class="p">({},</span> <span class="n">Q</span><span class="p">)</span><span class="o">.</span><span class="n">from_qubo</span><span class="p">(</span><span class="n">Q</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<span class="n">BinaryQuadraticModel</span><span class="o">.</span><span class="n">from_ising</span> <span class="o">=</span> \
+        <span class="k">lambda</span> <span class="n">linear</span><span class="p">,</span> <span class="n">quadratic</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">make_BinaryQuadraticModel</span><span class="p">(</span><span class="n">linear</span><span class="p">,</span> <span class="n">quadratic</span><span class="p">)</span><span class="o">.</span><span class="n">from_ising</span><span class="p">(</span><span class="n">linear</span><span class="p">,</span> <span class="n">quadratic</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<span class="n">BinaryQuadraticModel</span><span class="o">.</span><span class="n">from_serializable</span> <span class="o">=</span> \
+        <span class="k">lambda</span> <span class="n">obj</span><span class="p">:</span> <span class="n">make_BinaryQuadraticModel_from_JSON</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span><span class="o">.</span><span class="n">from_serializable</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
 
 
-<span class="c1"># class BinaryQuadraticModel:</span>
-<span class="c1">#     &quot;&quot;&quot;Represents Binary quadratic model</span>
-<span class="c1">#     Attributes:</span>
-<span class="c1">#         var_type(openjij.VariableType): variable type SPIN or BINARY</span>
-<span class="c1">#         linear(dict): represents linear term</span>
-<span class="c1">#         quad(dict): represents quadratic term</span>
-<span class="c1">#         indices(list): labels of each variables sorted by results variables</span>
-<span class="c1">#         energy_bias(float): represents constant energy term when convert to SPIN from BINARY</span>
-<span class="c1">#         size(int): number of variables</span>
-<span class="c1">#     &quot;&quot;&quot;</span>
 
-<span class="c1">#     def __init__(self, h=None, J=None, Q=None, var_type=openjij.SPIN):</span>
 
-<span class="c1">#         self.var_type = openjij.cast_var_type(var_type)</span>
 
-<span class="c1">#         if self.var_type == openjij.SPIN:</span>
-<span class="c1">#             if (h is None) or (J is None):</span>
-<span class="c1">#                 raise ValueError(&#39;Input h and J.&#39;)</span>
-<span class="c1">#             self.linear = h</span>
-<span class="c1">#             self.quad = J</span>
-<span class="c1">#         elif self.var_type == openjij.BINARY:</span>
-<span class="c1">#             if not isinstance(Q, dict) or Q is None:</span>
-<span class="c1">#                 raise ValueError(&#39;Q should be dictionary.&#39;)</span>
-<span class="c1">#             self.linear = {}</span>
-<span class="c1">#             self.quad = {}</span>
-<span class="c1">#             for (i, j), qij in Q.items():</span>
-<span class="c1">#                 if i == j:</span>
-<span class="c1">#                     self.linear[i] = qij</span>
-<span class="c1">#                 else:</span>
-<span class="c1">#                     self.quad[(i, j)] = qij</span>
 
-<span class="c1">#         index_set = set(self.linear.keys())</span>
-<span class="c1">#         for v1, v2 in self.quad.keys():</span>
-<span class="c1">#             index_set.add(v1)</span>
-<span class="c1">#             index_set.add(v2)</span>
 
-<span class="c1">#         self.indices = list(index_set)</span>
-<span class="c1">#         if var_type == openjij.SPIN:</span>
-<span class="c1">#             self.energy_bias = 0.0</span>
-<span class="c1">#         else:  # BINARY</span>
-<span class="c1">#             self.energy_bias = (sum(list(self.linear.values()))</span>
-<span class="c1">#                                 * 2 + sum(list(self.quad.values())))/4</span>
 
-<span class="c1">#         self._interaction_matrix = None  # calculated at interactions()</span>
-<span class="c1">#         self.size = len(self.indices)</span>
 
-<span class="c1">#     def get_cxxjij_ising_graph(self, sparse=False):</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-<span class="c1">#         Convert to cxxjij.graph.Dense or Sparse class from Python dictionary(h, J) or Q</span>
-<span class="c1">#         Args:</span>
-<span class="c1">#             sparse(bool): if true returns sparse graph</span>
-<span class="c1">#         Returns:</span>
-<span class="c1">#             openjij.graph.Dense openjij.graph.Sparse</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-<span class="c1">#         if not sparse:</span>
-<span class="c1">#             GraphClass = cxxjij.graph.Dense</span>
-<span class="c1">#         else:</span>
-<span class="c1">#             GraphClass = cxxjij.graph.Sparse</span>
 
-<span class="c1">#         cxxjij_graph = GraphClass(self.size)</span>
 
-<span class="c1">#         ising_int = self.ising_interactions()</span>
-<span class="c1">#         # cxxjij.graph.dense</span>
-<span class="c1">#         for i in range(self.size):</span>
-<span class="c1">#             if ising_int[i, i] != 0.0:</span>
-<span class="c1">#                 cxxjij_graph[i, i] = ising_int[i, i]</span>
-<span class="c1">#             for j in range(i+1, self.size):</span>
-<span class="c1">#                 if ising_int[i, j] != 0.0:</span>
-<span class="c1">#                     cxxjij_graph[i, j] = ising_int[i, j]</span>
 
-<span class="c1">#         return cxxjij_graph</span>
 
-<span class="c1">#     def ising_interactions(self):</span>
-<span class="c1">#         &quot;&quot;&quot; Interactions in the Ising representation</span>
-<span class="c1">#         QUBO formulation to the Ising formulation</span>
-<span class="c1">#         We assumption Q is a triangular matrix.</span>
-<span class="c1">#         H = q ^ T Q q</span>
-<span class="c1">#           = 1/4 (1+s) ^ T Q(1+s)</span>
-<span class="c1">#           = s ^ T Q/4 s + 1 ^ T Q/4 s + s ^ T Q/4 1 + 1 ^ T Q/4 1</span>
-<span class="c1">#           = s ^ T nondiag(Q)/4 s + 1 ^ T Q/4 s + s ^ T Q/4 1 + 1 ^ T(Q + diag(Q))/4 1</span>
-<span class="c1">#           = \sum_{i &lt; j} Q_{ij}/4 s_i s_j</span>
-<span class="c1">#             + \sum{i &lt;= j}(Q_{ij} + Q_{ji}) s_i</span>
-<span class="c1">#             + sum_{i &lt;= j}(Q_{ij} + Q_{ii})/4</span>
-<span class="c1">#         Therefore</span>
-<span class="c1">#           J_{ij} = Q_{ij}/4</span>
-<span class="c1">#           h_i = sum{i &lt;= j}(Q_{ij} + Q_{ji})/4</span>
-<span class="c1">#           constant_term = sum_{i &lt;= j} Q_{ij}/4 + Tr(Q)(energy bias)</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-<span class="c1">#         if self.var_type == openjij.SPIN:</span>
-<span class="c1">#             return self.interactions()</span>
-<span class="c1">#         interactions = self.interactions()/4</span>
-<span class="c1">#         if self.var_type == openjij.BINARY:</span>
-<span class="c1">#             # convert to the Ising interaction</span>
-<span class="c1">#             self.energy_bias = (</span>
-<span class="c1">#                 np.sum(np.triu(interactions)) + np.trace(interactions))</span>
-<span class="c1">#             for i in range(len(interactions)):</span>
-<span class="c1">#                 interactions[i, i] = np.sum(</span>
-<span class="c1">#                     interactions[i, :]) + interactions[i, i]</span>
-<span class="c1">#         return interactions</span>
 
-<span class="c1">#     def interactions(self, re_calculate=False):</span>
-<span class="c1">#         &quot;&quot;&quot;make interaction matrix</span>
-<span class="c1">#         The Ising model: E = ΣJ_ij σiσj + Σhiσi</span>
-<span class="c1">#             Interaction matrix -&gt; H_ij = J_ij + J_ji, H_ii = hi</span>
-<span class="c1">#         QUBO: E = Σ1/2Q_ij q_iq_j + ΣQ_ii q_i</span>
 
-<span class="c1">#         Args:</span>
-<span class="c1">#             re_calculate(bool): Whether to force a recalculation</span>
-<span class="c1">#         Returns:</span>
-<span class="c1">#             numpy.ndarray: interactioin matrix H_{ij} or Q_{ij}</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
 
-<span class="c1">#         if (self._interaction_matrix is not None) and (not re_calculate):</span>
-<span class="c1">#             return self._interaction_matrix</span>
-
-<span class="c1">#         system_size = len(self.indices)</span>
-<span class="c1">#         interactions = np.zeros((system_size, system_size))</span>
-
-<span class="c1">#         for i, i_index in enumerate(self.indices):</span>
-<span class="c1">#             interactions[i, i] = self.linear[i_index] if i_index in self.linear else 0.0</span>
-<span class="c1">#             for j, j_index in enumerate(self.indices[i+1:]):</span>
-<span class="c1">#                 j += i+1</span>
-<span class="c1">#                 jval = 0.0</span>
-<span class="c1">#                 if (i_index, j_index) in self.quad:</span>
-<span class="c1">#                     jval += self.quad[(i_index, j_index)]</span>
-<span class="c1">#                 if (j_index, i_index) in self.quad:</span>
-<span class="c1">#                     jval += self.quad[(j_index, i_index)]</span>
-<span class="c1">#                 interactions[i, j] = jval</span>
-<span class="c1">#                 interactions[j, i] = jval</span>
-
-<span class="c1">#         self._interaction_matrix = interactions</span>
-
-<span class="c1">#         return self._interaction_matrix</span>
-
-<span class="c1">#     def calc_energy(self, state, need_to_convert_from_spin=False):</span>
-<span class="c1">#         &quot;&quot;&quot;calculate energy from state</span>
-<span class="c1">#         Args:</span>
-<span class="c1">#             state(list, numpy.array): BINARY or SPIN state</span>
-<span class="c1">#             need_to_convet_to_spin(bool): if state is SPIN and need</span>
-<span class="c1">#                                            to convert to BINARY from SPIN</span>
-<span class="c1">#         &quot;&quot;&quot;</span>
-<span class="c1">#         _state = np.array(state)</span>
-<span class="c1">#         if need_to_convert_from_spin and self.var_type == openjij.BINARY:</span>
-<span class="c1">#             _state = (1+_state)/2</span>
-
-<span class="c1">#         if self.var_type == openjij.BINARY:</span>
-<span class="c1">#             int_mat = np.triu(self.interactions())</span>
-<span class="c1">#             return np.dot(_state, np.dot(int_mat, _state))</span>
-<span class="c1">#         elif self.var_type == openjij.SPIN:</span>
-<span class="c1">#             int_mat = self.ising_interactions()</span>
-<span class="c1">#             linear_term = np.diag(int_mat)</span>
-<span class="c1">#             energy = (np.dot(_state, np.dot(int_mat, _state)) -</span>
-<span class="c1">#                       np.sum(linear_term))/2</span>
-<span class="c1">#             energy += np.dot(linear_term, _state)</span>
-<span class="c1">#             return energy</span>
-
-<span class="c1">#     def ising_dictionary(self):</span>
-<span class="c1">#         if self.var_type == openjij.SPIN:</span>
-<span class="c1">#             return self.linear, self.quad</span>
-<span class="c1">#         elif self.var_type == openjij.BINARY:</span>
-<span class="c1">#             ising_int = self.ising_interactions()</span>
-<span class="c1">#             h = {}</span>
-<span class="c1">#             J = {(i, j): qij/4.0 for (i, j), qij in self.quad.items()}</span>
-<span class="c1">#             for i in range(len(ising_int)):</span>
-<span class="c1">#                 if ising_int[i][i] != 0:</span>
-<span class="c1">#                     h[self.indices[i]] = ising_int[i][i]</span>
-<span class="c1">#         return h, J</span>
 </pre></div>
 
            </div>
@@ -549,6 +341,7 @@
       <script type="text/javascript" src="../../../_static/underscore.js"></script>
       <script type="text/javascript" src="../../../_static/doctools.js"></script>
       <script type="text/javascript" src="../../../_static/language_data.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

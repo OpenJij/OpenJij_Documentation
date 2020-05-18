@@ -13,5 +13,10 @@ You may need additional Python packages in the course of installation.
 ## build
 
 ```
-$ sphinx-apidoc -f -o ./source/apis ./OpenJij/openjij
+$ sphinx-apidoc -f -o ./source/apis ./OpenJij/openjij -d 2
 $ make html
+```
+
+## Notes
+
+This Python documentation uses the **Google style** docstrings.

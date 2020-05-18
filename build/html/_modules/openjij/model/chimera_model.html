@@ -80,12 +80,18 @@
           
             
             
-                <p class="caption"><span class="caption-text">Contents:</span></p>
+                <p class="caption"><span class="caption-text">References:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../apis/openjij.html">openjij package</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../1-Introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../2-Install.html">Install</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../3-Minimum_sample.html">Minimum sample code</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../4-Parameters_customize.html">Parameters customize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../5-benchmark.html">Benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../6-HigherOrderModel.html">Higher order model</a></li>
 </ul>
 
             
@@ -165,274 +171,289 @@
 <span class="c1"># limitations under the License.</span>
 
 <span class="kn">import</span> <span class="nn">openjij</span>
-<span class="kn">from</span> <span class="nn">openjij.model</span> <span class="k">import</span> <span class="n">BinaryQuadraticModel</span>
+<span class="kn">from</span> <span class="nn">openjij.model</span> <span class="kn">import</span> <span class="n">make_BinaryQuadraticModel</span><span class="p">,</span> <span class="n">make_BinaryQuadraticModel_from_JSON</span><span class="p">,</span> <span class="n">BinaryQuadraticModel</span>
 <span class="kn">import</span> <span class="nn">cxxjij</span> <span class="k">as</span> <span class="nn">cj</span>
 
 
-<div class="viewcode-block" id="ChimeraModel"><a class="viewcode-back" href="../../../apis/openjij.model.html#openjij.model.chimera_model.ChimeraModel">[docs]</a><span class="k">class</span> <span class="nc">ChimeraModel</span><span class="p">(</span><span class="n">BinaryQuadraticModel</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Binary quadnratic model dealing with chimera graph</span>
-<span class="sd">    This model deal with chimera graph.</span>
-<span class="sd">    ChimeraModel provide methods to verify whether a given interaction graph matches a Chimera graph and to convert it to cxxjij.graph.Chimera.</span>
-
-<span class="sd">    Examples:</span>
-<span class="sd">        # This interactions satisfy chimera topology.</span>
-<span class="sd">        &gt;&gt;&gt; Q={(0, 4): -1, (4, 12): -1}</span>
-<span class="sd">        &gt;&gt;&gt; chimera_model = ChimeraModel(Q, unit_num_L=2)  # make</span>
-<span class="sd">        &gt;&gt;&gt; chimera_self.validate_chimera()</span>
+<div class="viewcode-block" id="make_ChimeraModel"><a class="viewcode-back" href="../../../apis/openjij.model.html#openjij.model.chimera_model.make_ChimeraModel">[docs]</a><span class="k">def</span> <span class="nf">make_ChimeraModel</span><span class="p">(</span><span class="n">linear</span><span class="p">,</span> <span class="n">quadratic</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; ChimeraModel factory</span>
+<span class="sd">    Args:</span>
+<span class="sd">        linear (dict): linear biases</span>
+<span class="sd">        quadratic (dict): quadratic biases</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        generated ChimeraModel class</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">linear</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">quadratic</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">offset</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">var_type</span><span class="o">=</span><span class="n">openjij</span><span class="o">.</span><span class="n">SPIN</span><span class="p">,</span>
-                 <span class="n">unit_num_L</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">gpu</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">gpu</span> <span class="o">=</span> <span class="n">gpu</span>
-        <span class="k">if</span> <span class="n">model</span><span class="p">:</span>
-            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">linear</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">quadratic</span><span class="p">,</span>
-                             <span class="n">model</span><span class="o">.</span><span class="n">offset</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">var_type</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">linear</span><span class="p">,</span> <span class="n">quadratic</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">var_type</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">unit_num_L</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s1">&#39;Input unit_num_L which is the length of the side of the two-dimensional grid where chimera unit cells are arranged.&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">unit_num_L</span> <span class="o">=</span> <span class="n">unit_num_L</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">coordinate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_validate_indices</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">indices</span><span class="p">)</span>
-
-        <span class="c1"># _chimera_index: 1-D index i,L -&gt; chimera coordinate x,y,z</span>
-        <span class="c1"># _to_index: chimera coordinate x,y,z,L -&gt; 1-D index i</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinate</span> <span class="o">==</span> <span class="s1">&#39;index&#39;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_chimera_index</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">i</span><span class="p">,</span> <span class="n">L</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">chimera_coordinate</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">L</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_to_index</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">L</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_index</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">L</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinate</span> <span class="o">==</span> <span class="s1">&#39;chimera coordinate&#39;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_chimera_index</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">i</span><span class="p">,</span> <span class="n">L</span><span class="p">:</span> <span class="n">i</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_to_index</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">L</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_index</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">L</span><span class="p">)</span>
-
-    <span class="c1"># @classmethod</span>
-    <span class="c1"># def from_qubo(cls, Q: dict, offset=0.0, unit_num_L=None, gpu=False):</span>
-    <span class="c1">#     linear = {}</span>
-    <span class="c1">#     quadratic = {}</span>
-    <span class="c1">#     for (u, v), bias in Q.items():</span>
-    <span class="c1">#         if u == v:</span>
-    <span class="c1">#             linear[u] = bias</span>
-    <span class="c1">#         else:</span>
-    <span class="c1">#             quadratic[(u, v)] = bias</span>
-    <span class="c1">#     return cls(linear, quadratic, offset, openjij.BINARY, unit_num_L, gpu=gpu)</span>
-
-
-<span class="c1"># class ChimeraModel(BinaryQuadraticModel):</span>
-<span class="c1">#     &quot;&quot;&quot;Binary quadnratic model dealing with chimera graph</span>
-<span class="c1">#     This model deal with chimera graph.</span>
-<span class="c1">#     ChimeraModel provide methods to verify whether a given interaction graph matches a Chimera graph and to convert it to cxxjij.graph.Chimera.</span>
-
-<span class="c1">#     Examples:</span>
-<span class="c1">#         # This interactions satisfy chimera topology.</span>
-<span class="c1">#         &gt;&gt;&gt; Q={(0, 4): -1, (4, 12): -1}</span>
-<span class="c1">#         &gt;&gt;&gt; chimera_model = ChimeraModel(Q, unit_num_L=2)  # make</span>
-<span class="c1">#         &gt;&gt;&gt; chimera_self.validate_chimera()</span>
-<span class="c1">#     &quot;&quot;&quot;</span>
-
-<span class="c1">#     def __init__(self, h=None, J=None, Q=None,</span>
-<span class="c1">#                  unit_num_L=None, model=None, var_type=openjij.SPIN,</span>
-<span class="c1">#                  gpu=False):</span>
-
-<span class="c1">#         # if you use gpu, gpu=True</span>
-<span class="c1">#         self.gpu = gpu</span>
-<span class="c1">#         if model:</span>
-<span class="c1">#             # convert to ChimeraModel from BinaryQuadraticModel</span>
-<span class="c1">#             self.linear = model.linear</span>
-<span class="c1">#             self.quad = model.quad</span>
-<span class="c1">#             self.indices = model.indices</span>
-<span class="c1">#             self.energy_bias = model.energy_bias</span>
-<span class="c1">#             self.var_type = model.var_type</span>
-<span class="c1">#             self._interaction_matrix = None</span>
-<span class="c1">#         else:</span>
-<span class="c1">#             super().__init__(linear=h, quadratic=J, Q=Q, var_type=var_type)</span>
-
-<span class="c1">#         if not unit_num_L:</span>
-<span class="c1">#             raise ValueError(</span>
-<span class="c1">#                 &#39;Input unit_num_L which is the length of the side of the two-dimensional grid where chimera unit cells are arranged.&#39;)</span>
-<span class="c1">#         self.unit_num_L = unit_num_L</span>
-
-<span class="c1">#         self.coordinate = self._validate_indices(self.indices)</span>
-
-<span class="c1">#         # _chimera_index: 1-D index i,L -&gt; chimera coordinate x,y,z</span>
-<span class="c1">#         # _to_index: chimera coordinate x,y,z,L -&gt; 1-D index i</span>
-<span class="c1">#         if self.coordinate == &#39;index&#39;:</span>
-<span class="c1">#             self._chimera_index = lambda i, L: self.chimera_coordinate(i, L)</span>
-<span class="c1">#             self._to_index = lambda x, y, z, L: self.to_index(x, y, z, L)</span>
-<span class="c1">#         elif self.coordinate == &#39;chimera coordinate&#39;:</span>
-<span class="c1">#             self._chimera_index = lambda i, L: i</span>
-<span class="c1">#             self._to_index = lambda x, y, z, L: self.to_index(x, y, z, L)</span>
-
-
-    <span class="k">def</span> <span class="nf">_validate_indices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indices</span><span class="p">):</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">indices</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">int</span><span class="p">):</span>
-            <span class="k">return</span> <span class="s1">&#39;index&#39;</span>
-        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">indices</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">)):</span>
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">indices</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">indices</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
-                <span class="k">return</span> <span class="s1">&#39;chimera coordinate&#39;</span>
-
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="s1">&#39;In the chimera graph, index should be int or tuple or list.&#39;</span><span class="p">)</span>
-
-<div class="viewcode-block" id="ChimeraModel.full_indices"><a class="viewcode-back" href="../../../apis/openjij.model.html#openjij.model.chimera_model.ChimeraModel.full_indices">[docs]</a>    <span class="k">def</span> <span class="nf">full_indices</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinate</span> <span class="o">==</span> <span class="s1">&#39;index&#39;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">8</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_num_L</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_num_L</span><span class="p">))</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">L</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_num_L</span>
-            <span class="k">return</span> <span class="p">[(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">L</span><span class="o">*</span><span class="n">L</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">L</span><span class="o">*</span><span class="n">L</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">)]</span></div>
-
-<div class="viewcode-block" id="ChimeraModel.validate_chimera"><a class="viewcode-back" href="../../../apis/openjij.model.html#openjij.model.chimera_model.ChimeraModel.validate_chimera">[docs]</a>    <span class="k">def</span> <span class="nf">validate_chimera</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Chimera coordinate: r, c, z</span>
-<span class="sd">        One dimension coordinate: i</span>
-<span class="sd">        Relation: i = 8Lr + 8c + z</span>
-
-<span class="sd">        Chimera unit cell (column reprezentation)</span>
-<span class="sd">        0 - 4</span>
-<span class="sd">        1 - 5</span>
-<span class="sd">        2 - 6</span>
-<span class="sd">        3 - 7</span>
+    <span class="k">class</span> <span class="nc">ChimeraModel</span><span class="p">(</span><span class="n">make_BinaryQuadraticModel</span><span class="p">(</span><span class="n">linear</span><span class="p">,</span> <span class="n">quadratic</span><span class="p">)):</span>
+        <span class="sd">&quot;&quot;&quot;Binary quadnratic model dealing with chimera graph</span>
+<span class="sd">        This model deal with chimera graph.</span>
+<span class="sd">        ChimeraModel provide methods to verify whether a given interaction graph matches a Chimera graph and to convert it to cxxjij.graph.Chimera.</span>
+<span class="sd">    </span>
+<span class="sd">        Examples:</span>
+<span class="sd">            # This interactions satisfy chimera topology.</span>
+<span class="sd">            &gt;&gt;&gt; Q={(0, 4): -1, (4, 12): -1}</span>
+<span class="sd">            &gt;&gt;&gt; chimera_model = ChimeraModel(Q, unit_num_L=2)  # make</span>
+<span class="sd">            &gt;&gt;&gt; chimera_self.validate_chimera()</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># check chimera interaction</span>
-        <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">quadratic</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="n">r_i</span><span class="p">,</span> <span class="n">c_i</span><span class="p">,</span> <span class="n">z_i</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_chimera_index</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_num_L</span><span class="p">)</span>
-            <span class="c1"># list up indices which can connect i</span>
-            <span class="n">adj_list</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="k">if</span> <span class="n">z_i</span> <span class="o">&gt;=</span> <span class="mi">4</span><span class="p">:</span>
-                <span class="c1"># part of right side of a Chimera unit cell (in the column representation).</span>
-                <span class="k">if</span> <span class="n">c_i</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-                    <span class="n">adj_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_to_index</span><span class="p">(</span>
-                        <span class="n">r_i</span><span class="p">,</span> <span class="n">c_i</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">z_i</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_num_L</span><span class="p">))</span>
-                <span class="k">if</span> <span class="n">c_i</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_num_L</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span>
-                    <span class="n">adj_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_to_index</span><span class="p">(</span>
-                        <span class="n">r_i</span><span class="p">,</span> <span class="n">c_i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">z_i</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_num_L</span><span class="p">))</span>
-                <span class="n">adj_list</span> <span class="o">+=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_to_index</span><span class="p">(</span><span class="n">r_i</span><span class="p">,</span> <span class="n">c_i</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_num_L</span><span class="p">)</span>
-                             <span class="k">for</span> <span class="n">z</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">)]</span>
+    
+        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">linear</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">quadratic</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                     <span class="n">offset</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">var_type</span><span class="o">=</span><span class="n">openjij</span><span class="o">.</span><span class="n">SPIN</span><span class="p">,</span>
+                     <span class="n">unit_num_L</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                     <span class="n">gpu</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gpu</span> <span class="o">=</span> <span class="n">gpu</span>
+            <span class="k">if</span> <span class="n">model</span><span class="p">:</span>
+                <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">linear</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">quadratic</span><span class="p">,</span>
+                                 <span class="n">model</span><span class="o">.</span><span class="n">offset</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">var_type</span><span class="p">,</span> <span class="n">gpu</span><span class="o">=</span><span class="n">gpu</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="c1"># part of left side of a Chimera unit cell (in the column representation).</span>
-                <span class="k">if</span> <span class="n">r_i</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-                    <span class="n">adj_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_to_index</span><span class="p">(</span>
-                        <span class="n">r_i</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">c_i</span><span class="p">,</span> <span class="n">z_i</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_num_L</span><span class="p">))</span>
-                <span class="k">if</span> <span class="n">r_i</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_num_L</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span>
-                    <span class="n">adj_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_to_index</span><span class="p">(</span>
-                        <span class="n">r_i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">c_i</span><span class="p">,</span> <span class="n">z_i</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_num_L</span><span class="p">))</span>
-                <span class="n">adj_list</span> <span class="o">+=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_to_index</span><span class="p">(</span><span class="n">r_i</span><span class="p">,</span> <span class="n">c_i</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_num_L</span><span class="p">)</span>
-                             <span class="k">for</span> <span class="n">z</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">8</span><span class="p">)]</span>
-
-            <span class="n">connect_i</span> <span class="o">=</span> <span class="n">j</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span>
-                <span class="n">j</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_to_index</span><span class="p">(</span><span class="o">*</span><span class="n">j</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_num_L</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">connect_i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">adj_list</span><span class="p">:</span>
-                <span class="n">incomp_part</span> <span class="o">=</span> <span class="s1">&#39;The connectable nodes of </span><span class="si">{}</span><span class="s1"> are </span><span class="si">{}</span><span class="s1">, not </span><span class="si">{}</span><span class="s1">.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                    <span class="n">i</span><span class="p">,</span> <span class="n">adj_list</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
+                <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">linear</span><span class="p">,</span> <span class="n">quadratic</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">var_type</span><span class="p">,</span> <span class="n">gpu</span><span class="o">=</span><span class="n">gpu</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">unit_num_L</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="s1">&#39;Problem graph incompatible with chimera graph.</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="n">incomp_part</span><span class="p">)</span>
-                <span class="k">return</span> <span class="kc">False</span>
-        <span class="k">return</span> <span class="kc">True</span></div>
-
-<div class="viewcode-block" id="ChimeraModel.to_index"><a class="viewcode-back" href="../../../apis/openjij.model.html#openjij.model.chimera_model.ChimeraModel.to_index">[docs]</a>    <span class="k">def</span> <span class="nf">to_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">unit_num_L</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Chimera coordinate: r, c, i</span>
-<span class="sd">        One dimension coordinate: i</span>
-<span class="sd">        Relation: i = 8*L*r + 8*c + i</span>
-<span class="sd">        Args:</span>
-<span class="sd">            r (int): Row index of 2-D Chimera grid.</span>
-<span class="sd">            c (int): Column index of 2-D Chimera grid.</span>
-<span class="sd">            i (int): index in Chimera unit cell.</span>
-<span class="sd">            unit_num_L (int): Row and Column length of 2-D Chimera grid.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="mi">8</span><span class="o">*</span><span class="n">unit_num_L</span><span class="o">*</span><span class="n">r</span> <span class="o">+</span> <span class="mi">8</span><span class="o">*</span><span class="n">c</span> <span class="o">+</span> <span class="n">i</span></div>
-
-<div class="viewcode-block" id="ChimeraModel.chimera_coordinate"><a class="viewcode-back" href="../../../apis/openjij.model.html#openjij.model.chimera_model.ChimeraModel.chimera_coordinate">[docs]</a>    <span class="k">def</span> <span class="nf">chimera_coordinate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">unit_num_L</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Convert 1-d index to chimera corrdinate</span>
-<span class="sd">        Args:</span>
-<span class="sd">            i (int): 1-D index 0~L*L*8-1</span>
-<span class="sd">            unit_num_L (int): number of chimera grid size</span>
-<span class="sd">        Returns:</span>
-<span class="sd">            (int, int, int): chimera corrdinate</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">z_i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">8</span>
-        <span class="n">c_i</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span> <span class="o">%</span> <span class="p">(</span><span class="mi">8</span> <span class="o">*</span> <span class="n">unit_num_L</span><span class="p">)</span> <span class="o">-</span> <span class="n">z_i</span><span class="p">)</span><span class="o">/</span><span class="mi">8</span>
-        <span class="n">r_i</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">8</span><span class="o">*</span><span class="n">c_i</span> <span class="o">-</span> <span class="n">z_i</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">8</span> <span class="o">*</span> <span class="n">unit_num_L</span><span class="p">)</span>
-        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">r_i</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">c_i</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">z_i</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="ChimeraModel.get_chimera_graph"><a class="viewcode-back" href="../../../apis/openjij.model.html#openjij.model.chimera_model.ChimeraModel.get_chimera_graph">[docs]</a>    <span class="k">def</span> <span class="nf">get_chimera_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">chimera_L</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_num_L</span>
-
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">validate_chimera</span><span class="p">():</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Problem graph incompatible with chimera graph.&quot;</span><span class="p">)</span>
-        <span class="n">_h</span><span class="p">,</span> <span class="n">_J</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ising_dictionary</span><span class="p">()</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">energy_bias</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">energy_bias</span>
-
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpu</span><span class="p">:</span>
-            <span class="n">chimera</span> <span class="o">=</span> <span class="n">cj</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">ChimeraGPU</span><span class="p">(</span><span class="n">chimera_L</span><span class="p">,</span> <span class="n">chimera_L</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">chimera</span> <span class="o">=</span> <span class="n">cj</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">Chimera</span><span class="p">(</span><span class="n">chimera_L</span><span class="p">,</span> <span class="n">chimera_L</span><span class="p">)</span>
-
-        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">hi</span> <span class="ow">in</span> <span class="n">_h</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">r_i</span><span class="p">,</span> <span class="n">c_i</span><span class="p">,</span> <span class="n">zi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_chimera_index</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">L</span><span class="o">=</span><span class="n">chimera_L</span><span class="p">)</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_index_validate</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">chimera_L</span><span class="p">):</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="s2">&quot;Problem graph incompatible with chimera graph. Node </span><span class="si">{}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
-            <span class="n">chimera</span><span class="p">[</span><span class="n">r_i</span><span class="p">,</span> <span class="n">c_i</span><span class="p">,</span> <span class="n">zi</span><span class="p">]</span> <span class="o">=</span> <span class="n">hi</span>
-        <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">),</span> <span class="n">Jij</span> <span class="ow">in</span> <span class="n">_J</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">r_i</span><span class="p">,</span> <span class="n">c_i</span><span class="p">,</span> <span class="n">zi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_chimera_index</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">L</span><span class="o">=</span><span class="n">chimera_L</span><span class="p">)</span>
-            <span class="n">r_j</span><span class="p">,</span> <span class="n">c_j</span><span class="p">,</span> <span class="n">zj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_chimera_index</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">L</span><span class="o">=</span><span class="n">chimera_L</span><span class="p">)</span>
-
-            <span class="c1"># validate connection</span>
-            <span class="n">error_msg</span> <span class="o">=</span> <span class="s2">&quot;In the </span><span class="si">{}</span><span class="s2">*</span><span class="si">{}</span><span class="s2"> Chimera grid, &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                <span class="n">chimera_L</span><span class="p">,</span> <span class="n">chimera_L</span><span class="p">)</span>
-            <span class="n">error_msg</span> <span class="o">+=</span> <span class="s2">&quot;there is no connection between node </span><span class="si">{}</span><span class="s2"> and node </span><span class="si">{}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
-            <span class="n">linear_vldt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_index_validate</span><span class="p">(</span>
-                <span class="n">i</span><span class="p">,</span> <span class="n">chimera_L</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_index_validate</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">chimera_L</span><span class="p">)</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">linear_vldt</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_validate</span><span class="p">((</span><span class="n">r_i</span><span class="p">,</span> <span class="n">c_i</span><span class="p">,</span> <span class="n">zi</span><span class="p">),</span> <span class="p">(</span><span class="n">r_j</span><span class="p">,</span> <span class="n">c_j</span><span class="p">,</span> <span class="n">zj</span><span class="p">),</span> <span class="n">chimera_L</span><span class="p">)):</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="s2">&quot;Problem graph incompatible with chimera graph.</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">error_msg</span><span class="p">)</span>
-
-            <span class="k">if</span> <span class="n">r_i</span> <span class="o">==</span> <span class="n">r_j</span> <span class="ow">and</span> <span class="n">c_i</span> <span class="o">==</span> <span class="n">c_j</span><span class="p">:</span>
-                <span class="c1"># connection in Chimera unit cell</span>
-                <span class="k">if</span> <span class="n">zj</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">]:</span>
-                    <span class="n">chimera</span><span class="p">[</span><span class="n">r_i</span><span class="p">,</span> <span class="n">c_i</span><span class="p">,</span> <span class="n">zi</span><span class="p">,</span> <span class="n">cj</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">ChimeraDir</span><span class="o">.</span><span class="n">IN_0or4</span><span class="p">]</span> <span class="o">=</span> <span class="n">Jij</span>
-                <span class="k">elif</span> <span class="n">zj</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">]:</span>
-                    <span class="n">chimera</span><span class="p">[</span><span class="n">r_i</span><span class="p">,</span> <span class="n">c_i</span><span class="p">,</span> <span class="n">zi</span><span class="p">,</span> <span class="n">cj</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">ChimeraDir</span><span class="o">.</span><span class="n">IN_1or5</span><span class="p">]</span> <span class="o">=</span> <span class="n">Jij</span>
-                <span class="k">elif</span> <span class="n">zj</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">6</span><span class="p">]:</span>
-                    <span class="n">chimera</span><span class="p">[</span><span class="n">r_i</span><span class="p">,</span> <span class="n">c_i</span><span class="p">,</span> <span class="n">zi</span><span class="p">,</span> <span class="n">cj</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">ChimeraDir</span><span class="o">.</span><span class="n">IN_2or6</span><span class="p">]</span> <span class="o">=</span> <span class="n">Jij</span>
+                    <span class="s1">&#39;Input unit_num_L which is the length of the side of the two-dimensional grid where chimera unit cells are arranged.&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">unit_num_L</span> <span class="o">=</span> <span class="n">unit_num_L</span>
+    
+            <span class="c1"># check the type of indices is valid.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">coordinate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_validate_indices</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">indices</span><span class="p">)</span>
+    
+            <span class="c1"># _chimera_index: 1-D index i,L -&gt; chimera coordinate x,y,z</span>
+            <span class="c1"># _to_index: chimera coordinate x,y,z,L -&gt; 1-D index i</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinate</span> <span class="o">==</span> <span class="s1">&#39;index&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_chimera_index</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">i</span><span class="p">,</span> <span class="n">L</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">chimera_coordinate</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">L</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_to_index</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">L</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_index</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">L</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinate</span> <span class="o">==</span> <span class="s1">&#39;chimera coordinate&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_chimera_index</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">i</span><span class="p">,</span> <span class="n">L</span><span class="p">:</span> <span class="n">i</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_to_index</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">L</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_index</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">L</span><span class="p">)</span>
+    
+        <span class="k">def</span> <span class="nf">_validate_indices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indices</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Check if the type of indices is valid.</span>
+<span class="sd">            Args:</span>
+<span class="sd">                indices (list(int) or list(tuple))</span>
+<span class="sd">            Return:</span>
+<span class="sd">                the type of indices (&#39;chimera coordinate or index&#39;)</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">indices</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">int</span><span class="p">):</span>
+                <span class="k">return</span> <span class="s1">&#39;index&#39;</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">indices</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">)):</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">indices</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">indices</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="s1">&#39;chimera coordinate&#39;</span>
+    
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s1">&#39;In the chimera graph, index should be int or tuple or list.&#39;</span><span class="p">)</span>
+    
+        <span class="k">def</span> <span class="nf">validate_chimera</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Check if the Chimera connectivity is valid.</span>
+<span class="sd">    </span>
+<span class="sd">            Chimera coordinate: r, c, z</span>
+<span class="sd">            One dimension coordinate: i</span>
+<span class="sd">            Relation: i = 8Lr + 8c + z</span>
+<span class="sd">    </span>
+<span class="sd">            Chimera unit cell (column reprezentation)</span>
+<span class="sd">            0 - 4</span>
+<span class="sd">            1 - 5</span>
+<span class="sd">            2 - 6</span>
+<span class="sd">            3 - 7</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="c1"># check chimera interaction</span>
+            <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">quadratic</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">r_i</span><span class="p">,</span> <span class="n">c_i</span><span class="p">,</span> <span class="n">z_i</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_chimera_index</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_num_L</span><span class="p">)</span>
+                <span class="c1"># list up indices which can connect i</span>
+                <span class="n">adj_list</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">if</span> <span class="n">z_i</span> <span class="o">&gt;=</span> <span class="mi">4</span><span class="p">:</span>
+                    <span class="c1"># part of right side of a Chimera unit cell (in the column representation).</span>
+                    <span class="k">if</span> <span class="n">c_i</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">adj_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_to_index</span><span class="p">(</span>
+                            <span class="n">r_i</span><span class="p">,</span> <span class="n">c_i</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">z_i</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_num_L</span><span class="p">))</span>
+                    <span class="k">if</span> <span class="n">c_i</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_num_L</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                        <span class="n">adj_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_to_index</span><span class="p">(</span>
+                            <span class="n">r_i</span><span class="p">,</span> <span class="n">c_i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">z_i</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_num_L</span><span class="p">))</span>
+                    <span class="n">adj_list</span> <span class="o">+=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_to_index</span><span class="p">(</span><span class="n">r_i</span><span class="p">,</span> <span class="n">c_i</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_num_L</span><span class="p">)</span>
+                                 <span class="k">for</span> <span class="n">z</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">)]</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">chimera</span><span class="p">[</span><span class="n">r_i</span><span class="p">,</span> <span class="n">c_i</span><span class="p">,</span> <span class="n">zi</span><span class="p">,</span> <span class="n">cj</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">ChimeraDir</span><span class="o">.</span><span class="n">IN_3or7</span><span class="p">]</span> <span class="o">=</span> <span class="n">Jij</span>
-            <span class="c1"># connection between Chimera unit cells</span>
-            <span class="k">elif</span> <span class="n">r_i</span> <span class="o">-</span> <span class="n">r_j</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
-                <span class="n">chimera</span><span class="p">[</span><span class="n">r_i</span><span class="p">,</span> <span class="n">c_i</span><span class="p">,</span> <span class="n">zi</span><span class="p">,</span> <span class="n">cj</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">ChimeraDir</span><span class="o">.</span><span class="n">PLUS_R</span><span class="p">]</span> <span class="o">=</span> <span class="n">Jij</span>
-            <span class="k">elif</span> <span class="n">r_i</span> <span class="o">-</span> <span class="n">r_j</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="n">chimera</span><span class="p">[</span><span class="n">r_i</span><span class="p">,</span> <span class="n">c_i</span><span class="p">,</span> <span class="n">zi</span><span class="p">,</span> <span class="n">cj</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">ChimeraDir</span><span class="o">.</span><span class="n">MINUS_R</span><span class="p">]</span> <span class="o">=</span> <span class="n">Jij</span>
-            <span class="k">elif</span> <span class="n">c_i</span> <span class="o">-</span> <span class="n">c_j</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
-                <span class="n">chimera</span><span class="p">[</span><span class="n">r_i</span><span class="p">,</span> <span class="n">c_i</span><span class="p">,</span> <span class="n">zi</span><span class="p">,</span> <span class="n">cj</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">ChimeraDir</span><span class="o">.</span><span class="n">PLUS_C</span><span class="p">]</span> <span class="o">=</span> <span class="n">Jij</span>
-            <span class="k">elif</span> <span class="n">c_i</span> <span class="o">-</span> <span class="n">c_j</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="n">chimera</span><span class="p">[</span><span class="n">r_i</span><span class="p">,</span> <span class="n">c_i</span><span class="p">,</span> <span class="n">zi</span><span class="p">,</span> <span class="n">cj</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">ChimeraDir</span><span class="o">.</span><span class="n">MINUS_C</span><span class="p">]</span> <span class="o">=</span> <span class="n">Jij</span>
-
-        <span class="k">return</span> <span class="n">chimera</span></div>
-
-    <span class="k">def</span> <span class="nf">_validate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rcz1</span><span class="p">,</span> <span class="n">rcz2</span><span class="p">,</span> <span class="n">L</span><span class="p">):</span>
-        <span class="n">r1</span><span class="p">,</span> <span class="n">c1</span><span class="p">,</span> <span class="n">z1</span> <span class="o">=</span> <span class="n">rcz1</span>
-        <span class="n">r2</span><span class="p">,</span> <span class="n">c2</span><span class="p">,</span> <span class="n">z2</span> <span class="o">=</span> <span class="n">rcz2</span>
-        <span class="n">left_side</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
-        <span class="n">right_side</span> <span class="o">=</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">r1</span> <span class="o">==</span> <span class="n">r2</span> <span class="ow">and</span> <span class="n">c1</span> <span class="o">==</span> <span class="n">c2</span><span class="p">:</span>
-            <span class="k">if</span> <span class="p">((</span><span class="n">z1</span> <span class="ow">in</span> <span class="n">left_side</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">z2</span> <span class="ow">in</span> <span class="n">right_side</span><span class="p">)):</span>
-                <span class="k">return</span> <span class="kc">True</span>
-            <span class="k">elif</span> <span class="p">((</span><span class="n">z2</span> <span class="ow">in</span> <span class="n">left_side</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">z1</span> <span class="ow">in</span> <span class="n">right_side</span><span class="p">)):</span>
-                <span class="k">return</span> <span class="kc">True</span>
-        <span class="k">elif</span> <span class="p">((</span><span class="n">c1</span> <span class="o">==</span> <span class="n">c2</span> <span class="ow">and</span> <span class="nb">abs</span><span class="p">(</span><span class="n">r1</span> <span class="o">-</span> <span class="n">r2</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">r1</span> <span class="o">==</span> <span class="n">r2</span> <span class="ow">and</span> <span class="nb">abs</span><span class="p">(</span><span class="n">c1</span> <span class="o">-</span> <span class="n">c2</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)):</span>
+                    <span class="c1"># part of left side of a Chimera unit cell (in the column representation).</span>
+                    <span class="k">if</span> <span class="n">r_i</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">adj_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_to_index</span><span class="p">(</span>
+                            <span class="n">r_i</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">c_i</span><span class="p">,</span> <span class="n">z_i</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_num_L</span><span class="p">))</span>
+                    <span class="k">if</span> <span class="n">r_i</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_num_L</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                        <span class="n">adj_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_to_index</span><span class="p">(</span>
+                            <span class="n">r_i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">c_i</span><span class="p">,</span> <span class="n">z_i</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_num_L</span><span class="p">))</span>
+                    <span class="n">adj_list</span> <span class="o">+=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_to_index</span><span class="p">(</span><span class="n">r_i</span><span class="p">,</span> <span class="n">c_i</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_num_L</span><span class="p">)</span>
+                                 <span class="k">for</span> <span class="n">z</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">8</span><span class="p">)]</span>
+    
+                <span class="n">connect_i</span> <span class="o">=</span> <span class="n">j</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span>
+                    <span class="n">j</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_to_index</span><span class="p">(</span><span class="o">*</span><span class="n">j</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_num_L</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">connect_i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">adj_list</span><span class="p">:</span>
+                    <span class="n">incomp_part</span> <span class="o">=</span> <span class="s1">&#39;The connectable nodes of </span><span class="si">{}</span><span class="s1"> are </span><span class="si">{}</span><span class="s1">, not </span><span class="si">{}</span><span class="s1">.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                        <span class="n">i</span><span class="p">,</span> <span class="n">adj_list</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                        <span class="s1">&#39;Problem graph incompatible with chimera graph.</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="n">incomp_part</span><span class="p">)</span>
+                    <span class="k">return</span> <span class="kc">False</span>
             <span class="k">return</span> <span class="kc">True</span>
-        <span class="k">return</span> <span class="kc">False</span>
+    
+        <span class="k">def</span> <span class="nf">to_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">unit_num_L</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Chimera coordinate: r, c, i</span>
+<span class="sd">            One dimension coordinate: i</span>
+<span class="sd">            Relation: i = 8*L*r + 8*c + i</span>
+<span class="sd">            Args:</span>
+<span class="sd">                r (int): Row index of 2-D Chimera grid.</span>
+<span class="sd">                c (int): Column index of 2-D Chimera grid.</span>
+<span class="sd">                i (int): index in Chimera unit cell.</span>
+<span class="sd">                unit_num_L (int): Row and Column length of 2-D Chimera grid.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="mi">8</span><span class="o">*</span><span class="n">unit_num_L</span><span class="o">*</span><span class="n">r</span> <span class="o">+</span> <span class="mi">8</span><span class="o">*</span><span class="n">c</span> <span class="o">+</span> <span class="n">i</span>
+    
+        <span class="k">def</span> <span class="nf">chimera_coordinate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">unit_num_L</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;Convert 1-d index to chimera corrdinate</span>
+<span class="sd">            Args:</span>
+<span class="sd">                i (int): 1-D index 0~L*L*8-1</span>
+<span class="sd">                unit_num_L (int): number of chimera grid size</span>
+<span class="sd">            Returns:</span>
+<span class="sd">                (int, int, int): chimera corrdinate</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="n">z_i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">8</span>
+            <span class="n">c_i</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span> <span class="o">%</span> <span class="p">(</span><span class="mi">8</span> <span class="o">*</span> <span class="n">unit_num_L</span><span class="p">)</span> <span class="o">-</span> <span class="n">z_i</span><span class="p">)</span><span class="o">/</span><span class="mi">8</span>
+            <span class="n">r_i</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">8</span><span class="o">*</span><span class="n">c_i</span> <span class="o">-</span> <span class="n">z_i</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">8</span> <span class="o">*</span> <span class="n">unit_num_L</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">r_i</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">c_i</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">z_i</span><span class="p">)</span>
+    
+        <span class="k">def</span> <span class="nf">get_cxxjij_ising_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;Get cxxjij.graph.Chimera type instance</span>
+<span class="sd">            Args:</span>
+<span class="sd">                i (int): 1-D index 0~L*L*8-1</span>
+<span class="sd">                unit_num_L (int): number of chimera grid size</span>
+<span class="sd">            Returns:</span>
+<span class="sd">                object (cxxjij.graph.Chimera)</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="n">chimera_L</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_num_L</span>
+    
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">validate_chimera</span><span class="p">():</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Problem graph incompatible with chimera graph.&quot;</span><span class="p">)</span>
+            <span class="n">_h</span><span class="p">,</span> <span class="n">_J</span><span class="p">,</span> <span class="n">_offset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_ising</span><span class="p">()</span>
+            
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpu</span><span class="p">:</span>
+                <span class="n">chimera</span> <span class="o">=</span> <span class="n">cj</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">ChimeraGPU</span><span class="p">(</span><span class="n">chimera_L</span><span class="p">,</span> <span class="n">chimera_L</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">chimera</span> <span class="o">=</span> <span class="n">cj</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">Chimera</span><span class="p">(</span><span class="n">chimera_L</span><span class="p">,</span> <span class="n">chimera_L</span><span class="p">)</span>
+    
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">hi</span> <span class="ow">in</span> <span class="n">_h</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">r_i</span><span class="p">,</span> <span class="n">c_i</span><span class="p">,</span> <span class="n">zi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_chimera_index</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">L</span><span class="o">=</span><span class="n">chimera_L</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_index_validate</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">chimera_L</span><span class="p">):</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                        <span class="s2">&quot;Problem graph incompatible with chimera graph. Node </span><span class="si">{}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+                <span class="n">chimera</span><span class="p">[</span><span class="n">r_i</span><span class="p">,</span> <span class="n">c_i</span><span class="p">,</span> <span class="n">zi</span><span class="p">]</span> <span class="o">=</span> <span class="n">hi</span>
+            <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">),</span> <span class="n">Jij</span> <span class="ow">in</span> <span class="n">_J</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">r_i</span><span class="p">,</span> <span class="n">c_i</span><span class="p">,</span> <span class="n">zi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_chimera_index</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">L</span><span class="o">=</span><span class="n">chimera_L</span><span class="p">)</span>
+                <span class="n">r_j</span><span class="p">,</span> <span class="n">c_j</span><span class="p">,</span> <span class="n">zj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_chimera_index</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">L</span><span class="o">=</span><span class="n">chimera_L</span><span class="p">)</span>
+    
+                <span class="c1"># validate connection</span>
+                <span class="n">error_msg</span> <span class="o">=</span> <span class="s2">&quot;In the </span><span class="si">{}</span><span class="s2">*</span><span class="si">{}</span><span class="s2"> Chimera grid, &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">chimera_L</span><span class="p">,</span> <span class="n">chimera_L</span><span class="p">)</span>
+                <span class="n">error_msg</span> <span class="o">+=</span> <span class="s2">&quot;there is no connection between node </span><span class="si">{}</span><span class="s2"> and node </span><span class="si">{}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
+                <span class="n">linear_vldt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_index_validate</span><span class="p">(</span>
+                    <span class="n">i</span><span class="p">,</span> <span class="n">chimera_L</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_index_validate</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">chimera_L</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">linear_vldt</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_validate</span><span class="p">((</span><span class="n">r_i</span><span class="p">,</span> <span class="n">c_i</span><span class="p">,</span> <span class="n">zi</span><span class="p">),</span> <span class="p">(</span><span class="n">r_j</span><span class="p">,</span> <span class="n">c_j</span><span class="p">,</span> <span class="n">zj</span><span class="p">),</span> <span class="n">chimera_L</span><span class="p">)):</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                        <span class="s2">&quot;Problem graph incompatible with chimera graph.</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">error_msg</span><span class="p">)</span>
+    
+                <span class="k">if</span> <span class="n">r_i</span> <span class="o">==</span> <span class="n">r_j</span> <span class="ow">and</span> <span class="n">c_i</span> <span class="o">==</span> <span class="n">c_j</span><span class="p">:</span>
+                    <span class="c1"># connection in Chimera unit cell</span>
+                    <span class="k">if</span> <span class="n">zj</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">]:</span>
+                        <span class="n">chimera</span><span class="p">[</span><span class="n">r_i</span><span class="p">,</span> <span class="n">c_i</span><span class="p">,</span> <span class="n">zi</span><span class="p">,</span> <span class="n">cj</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">ChimeraDir</span><span class="o">.</span><span class="n">IN_0or4</span><span class="p">]</span> <span class="o">=</span> <span class="n">Jij</span>
+                    <span class="k">elif</span> <span class="n">zj</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">]:</span>
+                        <span class="n">chimera</span><span class="p">[</span><span class="n">r_i</span><span class="p">,</span> <span class="n">c_i</span><span class="p">,</span> <span class="n">zi</span><span class="p">,</span> <span class="n">cj</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">ChimeraDir</span><span class="o">.</span><span class="n">IN_1or5</span><span class="p">]</span> <span class="o">=</span> <span class="n">Jij</span>
+                    <span class="k">elif</span> <span class="n">zj</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">6</span><span class="p">]:</span>
+                        <span class="n">chimera</span><span class="p">[</span><span class="n">r_i</span><span class="p">,</span> <span class="n">c_i</span><span class="p">,</span> <span class="n">zi</span><span class="p">,</span> <span class="n">cj</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">ChimeraDir</span><span class="o">.</span><span class="n">IN_2or6</span><span class="p">]</span> <span class="o">=</span> <span class="n">Jij</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">chimera</span><span class="p">[</span><span class="n">r_i</span><span class="p">,</span> <span class="n">c_i</span><span class="p">,</span> <span class="n">zi</span><span class="p">,</span> <span class="n">cj</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">ChimeraDir</span><span class="o">.</span><span class="n">IN_3or7</span><span class="p">]</span> <span class="o">=</span> <span class="n">Jij</span>
+                <span class="c1"># connection between Chimera unit cells</span>
+                <span class="k">elif</span> <span class="n">r_i</span> <span class="o">-</span> <span class="n">r_j</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                    <span class="n">chimera</span><span class="p">[</span><span class="n">r_i</span><span class="p">,</span> <span class="n">c_i</span><span class="p">,</span> <span class="n">zi</span><span class="p">,</span> <span class="n">cj</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">ChimeraDir</span><span class="o">.</span><span class="n">PLUS_R</span><span class="p">]</span> <span class="o">=</span> <span class="n">Jij</span>
+                <span class="k">elif</span> <span class="n">r_i</span> <span class="o">-</span> <span class="n">r_j</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">chimera</span><span class="p">[</span><span class="n">r_i</span><span class="p">,</span> <span class="n">c_i</span><span class="p">,</span> <span class="n">zi</span><span class="p">,</span> <span class="n">cj</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">ChimeraDir</span><span class="o">.</span><span class="n">MINUS_R</span><span class="p">]</span> <span class="o">=</span> <span class="n">Jij</span>
+                <span class="k">elif</span> <span class="n">c_i</span> <span class="o">-</span> <span class="n">c_j</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                    <span class="n">chimera</span><span class="p">[</span><span class="n">r_i</span><span class="p">,</span> <span class="n">c_i</span><span class="p">,</span> <span class="n">zi</span><span class="p">,</span> <span class="n">cj</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">ChimeraDir</span><span class="o">.</span><span class="n">PLUS_C</span><span class="p">]</span> <span class="o">=</span> <span class="n">Jij</span>
+                <span class="k">elif</span> <span class="n">c_i</span> <span class="o">-</span> <span class="n">c_j</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">chimera</span><span class="p">[</span><span class="n">r_i</span><span class="p">,</span> <span class="n">c_i</span><span class="p">,</span> <span class="n">zi</span><span class="p">,</span> <span class="n">cj</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">ChimeraDir</span><span class="o">.</span><span class="n">MINUS_C</span><span class="p">]</span> <span class="o">=</span> <span class="n">Jij</span>
+    
+            <span class="k">return</span> <span class="n">chimera</span>
+    
+        <span class="k">def</span> <span class="nf">energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sample</span><span class="p">,</span> <span class="n">convert_sample</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+            <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="n">sample</span><span class="p">,</span> <span class="n">sparse</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">convert_sample</span><span class="o">=</span><span class="n">convert_sample</span><span class="p">)</span>
+    
+        <span class="k">def</span> <span class="nf">energies</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">samples_like</span><span class="p">,</span> <span class="n">convert_sample</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+            <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">energies</span><span class="p">(</span><span class="n">sample_like</span><span class="p">,</span> <span class="n">sparse</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">convert_sample</span><span class="o">=</span><span class="n">convert_sample</span><span class="p">)</span>
+    
+    
+        <span class="k">def</span> <span class="nf">_validate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rcz1</span><span class="p">,</span> <span class="n">rcz2</span><span class="p">,</span> <span class="n">L</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot; Check if the connectivity is valid.</span>
+<span class="sd">            Args:</span>
+<span class="sd">                rcz1 (int), rcz2(int), L(int)</span>
+<span class="sd">            Returns:</span>
+<span class="sd">                result (bool)</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="n">r1</span><span class="p">,</span> <span class="n">c1</span><span class="p">,</span> <span class="n">z1</span> <span class="o">=</span> <span class="n">rcz1</span>
+            <span class="n">r2</span><span class="p">,</span> <span class="n">c2</span><span class="p">,</span> <span class="n">z2</span> <span class="o">=</span> <span class="n">rcz2</span>
+            <span class="n">left_side</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+            <span class="n">right_side</span> <span class="o">=</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">r1</span> <span class="o">==</span> <span class="n">r2</span> <span class="ow">and</span> <span class="n">c1</span> <span class="o">==</span> <span class="n">c2</span><span class="p">:</span>
+                <span class="k">if</span> <span class="p">((</span><span class="n">z1</span> <span class="ow">in</span> <span class="n">left_side</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">z2</span> <span class="ow">in</span> <span class="n">right_side</span><span class="p">)):</span>
+                    <span class="k">return</span> <span class="kc">True</span>
+                <span class="k">elif</span> <span class="p">((</span><span class="n">z2</span> <span class="ow">in</span> <span class="n">left_side</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">z1</span> <span class="ow">in</span> <span class="n">right_side</span><span class="p">)):</span>
+                    <span class="k">return</span> <span class="kc">True</span>
+            <span class="k">elif</span> <span class="p">((</span><span class="n">c1</span> <span class="o">==</span> <span class="n">c2</span> <span class="ow">and</span> <span class="nb">abs</span><span class="p">(</span><span class="n">r1</span> <span class="o">-</span> <span class="n">r2</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">r1</span> <span class="o">==</span> <span class="n">r2</span> <span class="ow">and</span> <span class="nb">abs</span><span class="p">(</span><span class="n">c1</span> <span class="o">-</span> <span class="n">c2</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)):</span>
+                <span class="k">return</span> <span class="kc">True</span>
+            <span class="k">return</span> <span class="kc">False</span>
+    
+        <span class="k">def</span> <span class="nf">_index_validate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">L</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot; Check if the index is valid.</span>
+<span class="sd">            Args:</span>
+<span class="sd">                i(int), L(int)</span>
+<span class="sd">            Returns:</span>
+<span class="sd">                result (bool)</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+                <span class="n">two_d_bool</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_num_L</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_num_L</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">two_d_bool</span> <span class="ow">and</span> <span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">8</span><span class="p">)</span>
+            <span class="n">max_index</span> <span class="o">=</span> <span class="mi">8</span> <span class="o">*</span> <span class="n">L</span> <span class="o">*</span> <span class="n">L</span>
+            <span class="k">return</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">max_index</span>
 
-    <span class="k">def</span> <span class="nf">_index_validate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">L</span><span class="p">):</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
-            <span class="n">two_d_bool</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_num_L</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit_num_L</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">two_d_bool</span> <span class="ow">and</span> <span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">8</span><span class="p">)</span>
-        <span class="n">max_index</span> <span class="o">=</span> <span class="mi">8</span> <span class="o">*</span> <span class="n">L</span> <span class="o">*</span> <span class="n">L</span>
-        <span class="k">return</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">max_index</span></div>
+    <span class="k">return</span> <span class="n">ChimeraModel</span></div>
+
+<div class="viewcode-block" id="make_ChimeraModel_from_JSON"><a class="viewcode-back" href="../../../apis/openjij.model.html#openjij.model.chimera_model.make_ChimeraModel_from_JSON">[docs]</a><span class="k">def</span> <span class="nf">make_ChimeraModel_from_JSON</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; ChimeraModel factory for JSON</span>
+<span class="sd">    Args:</span>
+<span class="sd">        obj (dict): JSON object</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        generated ChimeraModel class</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">label</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s1">&#39;variable_labels&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="c1">#convert to tuple</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
+
+    <span class="n">mock_linear</span> <span class="o">=</span> <span class="p">{</span><span class="n">label</span><span class="p">:</span><span class="mf">1.0</span><span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">make_ChimeraModel</span><span class="p">(</span><span class="n">mock_linear</span><span class="p">,</span> <span class="p">{})</span></div>
+
+<div class="viewcode-block" id="ChimeraModel"><a class="viewcode-back" href="../../../apis/openjij.model.html#openjij.model.chimera_model.ChimeraModel">[docs]</a><span class="k">def</span> <span class="nf">ChimeraModel</span><span class="p">(</span><span class="n">linear</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">quadratic</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                     <span class="n">offset</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">var_type</span><span class="o">=</span><span class="n">openjij</span><span class="o">.</span><span class="n">SPIN</span><span class="p">,</span>
+                     <span class="n">unit_num_L</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                     <span class="n">gpu</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+
+    <span class="n">Model</span> <span class="o">=</span> <span class="n">make_ChimeraModel</span><span class="p">(</span><span class="n">linear</span><span class="p">,</span> <span class="n">quadratic</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">Model</span><span class="p">(</span><span class="n">linear</span><span class="p">,</span> <span class="n">quadratic</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">var_type</span><span class="p">,</span> <span class="n">unit_num_L</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">gpu</span><span class="p">)</span></div>
+
+<span class="c1">#classmethods</span>
+<span class="n">ChimeraModel</span><span class="o">.</span><span class="n">from_qubo</span> <span class="o">=</span> \
+        <span class="k">lambda</span> <span class="n">Q</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">make_ChimeraModel</span><span class="p">({},</span> <span class="n">Q</span><span class="p">)</span><span class="o">.</span><span class="n">from_qubo</span><span class="p">(</span><span class="n">Q</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<span class="n">ChimeraModel</span><span class="o">.</span><span class="n">from_ising</span> <span class="o">=</span> \
+        <span class="k">lambda</span> <span class="n">linear</span><span class="p">,</span> <span class="n">quadratic</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">make_ChimeraModel</span><span class="p">(</span><span class="n">linear</span><span class="p">,</span> <span class="n">quadratic</span><span class="p">)</span><span class="o">.</span><span class="n">from_ising</span><span class="p">(</span><span class="n">linear</span><span class="p">,</span> <span class="n">quadratic</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<span class="n">ChimeraModel</span><span class="o">.</span><span class="n">from_serializable</span> <span class="o">=</span> \
+        <span class="k">lambda</span> <span class="n">obj</span><span class="p">:</span> <span class="n">make_ChimeraModel_from_JSON</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span><span class="o">.</span><span class="n">from_serializable</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+
 </pre></div>
 
            </div>
@@ -477,6 +498,7 @@
       <script type="text/javascript" src="../../../_static/underscore.js"></script>
       <script type="text/javascript" src="../../../_static/doctools.js"></script>
       <script type="text/javascript" src="../../../_static/language_data.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 
