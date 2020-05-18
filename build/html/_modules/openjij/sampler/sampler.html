@@ -169,6 +169,9 @@
 <span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
 <span class="c1"># See the License for the specific language governing permissions and</span>
 <span class="c1"># limitations under the License.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This module defines the abstract sampler (BaseSampler).</span>
+<span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">cxxjij</span>
@@ -180,6 +183,11 @@
 <span class="kn">import</span> <span class="nn">time</span>
 
 <div class="viewcode-block" id="measure_time"><a class="viewcode-back" href="../../../apis/openjij.sampler.html#openjij.sampler.sampler.measure_time">[docs]</a><span class="k">def</span> <span class="nf">measure_time</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Decorator for measuring calculation time.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        func: decorator function</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kargs</span><span class="p">):</span>
         <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
 
@@ -230,7 +238,7 @@
 <span class="sd">            structure (dict): structure dictionary that must have keys &quot;size&quot; and &quot;dict&quot;</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            [type]: [description]</span>
+<span class="sd">            :class:`openjij.Response`: results </span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># set algorithm function and set random seed ----</span>
@@ -323,7 +331,7 @@
 <span class="sd">                See the implemented sampling for additional keyword definitions.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            :obj:`.SampleSet`</span>
+<span class="sd">            :class:`openjij.Response`: results </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">bqm</span><span class="o">.</span><span class="n">vartype</span> <span class="o">==</span> <span class="n">openjij</span><span class="o">.</span><span class="n">SPIN</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sample_ising</span><span class="p">,</span> <span class="s1">&#39;__issamplemixin__&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
@@ -363,7 +371,7 @@
 <span class="sd">            J (dict): Quadratic biases</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            :obj: `.Sampleset`</span>
+<span class="sd">            :class:`openjij.Response`: results </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">bqm</span> <span class="o">=</span> <span class="n">openjij</span><span class="o">.</span><span class="n">BinaryQuadraticModel</span><span class="o">.</span><span class="n">from_ising</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">J</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">bqm</span><span class="p">,</span> <span class="o">**</span><span class="n">parameters</span><span class="p">)</span></div>
@@ -377,7 +385,7 @@
 <span class="sd">            Q (dict): Coefficients of a quadratic unconstrained binary optimization</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            :obj: `.Sampleset`</span>
+<span class="sd">            :class:`openjij.Response`: results </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">bqm</span> <span class="o">=</span> <span class="n">openjij</span><span class="o">.</span><span class="n">BinaryQuadraticModel</span><span class="o">.</span><span class="n">from_qubo</span><span class="p">(</span><span class="n">Q</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">bqm</span><span class="p">,</span> <span class="o">**</span><span class="n">parameters</span><span class="p">)</span></div></div>

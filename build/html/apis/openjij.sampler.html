@@ -341,7 +341,10 @@ for k, v in iterable:</p>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>obj: <cite>.Sampleset</cite></p>
+<dd class="field-even"><p>results</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">openjij.Response</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -494,7 +497,6 @@ implement default like this:</p>
 <em class="property">class </em><code class="sig-prename descclassname">openjij.sampler.sa_sampler.</code><code class="sig-name descname">SASampler</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">beta_min</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">beta_max</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">num_sweeps</span><span class="o">=</span><span class="default_value">1000</span></em>, <em class="sig-param"><span class="n">schedule</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">num_reads</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/sampler/sa_sampler.html#SASampler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#openjij.sampler.sa_sampler.SASampler" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#openjij.sampler.sampler.BaseSampler" title="openjij.sampler.sampler.BaseSampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">openjij.sampler.sampler.BaseSampler</span></code></a></p>
 <p>Sampler with Simulated Annealing (SA).</p>
-<p>Inherits from <a class="reference internal" href="#openjij.sampler.sampler.BaseSampler" title="openjij.sampler.sampler.BaseSampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">openjij.sampler.sampler.BaseSampler</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -509,54 +511,8 @@ You can overwrite in methods .sample_*.</p></li>
 <li><p><strong>schedule_info</strong> (<em>dict</em>) – Information about an annealing schedule.</p></li>
 </ul>
 </dd>
-</dl>
-<dl class="py attribute">
-<dt id="openjij.sampler.sa_sampler.SASampler.energy_bias">
-<code class="sig-name descname">energy_bias</code><a class="headerlink" href="#openjij.sampler.sa_sampler.SASampler.energy_bias" title="Permalink to this definition">¶</a></dt>
-<dd><p>Energy bias.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>float</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="openjij.sampler.sa_sampler.SASampler.var_type">
-<code class="sig-name descname">var_type</code><a class="headerlink" href="#openjij.sampler.sa_sampler.SASampler.var_type" title="Permalink to this definition">¶</a></dt>
-<dd><p>Type of variables: ‘SPIN’ or ‘BINARY’ which mean {-1, 1} or {0, 1}.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="openjij.sampler.sa_sampler.SASampler.indices">
-<code class="sig-name descname">indices</code><a class="headerlink" href="#openjij.sampler.sa_sampler.SASampler.indices" title="Permalink to this definition">¶</a></dt>
-<dd><p>Indices of <cite>openjij.model.model.BinaryQuadraticModel</cite> object.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>int</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="openjij.sampler.sa_sampler.SASampler.N">
-<code class="sig-name descname">N</code><a class="headerlink" href="#openjij.sampler.sa_sampler.SASampler.N" title="Permalink to this definition">¶</a></dt>
-<dd><p>Number of the indices.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>int</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="field-list simple">
-<dt class="field-odd">Raises</dt>
-<dd class="field-odd"><ul class="simple">
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
 <li><p><strong>ValueError</strong> – If schedules or variables violate as below.</p></li>
 <li><p><strong>- not list</strong><strong> or </strong><strong>numpy.array.</strong> – </p></li>
 <li><p><strong>- not list of tuple</strong><strong> (</strong><strong>beta</strong> – float, step_length : int).</p></li>
@@ -628,7 +584,10 @@ for k, v in iterable:</p>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>obj: <cite>.Sampleset</cite></p>
+<dd class="field-even"><p>results</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">openjij.Response</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -657,6 +616,7 @@ for k, v in iterable:</p>
 </div>
 <div class="section" id="module-openjij.sampler.sampler">
 <span id="openjij-sampler-sampler-module"></span><h2>openjij.sampler.sampler module<a class="headerlink" href="#module-openjij.sampler.sampler" title="Permalink to this headline">¶</a></h2>
+<p>This module defines the abstract sampler (BaseSampler).</p>
 <dl class="py class">
 <dt id="openjij.sampler.sampler.BaseSampler">
 <em class="property">class </em><code class="sig-prename descclassname">openjij.sampler.sampler.</code><code class="sig-name descname">BaseSampler</code><a class="reference internal" href="../_modules/openjij/sampler/sampler.html#BaseSampler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#openjij.sampler.sampler.BaseSampler" title="Permalink to this definition">¶</a></dt>
@@ -681,7 +641,10 @@ for k, v in iterable:</p>
 :param **kwargs: See the implemented sampling for additional keyword definitions.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">SampleSet</span></code></p>
+<dd class="field-odd"><p>results</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">openjij.Response</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -698,7 +661,10 @@ for k, v in iterable:</p>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>obj: <cite>.Sampleset</cite></p>
+<dd class="field-even"><p>results</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">openjij.Response</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -712,7 +678,10 @@ for k, v in iterable:</p>
 <dd class="field-odd"><p><strong>Q</strong> (<em>dict</em>) – Coefficients of a quadratic unconstrained binary optimization</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>obj: <cite>.Sampleset</cite></p>
+<dd class="field-even"><p>results</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">openjij.Response</span></code></p>
 </dd>
 </dl>
 </dd></dl>
@@ -722,7 +691,13 @@ for k, v in iterable:</p>
 <dl class="py function">
 <dt id="openjij.sampler.sampler.measure_time">
 <code class="sig-prename descclassname">openjij.sampler.sampler.</code><code class="sig-name descname">measure_time</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">func</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/sampler/sampler.html#measure_time"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#openjij.sampler.sampler.measure_time" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Decorator for measuring calculation time.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>func</strong> – decorator function</p>
+</dd>
+</dl>
+</dd></dl>
 
 </div>
 <div class="section" id="module-openjij.sampler.sqa_sampler">

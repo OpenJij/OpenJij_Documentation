@@ -243,6 +243,7 @@ ChimeraModel provide methods to verify whether a given interaction graph matches
 <dt id="openjij.model.higher_order_model.BinaryHigherOrderModel">
 <em class="property">class </em><code class="sig-prename descclassname">openjij.model.higher_order_model.</code><code class="sig-name descname">BinaryHigherOrderModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">interactions</span><span class="p">:</span> <span class="n">list</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/model/higher_order_model.html#BinaryHigherOrderModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#openjij.model.higher_order_model.BinaryHigherOrderModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Higher order model.</p>
 <dl class="py method">
 <dt id="openjij.model.higher_order_model.BinaryHigherOrderModel.adj_dict">
 <code class="sig-name descname">adj_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/model/higher_order_model.html#BinaryHigherOrderModel.adj_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#openjij.model.higher_order_model.BinaryHigherOrderModel.adj_dict" title="Permalink to this definition">¶</a></dt>
@@ -289,10 +290,13 @@ ChimeraModel provide methods to verify whether a given interaction graph matches
 <li><p><strong>linear</strong> (<em>dict</em>) – linear biases</p></li>
 <li><p><strong>quadratic</strong> (<em>dict</em>) – quadratic biases</p></li>
 <li><p><strong>offset</strong> (<em>float</em>) – offset</p></li>
-<li><p><strong>king_graph</strong> – represents ising or QUBO interaction.
-Each spins are decided by 2-d corrdinate x, y.
-Quadratic term [x1, y1, x2, y2, value]
-Linear term    [x1, y1, x1, y1, value]</p></li>
+<li><p><strong>king_graph</strong> – <p>represents ising or QUBO interaction.
+Each spins are decided by 2-d corrdinate x, y.</p>
+<ul>
+<li><p>Quadratic term: [x1, y1, x2, y2, value]</p></li>
+<li><p>Linear term:    [x1, y1, x1, y1, value]</p></li>
+</ul>
+</p></li>
 <li><p><strong>var_type</strong> – ‘SPIN’ or ‘BINARY’</p></li>
 <li><p><strong>machine_type</strong> (<em>str</em>) – choose ‘ASIC’ or ‘FPGA’</p></li>
 </ul>
