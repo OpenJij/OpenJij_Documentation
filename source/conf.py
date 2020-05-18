@@ -15,7 +15,7 @@ from recommonmark.parser import CommonMarkParser
 import sphinx_theme
 import os
 import sys
-sys.path.insert(0, os.path.abspath('../OpenJij/openjij'))
+sys.path.insert(0, os.path.abspath('../OpenJij'))
 
 
 # -- Project information -----------------------------------------------------

@@ -194,15 +194,7 @@
 <dt id="openjij.model.chimera_model.make_ChimeraModel">
 <code class="sig-prename descclassname">openjij.model.chimera_model.</code><code class="sig-name descname">make_ChimeraModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">linear</span></em>, <em class="sig-param"><span class="n">quadratic</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/model/chimera_model.html#make_ChimeraModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#openjij.model.chimera_model.make_ChimeraModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>ChimeraModel factory
-:param linear: linear biases
-:type linear: dict
-:param quadratic: quadratic biases
-:type quadratic: dict</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>generated ChimeraModel class</p>
-</dd>
-</dl>
+:returns: generated ChimeraModel class</p>
 </dd></dl>
 
 <dl class="py function">
@@ -301,33 +293,51 @@
 <span id="openjij-model-model-module"></span><h2>openjij.model.model module<a class="headerlink" href="#module-openjij.model.model" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
 <dt id="openjij.model.model.BinaryQuadraticModel">
-<code class="sig-prename descclassname">openjij.model.model.</code><code class="sig-name descname">BinaryQuadraticModel</code><span class="sig-paren">(</span><em class="sig-param">linear</em>, <em class="sig-param">quadratic</em>, <em class="sig-param">offset=0.0</em>, <em class="sig-param">var_type=&lt;Vartype.SPIN: frozenset({1</em>, <em class="sig-param">-1})&gt;</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/model/model.html#BinaryQuadraticModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#openjij.model.model.BinaryQuadraticModel" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="sig-prename descclassname">openjij.model.model.</code><code class="sig-name descname">BinaryQuadraticModel</code><span class="sig-paren">(</span><em class="sig-param">linear: dict</em>, <em class="sig-param">quadratic: dict</em>, <em class="sig-param">offset: float = 0.0</em>, <em class="sig-param">var_type=&lt;Vartype.SPIN: frozenset({1</em>, <em class="sig-param">-1})&gt;</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/model/model.html#BinaryQuadraticModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#openjij.model.model.BinaryQuadraticModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>generate BinaryQuadraticModel object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>linear</strong> (<em>dict</em>) – linear</p></li>
+<li><p><strong>quadratic</strong> (<em>dict</em>) – quadratic</p></li>
+<li><p><strong>offset</strong> (<em>float</em>) – offset</p></li>
+<li><p><strong>var_type</strong> (<em>openjij.variable_type.Vartype</em>) – var_type</p></li>
+<li><p><strong>kwargs</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>generated BinaryQuadraticModel</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>BinaryQuadraticModel</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt id="openjij.model.model.make_BinaryQuadraticModel">
-<code class="sig-prename descclassname">openjij.model.model.</code><code class="sig-name descname">make_BinaryQuadraticModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">linear</span></em>, <em class="sig-param"><span class="n">quadratic</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/model/model.html#make_BinaryQuadraticModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#openjij.model.model.make_BinaryQuadraticModel" title="Permalink to this definition">¶</a></dt>
-<dd><p>BinaryQuadraticModel factory
-:param linear: linear biases
-:type linear: dict
-:param quadratic: quadratic biases
-:type quadratic: dict</p>
+<code class="sig-prename descclassname">openjij.model.model.</code><code class="sig-name descname">make_BinaryQuadraticModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">linear</span><span class="p">:</span> <span class="n">dict</span></em>, <em class="sig-param"><span class="n">quadratic</span><span class="p">:</span> <span class="n">dict</span></em><span class="sig-paren">)</span> &#x2192; type<a class="reference internal" href="../_modules/openjij/model/model.html#make_BinaryQuadraticModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#openjij.model.model.make_BinaryQuadraticModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>BinaryQuadraticModel factory.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>generated BinaryQuadraticModel class</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>type</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt id="openjij.model.model.make_BinaryQuadraticModel_from_JSON">
-<code class="sig-prename descclassname">openjij.model.model.</code><code class="sig-name descname">make_BinaryQuadraticModel_from_JSON</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/model/model.html#make_BinaryQuadraticModel_from_JSON"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#openjij.model.model.make_BinaryQuadraticModel_from_JSON" title="Permalink to this definition">¶</a></dt>
-<dd><p>BinaryQuadraticModel factory for JSON
-:param obj: JSON object
-:type obj: dict</p>
+<code class="sig-prename descclassname">openjij.model.model.</code><code class="sig-name descname">make_BinaryQuadraticModel_from_JSON</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span><span class="p">:</span> <span class="n">dict</span></em><span class="sig-paren">)</span> &#x2192; type<a class="reference internal" href="../_modules/openjij/model/model.html#make_BinaryQuadraticModel_from_JSON"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#openjij.model.model.make_BinaryQuadraticModel_from_JSON" title="Permalink to this definition">¶</a></dt>
+<dd><p>make BinaryQuadraticModel from JSON.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>generated BinaryQuadraticModel class</p>
+<dd class="field-odd"><p>corresponding BinaryQuadraticModel type</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>type</p>
 </dd>
 </dl>
 </dd></dl>
