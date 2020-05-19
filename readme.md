@@ -10,7 +10,7 @@ $ pip install recommonmark
 ```
 You may need additional Python packages in the course of installation.
 
-## build
+## build document
 
 ```
 $ git submodule update
@@ -22,3 +22,4 @@ $ make html
 
 * This Python documentation uses the **Google style** docstrings.
 * If the update seems not to be reflected in the HTML files, make sure if the Python files for the documentation are imported from the intended directory when executing `make html`.
+* **Feel free to throw issues if you find typo in the documents!**

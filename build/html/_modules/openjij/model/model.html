@@ -169,6 +169,23 @@
 <span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
 <span class="c1"># See the License for the specific language governing permissions and</span>
 <span class="c1"># limitations under the License.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">| This module defines the BinaryQuadraticModel with the Hamiltonian,</span>
+
+<span class="sd">.. math:: </span>
+
+<span class="sd">    H = \\sum_{i\\neq j} J_{ij}\sigma_i \sigma_j + \\sum_{i} h_{i}\sigma_i,</span>
+
+<span class="sd">| in an Ising form and</span>
+
+<span class="sd">.. math:: </span>
+
+<span class="sd">    H = \\sum_{ij} Q_{ij}x_i x_j + \\sum_{i} H_{i}x_i,</span>
+
+<span class="sd">| in a QUBO form.</span>
+<span class="sd">| The methods and usage are basically the same as `dimod &lt;https://github.com/dwavesystems/dimod&gt;`_.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">cxxjij</span>
@@ -283,17 +300,29 @@
 <span class="sd">        linear (dict): represents linear term</span>
 <span class="sd">        quadratic (dict): represents quadratic term</span>
 <span class="sd">        adj (dict): represents adjacency</span>
-<span class="sd">        indices (list): labels of each variables sorted by results variables</span>
+<span class="sd">        indices (list): labels of each variables sorted by results variables.</span>
 <span class="sd">        offset (float): represents constant energy term when convert to SPIN from BINARY</span>
 <span class="sd">    Args:</span>
-<span class="sd">        linear (dict): linear</span>
-<span class="sd">        quadratic (dict): quadratic</span>
+<span class="sd">        linear (dict): linear biases</span>
+<span class="sd">        quadratic (dict): quadratic biases</span>
 <span class="sd">        offset (float): offset</span>
 <span class="sd">        var_type (openjij.variable_type.Vartype): vartype (&#39;SPIN&#39; or &#39;BINARY&#39;)</span>
 <span class="sd">        gpu (bool): if true, this can be used for gpu samplers.</span>
 <span class="sd">        kwargs:</span>
 <span class="sd">    Returns:</span>
 <span class="sd">        generated BinaryQuadraticModel</span>
+<span class="sd">    Examples:</span>
+<span class="sd">        BinaryQuadraticModel can be initialized by specifing h and J::</span>
+
+<span class="sd">            &gt;&gt;&gt; h = {0: 1, 1: -2}</span>
+<span class="sd">            &gt;&gt;&gt; J = {(0, 1): -1, (1, 2): -3, (2, 3): 0.5}</span>
+<span class="sd">            &gt;&gt;&gt; bqm = oj.BinaryQuadraticModel(self.h, self.J)</span>
+
+<span class="sd">        You can also use strings and tuples of integers (up to 4 elements) as indices::</span>
+
+<span class="sd">            &gt;&gt;&gt; h = {&#39;a&#39;: 1, &#39;b&#39;: -2}</span>
+<span class="sd">            &gt;&gt;&gt; J = {(&#39;a&#39;, &#39;b&#39;): -1, (&#39;b&#39;, &#39;c&#39;): -3, (&#39;c&#39;, &#39;d&#39;): 0.5}</span>
+<span class="sd">            &gt;&gt;&gt; bqm = oj.BinaryQuadraticModel(self.h, self.J)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">Model</span> <span class="o">=</span> <span class="n">make_BinaryQuadraticModel</span><span class="p">(</span><span class="n">linear</span><span class="p">,</span> <span class="n">quadratic</span><span class="p">)</span>

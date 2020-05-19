@@ -186,7 +186,7 @@
 <span class="sd">        This model deal with chimera graph.</span>
 <span class="sd">        ChimeraModel provide methods to verify whether a given interaction graph matches a Chimera graph and to convert it to cxxjij.graph.Chimera.</span>
 <span class="sd">    </span>
-<span class="sd">        Examples:</span>
+<span class="sd">        Examples::</span>
 <span class="sd">            # This interactions satisfy chimera topology.</span>
 <span class="sd">            &gt;&gt;&gt; Q={(0, 4): -1, (4, 12): -1}</span>
 <span class="sd">            &gt;&gt;&gt; chimera_model = ChimeraModel(Q, unit_num_L=2)  # make</span>
@@ -445,12 +445,7 @@
     <span class="sd">&quot;&quot;&quot;generate ChimeraModel object.</span>
 <span class="sd">    This model deal with chimera graph.</span>
 <span class="sd">    ChimeraModel provide methods to verify whether a given interaction graph matches a Chimera graph and to convert it to cxxjij.graph.Chimera.</span>
-<span class="sd">    </span>
-<span class="sd">    Examples:</span>
-<span class="sd">        # This interactions satisfy chimera topology.</span>
-<span class="sd">        &gt;&gt;&gt; Q={(0, 4): -1, (4, 12): -1}</span>
-<span class="sd">        &gt;&gt;&gt; chimera_model = ChimeraModel(Q, unit_num_L=2)  # make</span>
-<span class="sd">        &gt;&gt;&gt; chimera_self.validate_chimera()</span>
+
 <span class="sd">    Args:</span>
 <span class="sd">        linear (dict): linear biases</span>
 <span class="sd">        quadratic (dict): quadratic biases</span>
@@ -461,6 +456,15 @@
 <span class="sd">        gpu (bool): if true, this can be used for gpu samplers.</span>
 <span class="sd">    Returns:</span>
 <span class="sd">        generated ChimeraModel</span>
+
+<span class="sd">    Examples:</span>
+<span class="sd">        Example shows how to initialize ChimeraModel.::</span>
+<span class="sd">        </span>
+<span class="sd">            # This interactions satisfy chimera topology.</span>
+<span class="sd">            &gt;&gt;&gt; Q={(0, 4): -1, (4, 12): -1}</span>
+<span class="sd">            &gt;&gt;&gt; chimera_model = ChimeraModel(Q, unit_num_L=2)  # make</span>
+<span class="sd">            &gt;&gt;&gt; chimera_self.validate_chimera()</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">Model</span> <span class="o">=</span> <span class="n">make_ChimeraModel</span><span class="p">(</span><span class="n">linear</span><span class="p">,</span> <span class="n">quadratic</span><span class="p">)</span>

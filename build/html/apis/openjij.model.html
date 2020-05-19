@@ -191,11 +191,6 @@
 <dd><p>generate ChimeraModel object.
 This model deal with chimera graph.
 ChimeraModel provide methods to verify whether a given interaction graph matches a Chimera graph and to convert it to cxxjij.graph.Chimera.</p>
-<p class="rubric">Examples</p>
-<p># This interactions satisfy chimera topology.
-&gt;&gt;&gt; Q={(0, 4): -1, (4, 12): -1}
-&gt;&gt;&gt; chimera_model = ChimeraModel(Q, unit_num_L=2)  # make
-&gt;&gt;&gt; chimera_self.validate_chimera()</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -212,6 +207,14 @@ ChimeraModel provide methods to verify whether a given interaction graph matches
 <dd class="field-even"><p>generated ChimeraModel</p>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>Example shows how to initialize ChimeraModel.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># This interactions satisfy chimera topology.</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">Q</span><span class="o">=</span><span class="p">{(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">):</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">12</span><span class="p">):</span> <span class="o">-</span><span class="mi">1</span><span class="p">}</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">chimera_model</span> <span class="o">=</span> <span class="n">ChimeraModel</span><span class="p">(</span><span class="n">Q</span><span class="p">,</span> <span class="n">unit_num_L</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>  <span class="c1"># make</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">chimera_self</span><span class="o">.</span><span class="n">validate_chimera</span><span class="p">()</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py function">
@@ -247,13 +250,30 @@ ChimeraModel provide methods to verify whether a given interaction graph matches
 <dl class="py method">
 <dt id="openjij.model.higher_order_model.BinaryHigherOrderModel.adj_dict">
 <code class="sig-name descname">adj_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/model/higher_order_model.html#BinaryHigherOrderModel.adj_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#openjij.model.higher_order_model.BinaryHigherOrderModel.adj_dict" title="Permalink to this definition">¶</a></dt>
-<dd><p>adjgency list of each variables</p>
+<dd><p>adjacency list of each variables</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>key (variables key), value (list of tuple represents connected indices)</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="openjij.model.higher_order_model.BinaryHigherOrderModel.calc_energy">
+<code class="sig-name descname">calc_energy</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">state</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/model/higher_order_model.html#BinaryHigherOrderModel.calc_energy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#openjij.model.higher_order_model.BinaryHigherOrderModel.calc_energy" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <cite>energy</cite></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>state</strong> (<em>list of int</em>) – list of SPIN or BINARY</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>energy of state</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
 </dd>
 </dl>
 </dd></dl>
@@ -305,6 +325,18 @@ Each spins are decided by 2-d corrdinate x, y.</p>
 <dd class="field-even"><p>generated KingGraphModel</p>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>The following code shows intialization of KingGraph:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">J</span> <span class="o">=</span> <span class="p">{(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span> <span class="o">-</span><span class="mf">3.0</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">king_graph</span> <span class="o">=</span> <span class="n">oj</span><span class="o">.</span><span class="n">KingGraph</span><span class="p">(</span><span class="n">machine_type</span><span class="o">=</span><span class="s2">&quot;ASIC&quot;</span><span class="p">,</span> <span class="n">linear</span><span class="o">=</span><span class="n">h</span><span class="p">,</span> <span class="n">quadratic</span><span class="o">=</span><span class="n">J</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You can initialize it from <cite>king_interaction</cite>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">king_interaction</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">3.0</span><span class="p">]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">king_graph</span> <span class="o">=</span> <span class="n">oj</span><span class="o">.</span><span class="n">KingGraph</span><span class="p">(</span><span class="n">machine_type</span><span class="o">=</span><span class="s2">&quot;ASIC&quot;</span><span class="p">,</span> <span class="n">king_graph</span><span class="o">=</span><span class="n">king_interaction</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py function">
@@ -330,6 +362,20 @@ Each spins are decided by 2-d corrdinate x, y.</p>
 </div>
 <div class="section" id="module-openjij.model.model">
 <span id="openjij-model-model-module"></span><h2>openjij.model.model module<a class="headerlink" href="#module-openjij.model.model" title="Permalink to this headline">¶</a></h2>
+<div class="line-block">
+<div class="line">This module defines the BinaryQuadraticModel with the Hamiltonian,</div>
+</div>
+<div class="math notranslate nohighlight">
+\[H = \sum_{i\neq j} J_{ij}\sigma_i \sigma_j + \sum_{i} h_{i}\sigma_i,\]</div>
+<div class="line-block">
+<div class="line">in an Ising form and</div>
+</div>
+<div class="math notranslate nohighlight">
+\[H = \sum_{ij} Q_{ij}x_i x_j + \sum_{i} H_{i}x_i,\]</div>
+<div class="line-block">
+<div class="line">in a QUBO form.</div>
+<div class="line">The methods and usage are basically the same as <a class="reference external" href="https://github.com/dwavesystems/dimod">dimod</a>.</div>
+</div>
 <dl class="py function">
 <dt id="openjij.model.model.BinaryQuadraticModel">
 <code class="sig-prename descclassname">openjij.model.model.</code><code class="sig-name descname">BinaryQuadraticModel</code><span class="sig-paren">(</span><em class="sig-param">linear: dict</em>, <em class="sig-param">quadratic: dict</em>, <em class="sig-param">offset: float = 0.0</em>, <em class="sig-param">var_type=&lt;Vartype.SPIN: frozenset({1</em>, <em class="sig-param">-1})&gt;</em>, <em class="sig-param">gpu: bool = False</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/model/model.html#BinaryQuadraticModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#openjij.model.model.BinaryQuadraticModel" title="Permalink to this definition">¶</a></dt>
@@ -381,7 +427,7 @@ Each spins are decided by 2-d corrdinate x, y.</p>
 <dl class="py attribute">
 <dt id="openjij.model.model.indices">
 <code class="sig-prename descclassname">openjij.model.model.</code><code class="sig-name descname">indices</code><a class="headerlink" href="#openjij.model.model.indices" title="Permalink to this definition">¶</a></dt>
-<dd><p>labels of each variables sorted by results variables</p>
+<dd><p>labels of each variables sorted by results variables.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>list</p>
@@ -403,8 +449,8 @@ Each spins are decided by 2-d corrdinate x, y.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>linear</strong> (<em>dict</em>) – linear</p></li>
-<li><p><strong>quadratic</strong> (<em>dict</em>) – quadratic</p></li>
+<li><p><strong>linear</strong> (<em>dict</em>) – linear biases</p></li>
+<li><p><strong>quadratic</strong> (<em>dict</em>) – quadratic biases</p></li>
 <li><p><strong>offset</strong> (<em>float</em>) – offset</p></li>
 <li><p><strong>var_type</strong> (<em>openjij.variable_type.Vartype</em>) – vartype (‘SPIN’ or ‘BINARY’)</p></li>
 <li><p><strong>gpu</strong> (<em>bool</em>) – if true, this can be used for gpu samplers.</p></li>
@@ -415,6 +461,19 @@ Each spins are decided by 2-d corrdinate x, y.</p>
 <dd class="field-even"><p>generated BinaryQuadraticModel</p>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>BinaryQuadraticModel can be initialized by specifing h and J:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span> <span class="o">-</span><span class="mi">2</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">J</span> <span class="o">=</span> <span class="p">{(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">):</span> <span class="mf">0.5</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bqm</span> <span class="o">=</span> <span class="n">oj</span><span class="o">.</span><span class="n">BinaryQuadraticModel</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">J</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You can also use strings and tuples of integers (up to 4 elements) as indices:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">2</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">J</span> <span class="o">=</span> <span class="p">{(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">):</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">):</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">):</span> <span class="mf">0.5</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bqm</span> <span class="o">=</span> <span class="n">oj</span><span class="o">.</span><span class="n">BinaryQuadraticModel</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">h</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">J</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py function">

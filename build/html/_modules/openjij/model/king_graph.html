@@ -347,6 +347,17 @@
 <span class="sd">        machine_type (str): choose &#39;ASIC&#39; or &#39;FPGA&#39;</span>
 <span class="sd">    Returns:</span>
 <span class="sd">        generated KingGraphModel</span>
+<span class="sd">    Examples:</span>
+<span class="sd">        The following code shows intialization of KingGraph::</span>
+
+<span class="sd">            &gt;&gt;&gt; h = {}</span>
+<span class="sd">            &gt;&gt;&gt; J = {(0, 1): -1.0, (1, 2): -3.0}</span>
+<span class="sd">            &gt;&gt;&gt; king_graph = oj.KingGraph(machine_type=&quot;ASIC&quot;, linear=h, quadratic=J)</span>
+
+<span class="sd">        You can initialize it from `king_interaction`::</span>
+
+<span class="sd">            &gt;&gt;&gt; king_interaction = [[0, 0, 1, 0, -1.0], [1, 0, 2, 0, -3.0]]</span>
+<span class="sd">            &gt;&gt;&gt; king_graph = oj.KingGraph(machine_type=&quot;ASIC&quot;, king_graph=king_interaction)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">Model</span> <span class="o">=</span> <span class="n">make_KingGraph</span><span class="p">(</span><span class="n">linear</span><span class="p">,</span> <span class="n">quadratic</span><span class="p">,</span> <span class="n">king_graph</span><span class="p">)</span>
