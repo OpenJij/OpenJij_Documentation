@@ -11,12 +11,14 @@ $ git submodule update -i
 $ pipenv install
 $ pipenv shell
 ```
-You may need additional Python packages in the course of installation.
 
 ## build document
 
 ```
 $ git submodule update
+$ cd Openjij
+$ pipenv run python setup.py install
+$ cd ..
 $ pipenv run sphinx-apidoc -f -o ./source/apis ./OpenJij/openjij -d 2
 $ pipenv run make html
 ```
