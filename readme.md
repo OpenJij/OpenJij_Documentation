@@ -3,10 +3,13 @@
 This is the Python documentation repository for OpenJij.
 
 ## before install
+
+You need Pipenv to build this document
+
 ```
 $ git submodule update -i
-$ pip install sphinx
-$ pip install recommonmark
+$ pipenv install
+$ pipenv shell
 ```
 You may need additional Python packages in the course of installation.
 
@@ -14,8 +17,8 @@ You may need additional Python packages in the course of installation.
 
 ```
 $ git submodule update
-$ sphinx-apidoc -f -o ./source/apis ./OpenJij/openjij -d 2
-$ make html
+$ pipenv run sphinx-apidoc -f -o ./source/apis ./OpenJij/openjij -d 2
+$ pipenv run make html
 ```
 
 ## Notes
