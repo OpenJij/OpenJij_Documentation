@@ -267,7 +267,7 @@
 <span class="sd">        response (openjij.Response): response from solver (or sampler).</span>
 <span class="sd">        ref_energy (float): the reference energy (usually use the ground energy)</span>
 <span class="sd">    Returns:</span>
-<span class="sd">        float: Residual energy which is defined as :math:`&lt;E&gt; - E_0` (:math:`&lt;...&gt;` represents average, :math:`E_0` is the reference energy (usually use the ground energy)).</span>
+<span class="sd">        float: Residual energy which is defined as :math:`\\langle E \\rangle - E_0` (:math:`\\langle...\\rangle` represents average, :math:`E_0` is the reference energy (usually use the ground energy)).</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">energies</span><span class="p">)</span> <span class="o">-</span> <span class="n">ref_energy</span></div>
