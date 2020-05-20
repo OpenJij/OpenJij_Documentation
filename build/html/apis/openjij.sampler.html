@@ -332,16 +332,18 @@ for k, v in iterable:</p>
 <dl class="py method">
 <dt id="openjij.sampler.cmos_annealer.CMOSAnnealer.sample_ising">
 <code class="sig-name descname">sample_ising</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">h</span></em>, <em class="sig-param"><span class="n">J</span></em>, <em class="sig-param"><span class="n">num_reads</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">num_sweeps</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">step_length</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">beta_min</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">beta_max</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/sampler/cmos_annealer.html#CMOSAnnealer.sample_ising"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#openjij.sampler.cmos_annealer.CMOSAnnealer.sample_ising" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sample from an Ising model using the implemented sample method.</p>
+<dd><p>sample Ising model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>h</strong> (<em>dict</em>) – Linear biases</p></li>
-<li><p><strong>J</strong> (<em>dict</em>) – Quadratic biases</p></li>
+<li><p><strong>h</strong> (<em>dict</em>) – linear biases</p></li>
+<li><p><strong>J</strong> (<em>dict</em>) – quadratic biases</p></li>
+<li><p><strong>num_reads</strong> (<em>int</em>) – number of reads</p></li>
+<li><p><strong>num_sweeps</strong> (<em>int</em>) – number of sweeps</p></li>
+<li><p><strong>step_length</strong> (<em>int</em>) – number of Monte Carlo steop for each step</p></li>
+<li><p><strong>beta_min</strong> (<em>float</em>) – minimal value of inverse temperature</p></li>
+<li><p><strong>beta_max</strong> (<em>float</em>) – maximum value of inverse temperature</p></li>
 </ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>obj: <cite>.Sampleset</cite></p>
 </dd>
 </dl>
 </dd></dl>
@@ -387,39 +389,70 @@ implement default like this:</p>
 <dt id="openjij.sampler.csqa_sampler.CSQASampler">
 <em class="property">class </em><code class="sig-prename descclassname">openjij.sampler.csqa_sampler.</code><code class="sig-name descname">CSQASampler</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">beta</span><span class="o">=</span><span class="default_value">5.0</span></em>, <em class="sig-param"><span class="n">gamma</span><span class="o">=</span><span class="default_value">1.0</span></em>, <em class="sig-param"><span class="n">num_sweeps</span><span class="o">=</span><span class="default_value">1000</span></em>, <em class="sig-param"><span class="n">schedule</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">num_reads</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/sampler/csqa_sampler.html#CSQASampler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#openjij.sampler.csqa_sampler.CSQASampler" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#openjij.sampler.sqa_sampler.SQASampler" title="openjij.sampler.sqa_sampler.SQASampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">openjij.sampler.sqa_sampler.SQASampler</span></code></a></p>
-<dl class="py method">
-<dt id="openjij.sampler.csqa_sampler.CSQASampler.sample_ising">
-<code class="sig-name descname">sample_ising</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">h</span></em>, <em class="sig-param"><span class="n">J</span></em>, <em class="sig-param"><span class="n">beta</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">gamma</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">num_sweeps</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">schedule</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">num_reads</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">initial_state</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">updater</span><span class="o">=</span><span class="default_value">'swendsenwang'</span></em>, <em class="sig-param"><span class="n">reinitialize_state</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">seed</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/sampler/csqa_sampler.html#CSQASampler.sample_ising"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#openjij.sampler.csqa_sampler.CSQASampler.sample_ising" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sampling from the Ising model</p>
+<p>Sampler with continuous-time simulated quantum annealing (CSQA) using Hamiltonian</p>
+<div class="math notranslate nohighlight">
+\[H(s) = s H_p + \Gamma (1-s)\sum_i \sigma_i^x\]</div>
+<p>where <span class="math notranslate nohighlight">\(H_p\)</span> is the problem Hamiltonian we want to solve.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>h</strong> (<em>dict</em>) – Linear term of the target Ising model.</p></li>
-<li><p><strong>J</strong> (<em>dict</em>) – Quadratic term of the target Ising model.</p></li>
-<li><p><strong>beta</strong> (<em>float</em><em>, </em><em>optional</em>) – inverse tempareture.</p></li>
-<li><p><strong>gamma</strong> (<em>float</em><em>, </em><em>optional</em>) – strangth of transverse field. Defaults to None.</p></li>
-<li><p><strong>num_sweeps</strong> (<em>int</em><em>, </em><em>optional</em>) – number of sweeps. Defaults to None.</p></li>
-<li><p><strong>schedule</strong> (<em>list</em><em>[</em><em>list</em><em>[</em><em>float</em><em>, </em><em>int</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – List of annealing parameter. Defaults to None.</p></li>
-<li><p><strong>num_reads</strong> (<em>int</em><em>, </em><em>optional</em>) – number of sampling. Defaults to 1.</p></li>
-<li><p><strong>initial_state</strong> (<em>list</em><em>[</em><em>int</em><em>]</em><em>, </em><em>optional</em>) – Initial state. Defaults to None.</p></li>
-<li><p><strong>updater</strong> (<em>str</em><em>, </em><em>optional</em>) – update method. Defaults to ‘single spin flip’.</p></li>
-<li><p><strong>reinitialize_state</strong> (<em>bool</em><em>, </em><em>optional</em>) – Re-initilization at each sampling. Defaults to True.</p></li>
-<li><p><strong>seed</strong> (<em>int</em><em>, </em><em>optional</em>) – Sampling seed. Defaults to None.</p></li>
-<li><p><strong>structure</strong> (<em>dict</em>) – specify the structure.</p></li>
-<li><p><strong>argument is necessary if the model has a specific structure</strong> (<em>This</em>) – </p></li>
-<li><p><strong>must have two types of keys</strong><strong>, </strong><strong>namely &quot;size&quot; which shows the total size of spins and &quot;dict&quot; which is the map from model index</strong> (<em>structure</em>) – </p></li>
+<li><p><strong>beta</strong> (<em>float</em>) – Inverse temperature.</p></li>
+<li><p><strong>gamma</strong> (<em>float</em>) – Amplitude of quantum fluctuation.</p></li>
+<li><p><strong>schedule</strong> (<em>list</em>) – schedule list</p></li>
+<li><p><strong>step_num</strong> (<em>int</em>) – Number of Monte Carlo step.</p></li>
+<li><p><strong>schedule_info</strong> (<em>dict</em>) – Information about a annealing schedule.</p></li>
+<li><p><strong>num_reads</strong> (<em>int</em>) – Number of iterations.</p></li>
+<li><p><strong>num_sweeps</strong> (<em>int</em>) – number of sweeps</p></li>
+<li><p><strong>num_reads</strong> – Number of iterations.</p></li>
+<li><p><strong>schedule_info</strong> – Information about a annealing schedule.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><p><strong>ValueError</strong> – [description]</p>
+</dl>
+<dl class="py method">
+<dt id="openjij.sampler.csqa_sampler.CSQASampler.sample_ising">
+<code class="sig-name descname">sample_ising</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">h</span></em>, <em class="sig-param"><span class="n">J</span></em>, <em class="sig-param"><span class="n">beta</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">gamma</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">num_sweeps</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">schedule</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">num_reads</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">initial_state</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">updater</span><span class="o">=</span><span class="default_value">'swendsenwang'</span></em>, <em class="sig-param"><span class="n">reinitialize_state</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">seed</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/sampler/csqa_sampler.html#CSQASampler.sample_ising"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#openjij.sampler.csqa_sampler.CSQASampler.sample_ising" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sampling from the Ising model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>h</strong> (<em>dict</em>) – linear biases</p></li>
+<li><p><strong>J</strong> (<em>dict</em>) – quadratic biases</p></li>
+<li><p><strong>beta</strong> (<em>float</em><em>, </em><em>optional</em>) – inverse temperature</p></li>
+<li><p><strong>gamma</strong> (<em>float</em><em>, </em><em>optional</em>) – strength of transverse field</p></li>
+<li><p><strong>num_sweeps</strong> (<em>int</em><em>, </em><em>optional</em>) – number of sampling.</p></li>
+<li><p><strong>schedule</strong> (<em>list</em><em>, </em><em>optional</em>) – schedule list</p></li>
+<li><p><strong>num_reads</strong> (<em>int</em><em>, </em><em>optional</em>) – number of iterations</p></li>
+<li><p><strong>initial_state</strong> (<em>optional</em>) – initial state of spins</p></li>
+<li><p><strong>updater</strong> (<em>str</em><em>, </em><em>optional</em>) – updater algorithm</p></li>
+<li><p><strong>reinitialize_state</strong> (<em>bool</em><em>, </em><em>optional</em>) – Re-initilization at each sampling. Defaults to True.</p></li>
+<li><p><strong>seed</strong> (<em>int</em><em>, </em><em>optional</em>) – Sampling seed.</p></li>
+<li><p><strong>structure</strong> (<em>int</em><em>, </em><em>optional</em>) – specify the structure.</p></li>
+<li><p><strong>argument is necessary if the model has a specific structure</strong> (<em>This</em>) – </p></li>
+<li><p><strong>must have two types of keys</strong><strong>, </strong><strong>namely &quot;size&quot; which shows the total size of spins and &quot;dict&quot; which is the map from model index</strong> (<em>structure</em>) – </p></li>
+<li><p><strong>kwargs</strong> – </p></li>
+</ul>
 </dd>
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>[description]</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>results</p>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>[type]</p>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#openjij.sampler.response.Response" title="openjij.sampler.response.Response"><code class="xref py py-class docutils literal notranslate"><span class="pre">openjij.sampler.response.Response</span></code></a></p>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>for Ising case:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">J</span> <span class="o">=</span> <span class="p">{(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">):</span> <span class="o">-</span><span class="mi">1</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sampler</span> <span class="o">=</span> <span class="n">oj</span><span class="o">.</span><span class="n">CSQASampler</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">sampler</span><span class="o">.</span><span class="n">sample_ising</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">J</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>for QUBO case:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Q</span> <span class="o">=</span> <span class="p">{(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">):</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">):</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">):</span> <span class="mi">1</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sampler</span> <span class="o">=</span> <span class="n">oj</span><span class="o">.</span><span class="n">CSQASampler</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">sampler</span><span class="o">.</span><span class="n">sample_qubo</span><span class="p">(</span><span class="n">Q</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </dd></dl>
@@ -450,6 +483,10 @@ implement default like this:</p>
 </div>
 <div class="section" id="module-openjij.sampler.response">
 <span id="openjij-sampler-response-module"></span><h2>openjij.sampler.response module<a class="headerlink" href="#module-openjij.sampler.response" title="Permalink to this headline">¶</a></h2>
+<div class="line-block">
+<div class="line">OpenJij response class.</div>
+<div class="line">The usage is almost the same as <code class="xref py py-class docutils literal notranslate"><span class="pre">dimod.SampleSet</span></code>.</div>
+</div>
 <dl class="py class">
 <dt id="openjij.sampler.response.Response">
 <em class="property">class </em><code class="sig-prename descclassname">openjij.sampler.response.</code><code class="sig-name descname">Response</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">record</span></em>, <em class="sig-param"><span class="n">variables</span></em>, <em class="sig-param"><span class="n">info</span></em>, <em class="sig-param"><span class="n">vartype</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/sampler/response.html#Response"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#openjij.sampler.response.Response" title="Permalink to this definition">¶</a></dt>
@@ -494,7 +531,6 @@ implement default like this:</p>
 <em class="property">class </em><code class="sig-prename descclassname">openjij.sampler.sa_sampler.</code><code class="sig-name descname">SASampler</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">beta_min</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">beta_max</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">num_sweeps</span><span class="o">=</span><span class="default_value">1000</span></em>, <em class="sig-param"><span class="n">schedule</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">num_reads</span><span class="o">=</span><span class="default_value">1</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/sampler/sa_sampler.html#SASampler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#openjij.sampler.sa_sampler.SASampler" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#openjij.sampler.sampler.BaseSampler" title="openjij.sampler.sampler.BaseSampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">openjij.sampler.sampler.BaseSampler</span></code></a></p>
 <p>Sampler with Simulated Annealing (SA).</p>
-<p>Inherits from <a class="reference internal" href="#openjij.sampler.sampler.BaseSampler" title="openjij.sampler.sampler.BaseSampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">openjij.sampler.sampler.BaseSampler</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -509,54 +545,8 @@ You can overwrite in methods .sample_*.</p></li>
 <li><p><strong>schedule_info</strong> (<em>dict</em>) – Information about an annealing schedule.</p></li>
 </ul>
 </dd>
-</dl>
-<dl class="py attribute">
-<dt id="openjij.sampler.sa_sampler.SASampler.energy_bias">
-<code class="sig-name descname">energy_bias</code><a class="headerlink" href="#openjij.sampler.sa_sampler.SASampler.energy_bias" title="Permalink to this definition">¶</a></dt>
-<dd><p>Energy bias.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>float</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="openjij.sampler.sa_sampler.SASampler.var_type">
-<code class="sig-name descname">var_type</code><a class="headerlink" href="#openjij.sampler.sa_sampler.SASampler.var_type" title="Permalink to this definition">¶</a></dt>
-<dd><p>Type of variables: ‘SPIN’ or ‘BINARY’ which mean {-1, 1} or {0, 1}.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="openjij.sampler.sa_sampler.SASampler.indices">
-<code class="sig-name descname">indices</code><a class="headerlink" href="#openjij.sampler.sa_sampler.SASampler.indices" title="Permalink to this definition">¶</a></dt>
-<dd><p>Indices of <cite>openjij.model.model.BinaryQuadraticModel</cite> object.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>int</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="openjij.sampler.sa_sampler.SASampler.N">
-<code class="sig-name descname">N</code><a class="headerlink" href="#openjij.sampler.sa_sampler.SASampler.N" title="Permalink to this definition">¶</a></dt>
-<dd><p>Number of the indices.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>int</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="field-list simple">
-<dt class="field-odd">Raises</dt>
-<dd class="field-odd"><ul class="simple">
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
 <li><p><strong>ValueError</strong> – If schedules or variables violate as below.</p></li>
 <li><p><strong>- not list</strong><strong> or </strong><strong>numpy.array.</strong> – </p></li>
 <li><p><strong>- not list of tuple</strong><strong> (</strong><strong>beta</strong> – float, step_length : int).</p></li>
@@ -587,50 +577,80 @@ for k, v in iterable:</p>
 <dl class="py method">
 <dt id="openjij.sampler.sa_sampler.SASampler.sample_hubo">
 <code class="sig-name descname">sample_hubo</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">interactions</span><span class="p">:</span> <span class="n">list</span></em>, <em class="sig-param"><span class="n">var_type</span></em>, <em class="sig-param"><span class="n">beta_min</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">beta_max</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">schedule</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">num_sweeps</span><span class="o">=</span><span class="default_value">100</span></em>, <em class="sig-param"><span class="n">num_reads</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">init_state</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">seed</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/sampler/sa_sampler.html#SASampler.sample_hubo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#openjij.sampler.sa_sampler.SASampler.sample_hubo" title="Permalink to this definition">¶</a></dt>
-<dd><p>sampling from higher order unconstrainted binary optimization
-:param interactions: ordered by degree of interaction. [linear, quadratic, …]
-:type interactions: list of dict
-:param var_type: “SPIN” or “BINARY”
-:type var_type: str, openjij.VarType
-:param beta_min: Minimum beta (initial inverse temperature). Defaults to None.
-:type beta_min: float, optional
-:param beta_max: Maximum beta (final inverse temperature). Defaults to None.
-:type beta_max: float, optional
-:param schedule: [description]. Defaults to None.
-:type schedule: list, optional
-:param num_sweeps: [description]. Defaults to 100.
-:type num_sweeps: int, optional
-:param num_reads: [description]. Defaults to 1.
-:type num_reads: int, optional
-:param init_state: initial state. Defaults to None.
-:type init_state: list, optional
-:param seed: [description]. Defaults to None.
-:type seed: int, optional</p>
+<dd><p>sampling from higher order unconstrainted binary optimization.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>[description]</p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>interactions</strong> (<em>list</em>) – ordered by degree of interaction.</p></li>
+<li><p><strong>var_type</strong> (<em>str</em><em>, </em><em>openjij.VarType</em>) – “SPIN” or “BINARY”</p></li>
+<li><p><strong>beta_min</strong> (<em>float</em><em>, </em><em>optional</em>) – Minimum beta (initial inverse temperature). Defaults to None.</p></li>
+<li><p><strong>beta_max</strong> (<em>float</em><em>, </em><em>optional</em>) – Maximum beta (final inverse temperature). Defaults to None.</p></li>
+<li><p><strong>schedule</strong> (<em>list</em><em>, </em><em>optional</em>) – schedule list. Defaults to None.</p></li>
+<li><p><strong>num_sweeps</strong> (<em>int</em><em>, </em><em>optional</em>) – number of sweeps. Defaults to 100.</p></li>
+<li><p><strong>num_reads</strong> (<em>int</em><em>, </em><em>optional</em>) – number of reads. Defaults to 1.</p></li>
+<li><p><strong>init_state</strong> (<em>list</em><em>, </em><em>optional</em>) – initial state. Defaults to None.</p></li>
+<li><p><strong>seed</strong> (<em>int</em><em>, </em><em>optional</em>) – [description]. Defaults to None.</p></li>
+</ul>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>[type]</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>results</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#openjij.sampler.response.Response" title="openjij.sampler.response.Response"><code class="xref py py-class docutils literal notranslate"><span class="pre">openjij.sampler.response.Response</span></code></a></p>
 </dd>
 </dl>
+<p>Examples:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sampler</span> <span class="o">=</span> <span class="n">oj</span><span class="o">.</span><span class="n">SASampler</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">J</span> <span class="o">=</span> <span class="p">{(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span> <span class="o">-</span><span class="mi">1</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">K</span> <span class="o">=</span> <span class="p">{(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span> <span class="mi">1</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">response</span> <span class="o">=</span> <span class="n">sampler</span><span class="o">.</span><span class="n">sample_hubo</span><span class="p">([</span><span class="n">h</span><span class="p">,</span> <span class="n">J</span><span class="p">,</span> <span class="n">K</span><span class="p">],</span> <span class="n">var_type</span><span class="o">=</span><span class="s2">&quot;SPIN&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py method">
 <dt id="openjij.sampler.sa_sampler.SASampler.sample_ising">
 <code class="sig-name descname">sample_ising</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">h</span></em>, <em class="sig-param"><span class="n">J</span></em>, <em class="sig-param"><span class="n">beta_min</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">beta_max</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">num_sweeps</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">num_reads</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">schedule</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">initial_state</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">updater</span><span class="o">=</span><span class="default_value">'single spin flip'</span></em>, <em class="sig-param"><span class="n">reinitialize_state</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">seed</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/sampler/sa_sampler.html#SASampler.sample_ising"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#openjij.sampler.sa_sampler.SASampler.sample_ising" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sample from an Ising model using the implemented sample method.</p>
+<dd><p>sample Ising model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>h</strong> (<em>dict</em>) – Linear biases</p></li>
-<li><p><strong>J</strong> (<em>dict</em>) – Quadratic biases</p></li>
+<li><p><strong>h</strong> (<em>dict</em>) – linear biases</p></li>
+<li><p><strong>J</strong> (<em>dict</em>) – quadratic biases</p></li>
+<li><p><strong>beta_min</strong> (<em>float</em>) – minimal value of inverse temperature</p></li>
+<li><p><strong>beta_max</strong> (<em>float</em>) – maximum value of inverse temperature</p></li>
+<li><p><strong>num_sweeps</strong> (<em>int</em>) – number of sweeps</p></li>
+<li><p><strong>num_reads</strong> (<em>int</em>) – number of reads</p></li>
+<li><p><strong>schedule</strong> (<em>list</em>) – list of inverse temperature</p></li>
+<li><p><strong>initial_state</strong> (<em>dict</em>) – initial state</p></li>
+<li><p><strong>updater</strong> (<em>str</em>) – updater algorithm</p></li>
+<li><p><strong>reinitialize_state</strong> (<em>bool</em>) – if true reinitialize state for each run</p></li>
+<li><p><strong>seed</strong> (<em>int</em>) – seed for Monte Carlo algorithm</p></li>
+<li><p><strong>kwargs</strong> – </p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>obj: <cite>.Sampleset</cite></p>
+<dd class="field-even"><p>results</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#openjij.sampler.response.Response" title="openjij.sampler.response.Response"><code class="xref py py-class docutils literal notranslate"><span class="pre">openjij.sampler.response.Response</span></code></a></p>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>for Ising case:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">J</span> <span class="o">=</span> <span class="p">{(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">):</span> <span class="o">-</span><span class="mi">1</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sampler</span> <span class="o">=</span> <span class="n">oj</span><span class="o">.</span><span class="n">SASampler</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">sampler</span><span class="o">.</span><span class="n">sample_ising</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">J</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>for QUBO case:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Q</span> <span class="o">=</span> <span class="p">{(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">):</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">):</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">):</span> <span class="mi">1</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sampler</span> <span class="o">=</span> <span class="n">oj</span><span class="o">.</span><span class="n">SASampler</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">sampler</span><span class="o">.</span><span class="n">sample_qubo</span><span class="p">(</span><span class="n">Q</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </dd></dl>
@@ -657,6 +677,7 @@ for k, v in iterable:</p>
 </div>
 <div class="section" id="module-openjij.sampler.sampler">
 <span id="openjij-sampler-sampler-module"></span><h2>openjij.sampler.sampler module<a class="headerlink" href="#module-openjij.sampler.sampler" title="Permalink to this headline">¶</a></h2>
+<p>This module defines the abstract sampler (BaseSampler).</p>
 <dl class="py class">
 <dt id="openjij.sampler.sampler.BaseSampler">
 <em class="property">class </em><code class="sig-prename descclassname">openjij.sampler.sampler.</code><code class="sig-name descname">BaseSampler</code><a class="reference internal" href="../_modules/openjij/sampler/sampler.html#BaseSampler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#openjij.sampler.sampler.BaseSampler" title="Permalink to this definition">¶</a></dt>
@@ -681,7 +702,10 @@ for k, v in iterable:</p>
 :param **kwargs: See the implemented sampling for additional keyword definitions.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">SampleSet</span></code></p>
+<dd class="field-odd"><p>results</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><a class="reference internal" href="#openjij.sampler.response.Response" title="openjij.sampler.response.Response"><code class="xref py py-class docutils literal notranslate"><span class="pre">openjij.sampler.response.Response</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -698,7 +722,10 @@ for k, v in iterable:</p>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>obj: <cite>.Sampleset</cite></p>
+<dd class="field-even"><p>results</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#openjij.sampler.response.Response" title="openjij.sampler.response.Response"><code class="xref py py-class docutils literal notranslate"><span class="pre">openjij.sampler.response.Response</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -712,7 +739,10 @@ for k, v in iterable:</p>
 <dd class="field-odd"><p><strong>Q</strong> (<em>dict</em>) – Coefficients of a quadratic unconstrained binary optimization</p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>obj: <cite>.Sampleset</cite></p>
+<dd class="field-even"><p>results</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#openjij.sampler.response.Response" title="openjij.sampler.response.Response"><code class="xref py py-class docutils literal notranslate"><span class="pre">openjij.sampler.response.Response</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -722,7 +752,13 @@ for k, v in iterable:</p>
 <dl class="py function">
 <dt id="openjij.sampler.sampler.measure_time">
 <code class="sig-prename descclassname">openjij.sampler.sampler.</code><code class="sig-name descname">measure_time</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">func</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/sampler/sampler.html#measure_time"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#openjij.sampler.sampler.measure_time" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Decorator for measuring calculation time.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>func</strong> – decorator function</p>
+</dd>
+</dl>
+</dd></dl>
 
 </div>
 <div class="section" id="module-openjij.sampler.sqa_sampler">
@@ -733,87 +769,24 @@ for k, v in iterable:</p>
 <dd><p>Bases: <a class="reference internal" href="#openjij.sampler.sampler.BaseSampler" title="openjij.sampler.sampler.BaseSampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">openjij.sampler.sampler.BaseSampler</span></code></a></p>
 <p>Sampler with Simulated Quantum Annealing (SQA).</p>
 <p>Inherits from <a class="reference internal" href="#openjij.sampler.sampler.BaseSampler" title="openjij.sampler.sampler.BaseSampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">openjij.sampler.sampler.BaseSampler</span></code></a>.
-Hamiltonian
-$$H(s) = s H_p + (1-s)sum_i sigma_i^x$$
-which $H_p$ is problem Hamiltonian that we want solve.</p>
+Hamiltonian</p>
+<div class="math notranslate nohighlight">
+\[H(s) = s H_p + \Gamma (1-s)\sum_i \sigma_i^x\]</div>
+<p>where <span class="math notranslate nohighlight">\(H_p\)</span> is the problem Hamiltonian we want to solve.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>beta</strong> (<em>float</em>) – Inverse temperature.</p></li>
 <li><p><strong>gamma</strong> (<em>float</em>) – Amplitude of quantum fluctuation.</p></li>
 <li><p><strong>trotter</strong> (<em>int</em>) – Trotter number.</p></li>
-<li><p><strong>step_length</strong> (<em>int</em>) – Length of Monte Carlo step.</p></li>
-<li><p><strong>step_num</strong> (<em>int</em>) – Number of Monte Carlo step.</p></li>
+<li><p><strong>num_sweeps</strong> (<em>int</em>) – number of sweeps</p></li>
+<li><p><strong>schedule</strong> (<em>list</em>) – schedule list</p></li>
+<li><p><strong>num_reads</strong> (<em>int</em>) – Number of iterations.</p></li>
 <li><p><strong>schedule_info</strong> (<em>dict</em>) – Information about a annealing schedule.</p></li>
-<li><p><strong>iteration</strong> (<em>int</em>) – Number of iterations.</p></li>
 </ul>
 </dd>
-</dl>
-<dl class="py attribute">
-<dt id="openjij.sampler.sqa_sampler.SQASampler.energy_bias">
-<code class="sig-name descname">energy_bias</code><a class="headerlink" href="#openjij.sampler.sqa_sampler.SQASampler.energy_bias" title="Permalink to this definition">¶</a></dt>
-<dd><p>Energy bias.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>float</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="openjij.sampler.sqa_sampler.SQASampler.var_type">
-<code class="sig-name descname">var_type</code><a class="headerlink" href="#openjij.sampler.sqa_sampler.SQASampler.var_type" title="Permalink to this definition">¶</a></dt>
-<dd><p>Type of variables: ‘SPIN’ or ‘BINARY’ which mean {-1, 1} or {0, 1}.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="openjij.sampler.sqa_sampler.SQASampler.indices">
-<code class="sig-name descname">indices</code><a class="headerlink" href="#openjij.sampler.sqa_sampler.SQASampler.indices" title="Permalink to this definition">¶</a></dt>
-<dd><p>Indices of <cite>openjij.model.model.BinaryQuadraticModel</cite> object.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>int</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="openjij.sampler.sqa_sampler.SQASampler.N">
-<code class="sig-name descname">N</code><a class="headerlink" href="#openjij.sampler.sqa_sampler.SQASampler.N" title="Permalink to this definition">¶</a></dt>
-<dd><p>Number of the indices.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>int</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt>
-<code class="sig-name descname">system_class (</code></dt>
-<dd><p>class:):
-<cite>cxxjij.system.QuantumIsing</cite> class.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="openjij.sampler.sqa_sampler.SQASampler.sqa_kwargs">
-<code class="sig-name descname">sqa_kwargs</code><a class="headerlink" href="#openjij.sampler.sqa_sampler.SQASampler.sqa_kwargs" title="Permalink to this definition">¶</a></dt>
-<dd><p>Parameters of SQA: beta, gamma, and schedule_info.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p>dict</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="field-list simple">
-<dt class="field-odd">Raises</dt>
-<dd class="field-odd"><ul class="simple">
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
 <li><p><strong>ValueError</strong> – If the schedule violates as below.</p></li>
 <li><p><strong>- not list</strong><strong> or </strong><strong>numpy.array.</strong> – </p></li>
 <li><p><strong>- schedule range is '0 &lt;= s &lt;= 1'.</strong> – </p></li>
@@ -864,15 +837,29 @@ for k, v in iterable:</p>
 </ul>
 </dd>
 <dt class="field-even">Raises</dt>
-<dd class="field-even"><p><strong>ValueError</strong> – [description]</p>
+<dd class="field-even"><p><strong>ValueError</strong> – </p>
 </dd>
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>[description]</p>
+<dd class="field-odd"><p>results</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>[type]</p>
+<dd class="field-even"><p><a class="reference internal" href="#openjij.sampler.response.Response" title="openjij.sampler.response.Response"><code class="xref py py-class docutils literal notranslate"><span class="pre">openjij.sampler.response.Response</span></code></a></p>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<p>for Ising case:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">J</span> <span class="o">=</span> <span class="p">{(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">):</span> <span class="o">-</span><span class="mi">1</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sampler</span> <span class="o">=</span> <span class="n">oj</span><span class="o">.</span><span class="n">SQASampler</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">sampler</span><span class="o">.</span><span class="n">sample_ising</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">J</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>for QUBO case:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Q</span> <span class="o">=</span> <span class="p">{(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">):</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">):</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">):</span> <span class="mi">1</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sampler</span> <span class="o">=</span> <span class="n">oj</span><span class="o">.</span><span class="n">SQASampler</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">sampler</span><span class="o">.</span><span class="n">sample_qubo</span><span class="p">(</span><span class="n">Q</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </dd></dl>
@@ -880,7 +867,21 @@ for k, v in iterable:</p>
 <dl class="py function">
 <dt id="openjij.sampler.sqa_sampler.linear_ising_schedule">
 <code class="sig-prename descclassname">openjij.sampler.sqa_sampler.</code><code class="sig-name descname">linear_ising_schedule</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model</span></em>, <em class="sig-param"><span class="n">beta</span></em>, <em class="sig-param"><span class="n">gamma</span></em>, <em class="sig-param"><span class="n">num_sweeps</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/sampler/sqa_sampler.html#linear_ising_schedule"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#openjij.sampler.sqa_sampler.linear_ising_schedule" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Generate linear ising schedule.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<a class="reference internal" href="openjij.model.html#openjij.model.model.BinaryQuadraticModel" title="openjij.model.model.BinaryQuadraticModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">openjij.model.model.BinaryQuadraticModel</span></code></a>) – BinaryQuadraticModel</p></li>
+<li><p><strong>beta</strong> (<em>float</em>) – inverse temperature</p></li>
+<li><p><strong>gamma</strong> (<em>float</em>) – transverse field</p></li>
+<li><p><strong>num_sweeps</strong> (<em>int</em>) – number of steps</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>generated schedule</p>
+</dd>
+</dl>
+</dd></dl>
 
 </div>
 <div class="section" id="module-openjij.sampler">

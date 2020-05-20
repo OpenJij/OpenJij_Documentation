@@ -196,12 +196,7 @@
 :type ref_energy: float</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><dl class="simple">
-<dt>Residual energy which is defined as follow</dt><dd><p>&lt;E&gt; - E_0
-(&lt;…&gt; represents average, E_0 is the reference energy (usually use the ground energy)).</p>
-</dd>
-</dl>
-</p>
+<dd class="field-odd"><p>Residual energy which is defined as <span class="math notranslate nohighlight">\(\langle E \rangle - E_0\)</span> (<span class="math notranslate nohighlight">\(\langle...\rangle\)</span> represents average, <span class="math notranslate nohighlight">\(E_0\)</span> is the reference energy (usually use the ground energy)).</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p>float</p>
@@ -220,9 +215,11 @@
 <li><p><strong>p_r</strong> (<em>float</em>) – thereshold probability to calculate time to solution.</p></li>
 </ul>
 </dd>
-</dl>
-<dl class="simple">
-<dt>Returens:</dt><dd><p>float: time to solution <cite>tau * log(1-pr)/log(1-ps)</cite> ‘s standard error which pr is thereshold probability, ps is success probability and tau is computation time.</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>time to solution <span class="math notranslate nohighlight">\(\tau * \log(1-pr)/\log(1-ps)\)</span> ‘s standard error which pr is thereshold probability, ps is success probability and <span class="math notranslate nohighlight">\(tau\)</span> is computation time.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
 </dd>
 </dl>
 </dd></dl>
@@ -255,11 +252,11 @@
 :type solutions: list[int]</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><dl class="simple">
-<dt>Success probability’s standard error.</dt><dd><p>When measure_with_energy is False, success is defined as getting the same state as solutions.
-When measure_with_energy is True, success is defined as getting a state which energy is below reference energy</p>
-</dd>
-</dl>
+<dd class="field-odd"><p><p>Success probability’s standard error.</p>
+<ul class="simple">
+<li><p>When measure_with_energy is False, success is defined as getting the same state as solutions.</p></li>
+<li><p>When measure_with_energy is True, success is defined as getting a state which energy is below reference energy</p></li>
+</ul>
 </p>
 </dd>
 <dt class="field-even">Return type</dt>
@@ -281,7 +278,7 @@ When measure_with_energy is True, success is defined as getting a state which en
 </dd>
 </dl>
 <dl class="simple">
-<dt>Returens:</dt><dd><p>float: time to solution <cite>tau * log(1-pr)/log(1-ps)</cite> ‘s standard error which pr is thereshold probability, ps is success probability and tau is computation time.</p>
+<dt>Returens:</dt><dd><p>float: time to solution <span class="math notranslate nohighlight">\(\tau * \log(1-pr)/\log(1-ps)\)</span> ‘s standard error which pr is thereshold probability, ps is success probability and <span class="math notranslate nohighlight">\(tau\)</span> is computation time.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -306,21 +303,18 @@ When measure_with_energy is True, success is defined as getting a state which en
 :type measure_with_energy: bool</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><dl>
-<dt>{</dt><dd><blockquote>
-<div><p>“time”: list of compuation time,
-“success_prob” list of success probability at each computation time
-“tts”: list of time to solusion at each computation time
-“residual_energy”: list of residual energy at each computation time
-“se_lower_tts”: list of tts’s lower standard error at each computation time
-“se_upper_tts”: list of tts’s upper standard error at each computation time
-“se_success_prob”: list of success probability’s standard error at each computation time
-“se_residual_energy”: list of residual_energy’s standard error at each computation time
-“info” (dict): Parameter information for the benchmark</p>
-</div></blockquote>
-<p>}</p>
-</dd>
-</dl>
+<dd class="field-odd"><p><p>dictionary which has the following keys:</p>
+<ul class="simple">
+<li><p><strong>time</strong>: list of compuation time</p></li>
+<li><p><strong>success_prob</strong> list of success probability at each computation time</p></li>
+<li><p><strong>tts</strong>: list of time to solusion at each computation time</p></li>
+<li><p><strong>residual_energy</strong>: list of residual energy at each computation time</p></li>
+<li><p><strong>se_lower_tts</strong>: list of tts’s lower standard error at each computation time</p></li>
+<li><p><strong>se_upper_tts</strong>: list of tts’s upper standard error at each computation time</p></li>
+<li><p><strong>se_success_prob</strong>: list of success probability’s standard error at each computation time</p></li>
+<li><p><strong>se_residual_energy</strong>: list of residual_energy’s standard error at each computation time</p></li>
+<li><p><strong>info</strong> (dict): Parameter information for the benchmark</p></li>
+</ul>
 </p>
 </dd>
 <dt class="field-even">Return type</dt>
@@ -339,11 +333,11 @@ When measure_with_energy is True, success is defined as getting a state which en
 :type solutions: list[int]</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><dl class="simple">
-<dt>Success probability.</dt><dd><p>When measure_with_energy is False, success is defined as getting the same state as solutions.
-When measure_with_energy is True, success is defined as getting a state which energy is below reference energy</p>
-</dd>
-</dl>
+<dd class="field-odd"><p><p>Success probability.</p>
+<ul class="simple">
+<li><p>When measure_with_energy is False, success is defined as getting the same state as solutions.</p></li>
+<li><p>When measure_with_energy is True, success is defined as getting a state which energy is below reference energy</p></li>
+</ul>
 </p>
 </dd>
 <dt class="field-even">Return type</dt>
@@ -363,9 +357,11 @@ When measure_with_energy is True, success is defined as getting a state which en
 <li><p><strong>p_r</strong> (<em>float</em>) – thereshold probability to calculate time to solution.</p></li>
 </ul>
 </dd>
-</dl>
-<dl class="simple">
-<dt>Returens:</dt><dd><p>float: time to solution <cite>tau * log(1-pr)/log(1-ps)</cite> which pr is thereshold probability, ps is success probability and tau is computation time.</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>time to solution <span class="math notranslate nohighlight">\(\tau * \log(1-pr)/\log(1-ps)\)</span> which pr is thereshold probability, ps is success probability and <span class="math notranslate nohighlight">\(tau\)</span> is computation time.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
 </dd>
 </dl>
 </dd></dl>
@@ -398,20 +394,20 @@ When measure_with_energy is True, success is defined as getting a state which en
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>r</strong> (<em>int</em>) – [description]</p></li>
-<li><p><strong>c</strong> (<em>int</em>) – [description]</p></li>
-<li><p><strong>z</strong> (<em>int</em>) – [description]</p></li>
-<li><p><strong>L</strong> (<em>int</em>) – [description]</p></li>
+<li><p><strong>r</strong> (<em>int</em>) – row index</p></li>
+<li><p><strong>c</strong> (<em>int</em>) – column index</p></li>
+<li><p><strong>z</strong> (<em>int</em>) – in-chimera index (must be from 0 to 7)</p></li>
+<li><p><strong>L</strong> (<em>int</em>) – height and width of  chimera-units (total number of spins is <span class="math notranslate nohighlight">\(L \times L \times 8\)</span>)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises</dt>
 <dd class="field-even"><p><strong>ValueError</strong> – [description]</p>
 </dd>
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>[description]</p>
+<dd class="field-odd"><p>corresponding Chimera index</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>[int]</p>
+<dd class="field-even"><p>int</p>
 </dd>
 </dl>
 </dd></dl>

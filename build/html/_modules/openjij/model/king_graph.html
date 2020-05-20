@@ -176,10 +176,6 @@
 
 <div class="viewcode-block" id="make_KingGraph"><a class="viewcode-back" href="../../../apis/openjij.model.html#openjij.model.king_graph.make_KingGraph">[docs]</a><span class="k">def</span> <span class="nf">make_KingGraph</span><span class="p">(</span><span class="n">linear</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">quadratic</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">king_graph</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; KingGraph factory</span>
-<span class="sd">    Args:</span>
-<span class="sd">        linear (dict): linear biases</span>
-<span class="sd">        quadratic (dict): quadratic biases</span>
-<span class="sd">        king_graph (list(list)): king_graph connectivity</span>
 <span class="sd">    Returns:</span>
 <span class="sd">        generated KingGraph class</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -202,35 +198,32 @@
     <span class="k">class</span> <span class="nc">KingGraph</span><span class="p">(</span><span class="n">make_BinaryQuadraticModel</span><span class="p">(</span><span class="n">mock_linear</span><span class="p">,</span> <span class="n">mock_quadratic</span><span class="p">)):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        BQM for king graph of HITACHI CMOS Annealer</span>
-<span class="sd">        Attributes</span>
-<span class="sd">        ---------</span>
-<span class="sd">        xrange : list of int</span>
-<span class="sd">            represents hardware (CMOS) restricts for coordinate. [xmin, xmax]</span>
-<span class="sd">        yrange : list of int</span>
-<span class="sd">            represents hardware (CMOS) restricts for coordinate. [ymin, ymax]</span>
-<span class="sd">        prange : list of int</span>
-<span class="sd">            represents hardware (CMOS) restricts for the strength of interactions &#39;p&#39;. [pmin, pmax]</span>
-<span class="sd">        king_graph : list of list of int</span>
-<span class="sd">            Annealing cloud Web API format representation of interaction coefficients</span>
-<span class="sd">            Quadratic term [x1, y1, x2, y2, value]</span>
-<span class="sd">            Linear term    [x1, y1, x1, y1, value]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-    
-        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">linear</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">quadratic</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-                     <span class="n">king_graph</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">var_type</span><span class="o">=</span><span class="n">openjij</span><span class="o">.</span><span class="n">SPIN</span><span class="p">,</span> <span class="n">machine_type</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
-            <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">            The constructor reformat interactions to Web API format (ising king graph),</span>
-<span class="sd">            and validates that the interaction is in King Graph. </span>
-<span class="sd">            ----------</span>
-<span class="sd">            machine_type : str</span>
-<span class="sd">                choose &#39;ASIC&#39; or &#39;FPGA&#39;</span>
-<span class="sd">            king_graph : list of list</span>
-<span class="sd">                represents ising or QUBO interaction.</span>
-<span class="sd">                Each spins are decided by 2-d corrdinate x, y.</span>
+<span class="sd">        Attributes:</span>
+<span class="sd">            xrange (list(int)): represents hardware (CMOS) restricts for coordinate. [xmin, xmax]</span>
+<span class="sd">            yrange (list(int)): represents hardware (CMOS) restricts for coordinate. [ymin, ymax]</span>
+<span class="sd">            prange (list(int)): represents hardware (CMOS) restricts for the strength of interactions &#39;p&#39;. [pmin, pmax]</span>
+<span class="sd">            king_graph (list(int)): </span>
+<span class="sd">                Annealing cloud Web API format representation of interaction coefficients</span>
 <span class="sd">                Quadratic term [x1, y1, x2, y2, value]</span>
 <span class="sd">                Linear term    [x1, y1, x1, y1, value]</span>
-<span class="sd">            &quot;&quot;&quot;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
     
+        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">linear</span><span class="p">:</span> <span class="nb">dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">quadratic</span><span class="p">:</span> <span class="nb">dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">offset</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+
+                <span class="n">king_graph</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">var_type</span><span class="o">=</span><span class="n">openjij</span><span class="o">.</span><span class="n">SPIN</span><span class="p">,</span> <span class="n">machine_type</span><span class="p">:</span> <span class="nb">str</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;__init__.</span>
+
+<span class="sd">            Args:</span>
+<span class="sd">                linear (dict): linear biases</span>
+<span class="sd">                quadratic (dict): quadratic biases</span>
+<span class="sd">                offset (float): offset</span>
+<span class="sd">                king_graph: represents ising or QUBO interaction.</span>
+<span class="sd">                    Each spins are decided by 2-d corrdinate x, y.</span>
+<span class="sd">                    Quadratic term [x1, y1, x2, y2, value]</span>
+<span class="sd">                    Linear term    [x1, y1, x1, y1, value]</span>
+<span class="sd">                var_type: &#39;SPIN&#39; or &#39;BINARY&#39;</span>
+<span class="sd">                machine_type (str): choose &#39;ASIC&#39; or &#39;FPGA&#39;</span>
+<span class="sd">            &quot;&quot;&quot;</span>
             <span class="n">var_type</span> <span class="o">=</span> <span class="n">openjij</span><span class="o">.</span><span class="n">cast_var_type</span><span class="p">(</span><span class="n">var_type</span><span class="p">)</span>
     
             <span class="c1"># set parameter ranges</span>
@@ -339,6 +332,33 @@
 
 <div class="viewcode-block" id="KingGraph"><a class="viewcode-back" href="../../../apis/openjij.model.html#openjij.model.king_graph.KingGraph">[docs]</a><span class="k">def</span> <span class="nf">KingGraph</span><span class="p">(</span><span class="n">linear</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">quadratic</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
                      <span class="n">king_graph</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">var_type</span><span class="o">=</span><span class="n">openjij</span><span class="o">.</span><span class="n">SPIN</span><span class="p">,</span> <span class="n">machine_type</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;generate KingGraph model.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        linear (dict): linear biases</span>
+<span class="sd">        quadratic (dict): quadratic biases</span>
+<span class="sd">        offset (float): offset</span>
+<span class="sd">        king_graph: represents ising or QUBO interaction.</span>
+<span class="sd">            Each spins are decided by 2-d corrdinate x, y.</span>
+<span class="sd">            </span>
+<span class="sd">            * Quadratic term: [x1, y1, x2, y2, value]</span>
+<span class="sd">            * Linear term:    [x1, y1, x1, y1, value]</span>
+<span class="sd">        var_type: &#39;SPIN&#39; or &#39;BINARY&#39;</span>
+<span class="sd">        machine_type (str): choose &#39;ASIC&#39; or &#39;FPGA&#39;</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        generated KingGraphModel</span>
+<span class="sd">    Examples:</span>
+<span class="sd">        The following code shows intialization of KingGraph::</span>
+
+<span class="sd">            &gt;&gt;&gt; h = {}</span>
+<span class="sd">            &gt;&gt;&gt; J = {(0, 1): -1.0, (1, 2): -3.0}</span>
+<span class="sd">            &gt;&gt;&gt; king_graph = oj.KingGraph(machine_type=&quot;ASIC&quot;, linear=h, quadratic=J)</span>
+
+<span class="sd">        You can initialize it from `king_interaction`::</span>
+
+<span class="sd">            &gt;&gt;&gt; king_interaction = [[0, 0, 1, 0, -1.0], [1, 0, 2, 0, -3.0]]</span>
+<span class="sd">            &gt;&gt;&gt; king_graph = oj.KingGraph(machine_type=&quot;ASIC&quot;, king_graph=king_interaction)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">Model</span> <span class="o">=</span> <span class="n">make_KingGraph</span><span class="p">(</span><span class="n">linear</span><span class="p">,</span> <span class="n">quadratic</span><span class="p">,</span> <span class="n">king_graph</span><span class="p">)</span>
 

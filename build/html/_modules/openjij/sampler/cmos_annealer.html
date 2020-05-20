@@ -189,33 +189,17 @@
 <span class="sd">    please access the reference (https://annealing-cloud.com/web-api/reference.html).</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        token (str):</span>
-<span class="sd">            API token of COMS Annealer.</span>
-
-<span class="sd">        machine_type (str):</span>
-<span class="sd">            Type of CMOS Annealer: &#39;ASIC&#39; or &#39;FPGA&#39;.</span>
-
-<span class="sd">        beta_min (float):</span>
-<span class="sd">            Minimum beta (inverse temperature).</span>
-
-<span class="sd">        beta_max (float):</span>
-<span class="sd">            Maximum beta (inverse temperature).</span>
-
-<span class="sd">        step_length (int):</span>
-<span class="sd">            Length of Monte Carlo step.</span>
-
-<span class="sd">        num_sweeps (int):</span>
-<span class="sd">            Number of Monte Carlo step.</span>
-
-<span class="sd">        num_reads (int):</span>
-<span class="sd">            Number of iterations.</span>
-
-<span class="sd">        **kwargs:</span>
-<span class="sd">            Optional keyword arguments for CMOS Annealer.</span>
+<span class="sd">        token (str): API token of COMS Annealer.</span>
+<span class="sd">        machine_type (str): Type of CMOS Annealer: &#39;ASIC&#39; or &#39;FPGA&#39;.</span>
+<span class="sd">        beta_min (float): Minimum beta (inverse temperature).</span>
+<span class="sd">        beta_max (float): Maximum beta (inverse temperature).</span>
+<span class="sd">        step_length (int): Length of Monte Carlo step.</span>
+<span class="sd">        num_sweeps (int): Number of Monte Carlo step.</span>
+<span class="sd">        num_reads (int): Number of iterations.</span>
+<span class="sd">        **kwargs: Optional keyword arguments for CMOS Annealer.</span>
 
 <span class="sd">    Attributes:</span>
-<span class="sd">        cmos_parameters (dict):</span>
-<span class="sd">            Parameters of CMOS Annealer.</span>
+<span class="sd">        cmos_parameters (dict): Parameters of CMOS Annealer.</span>
 
 <span class="sd">    Raises:</span>
 <span class="sd">        ValueError:</span>
@@ -302,6 +286,17 @@
 <div class="viewcode-block" id="CMOSAnnealer.sample_ising"><a class="viewcode-back" href="../../../apis/openjij.sampler.html#openjij.sampler.cmos_annealer.CMOSAnnealer.sample_ising">[docs]</a>    <span class="k">def</span> <span class="nf">sample_ising</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">J</span><span class="p">,</span> <span class="n">num_reads</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                      <span class="n">num_sweeps</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">step_length</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                      <span class="n">beta_min</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">beta_max</span><span class="o">=</span><span class="kc">None</span><span class="p">,):</span>
+        <span class="sd">&quot;&quot;&quot;sample Ising model.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            h (dict): linear biases</span>
+<span class="sd">            J (dict): quadratic biases</span>
+<span class="sd">            num_reads (int): number of reads</span>
+<span class="sd">            num_sweeps (int): number of sweeps</span>
+<span class="sd">            step_length (int): number of Monte Carlo steop for each step</span>
+<span class="sd">            beta_min (float): minimal value of inverse temperature</span>
+<span class="sd">            beta_max (float): maximum value of inverse temperature</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># settting annealing parameters and validation -------------</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_setting_overwrite</span><span class="p">(</span>
