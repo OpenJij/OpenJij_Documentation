@@ -15,7 +15,7 @@ from recommonmark.parser import CommonMarkParser
 import sphinx_theme
 import os
 import sys
-sys.path.insert(0, os.path.abspath('../../../'))
+sys.path.insert(0, os.path.abspath('../OpenJij'))
 
 
 # -- Project information -----------------------------------------------------
@@ -31,7 +31,13 @@ author = 'Jij Inc.'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    "sphinx.ext.autodoc"
+    "sphinx.ext.autodoc",
+    "sphinx.ext.napoleon",
+    "recommonmark",
+    'sphinx.ext.autosummary',
+    'sphinx.ext.doctest',
+    'sphinx.ext.mathjax',
+    'sphinx.ext.viewcode',
 ]
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -70,15 +76,14 @@ html_static_path = ['_static']
 # html_sidebars = {}
 # ---sphinx-themes-----
 html_theme = 'neo_rtd_theme'
-html_theme_path = [sphinx_theme.get_html_theme_path()]
+html_theme_path = [sphinx_theme.get_html_theme_path('neo-rtd-theme')]
 
 
 # -- for Markdown ----------------------------------------
-source_suffix = ['.rst', '.md']
-
-
-source_parsers = {
-    '.md': CommonMarkParser,
+source_suffix = {
+    '.rst': 'restructuredtext',
+    '.txt': 'markdown',
+    '.md': 'markdown',
 }
 
 # for AutoStructity component

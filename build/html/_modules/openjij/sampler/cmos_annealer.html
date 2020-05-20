@@ -80,12 +80,18 @@
           
             
             
-                <p class="caption"><span class="caption-text">Contents:</span></p>
+                <p class="caption"><span class="caption-text">API references:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../apis/openjij.html">openjij package</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../1-Introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../2-Install.html">Install</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../3-Minimum_sample.html">Minimum sample code</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../4-Parameters_customize.html">Parameters customize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../5-benchmark.html">Benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../6-HigherOrderModel.html">Higher order model</a></li>
 </ul>
 
             
@@ -167,12 +173,14 @@
 <span class="kn">import</span> <span class="nn">requests</span>
 <span class="kn">import</span> <span class="nn">json</span>
 
-<span class="kn">from</span> <span class="nn">openjij.sampler</span> <span class="k">import</span> <span class="n">BaseSampler</span><span class="p">,</span> <span class="n">Response</span>
-<span class="kn">from</span> <span class="nn">openjij.model</span> <span class="k">import</span> <span class="n">KingGraph</span>
+<span class="kn">from</span> <span class="nn">openjij.sampler</span> <span class="kn">import</span> <span class="n">BaseSampler</span>
+<span class="kn">import</span> <span class="nn">openjij</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">dimod</span>
 
-<div class="viewcode-block" id="CMOSAnnealer"><a class="viewcode-back" href="../../../apis/openjij.sampler.html#openjij.sampler.cmos_annealer.CMOSAnnealer">[docs]</a><span class="k">class</span> <span class="nc">CMOSAnnealer</span><span class="p">(</span><span class="n">BaseSampler</span><span class="p">):</span>
+
+<div class="viewcode-block" id="CMOSAnnealer"><a class="viewcode-back" href="../../../apis/openjij.sampler.html#openjij.sampler.cmos_annealer.CMOSAnnealer">[docs]</a><span class="k">class</span> <span class="nc">CMOSAnnealer</span><span class="p">(</span><span class="n">BaseSampler</span><span class="p">,</span> <span class="n">dimod</span><span class="o">.</span><span class="n">Structured</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Sampler with CMOS Annealer.</span>
 
 <span class="sd">    Inherits from :class:`openjij.sampler.sampler.BaseSampler`.</span>
@@ -196,13 +204,10 @@
 <span class="sd">        step_length (int):</span>
 <span class="sd">            Length of Monte Carlo step.</span>
 
-<span class="sd">        step_num (int):</span>
+<span class="sd">        num_sweeps (int):</span>
 <span class="sd">            Number of Monte Carlo step.</span>
 
-<span class="sd">        schedule_info (dict):</span>
-<span class="sd">            Information about an annealing schedule.</span>
-
-<span class="sd">        iteration (int):</span>
+<span class="sd">        num_reads (int):</span>
 <span class="sd">            Number of iterations.</span>
 
 <span class="sd">        **kwargs:</span>
@@ -219,134 +224,146 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">token</span><span class="p">,</span> <span class="n">machine_type</span><span class="o">=</span><span class="s2">&quot;ASIC&quot;</span><span class="p">,</span> <span class="n">beta_min</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">beta_max</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span> <span class="n">step_length</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">step_num</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">iteration</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">token</span><span class="p">,</span> <span class="n">machine_type</span><span class="o">=</span><span class="s2">&quot;ASIC&quot;</span><span class="p">,</span>
+                 <span class="n">beta_min</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">beta_max</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">num_sweeps</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">step_length</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">num_reads</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">token</span> <span class="o">=</span> <span class="n">token</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">machine_type</span> <span class="o">=</span> <span class="n">machine_type</span>
-        
-        <span class="bp">self</span><span class="o">.</span><span class="n">cmos_parameters</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;temperature_num_steps&quot;</span><span class="p">:</span> <span class="n">step_num</span><span class="p">,</span>
-                                <span class="s2">&quot;temperature_step_length&quot;</span><span class="p">:</span> <span class="n">step_length</span><span class="p">,</span>
-                                <span class="s2">&quot;temperature_initial&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="o">/</span><span class="n">beta_min</span><span class="p">,</span>
-                                <span class="s2">&quot;temperature_target&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="o">/</span><span class="n">beta_max</span><span class="p">,</span>
-                                <span class="s2">&quot;num_executions&quot;</span><span class="p">:</span> <span class="n">iteration</span><span class="p">}</span>
-        
-        <span class="bp">self</span><span class="o">.</span><span class="n">cmos_parameters</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
-        
-<div class="viewcode-block" id="CMOSAnnealer.sample_ising"><a class="viewcode-back" href="../../../apis/openjij.sampler.html#openjij.sampler.cmos_annealer.CMOSAnnealer.sample_ising">[docs]</a>    <span class="k">def</span> <span class="nf">sample_ising</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">J</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">king_graph</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Sample from the specified Ising model.</span>
+        <span class="c1"># setting machine type and 2D Grid size</span>
+        <span class="c1"># more information see: https://annealing-cloud.com/web-api/reference/v2.html</span>
+        <span class="k">if</span> <span class="n">machine_type</span> <span class="o">==</span> <span class="s1">&#39;ASIC&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_Y</span> <span class="o">=</span> <span class="mi">352</span><span class="p">,</span> <span class="mi">176</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">max_abs</span> <span class="o">=</span> <span class="mi">3</span>
+        <span class="k">elif</span> <span class="n">machine_type</span> <span class="o">==</span> <span class="s1">&#39;FPGA&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_Y</span> <span class="o">=</span> <span class="mi">80</span><span class="p">,</span> <span class="mi">80</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">max_abs</span> <span class="o">=</span> <span class="mi">127</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;machine_type is &#39;ASIC&#39; or &#39;FPGA&#39;.&quot;</span><span class="p">)</span>
 
-<span class="sd">        Args:</span>
-<span class="sd">            h (dict):</span>
-<span class="sd">                Linear biases of the Ising model.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">beta_min</span> <span class="o">=</span> <span class="n">beta_min</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">beta_max</span> <span class="o">=</span> <span class="n">beta_max</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_sweeps</span> <span class="o">=</span> <span class="n">num_sweeps</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_reads</span> <span class="o">=</span> <span class="n">num_reads</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_schedule_setting</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;beta_min&#39;</span><span class="p">:</span> <span class="n">beta_min</span><span class="p">,</span>
+            <span class="s1">&#39;beta_max&#39;</span><span class="p">:</span> <span class="n">beta_max</span><span class="p">,</span>
+            <span class="s1">&#39;num_sweeps&#39;</span><span class="p">:</span> <span class="n">num_sweeps</span><span class="p">,</span>
+            <span class="s1">&#39;num_reads&#39;</span><span class="p">:</span> <span class="n">num_reads</span><span class="p">,</span>
+            <span class="s1">&#39;step_length&#39;</span><span class="p">:</span> <span class="n">step_length</span>
+        <span class="p">}</span>
 
-<span class="sd">            J (dict):</span>
-<span class="sd">                Quadratic biases of the Ising model.</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;num_reads&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;1&lt;=n&lt;=10&#39;</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">n</span><span class="p">:</span> <span class="mi">1</span> <span class="o">&lt;=</span> <span class="n">n</span> <span class="o">&lt;=</span> <span class="mi">10</span><span class="p">],</span>
+                <span class="s1">&#39;num_sweeps&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;1&lt;=n&lt;=100&#39;</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">n</span><span class="p">:</span> <span class="mi">1</span> <span class="o">&lt;=</span> <span class="n">n</span> <span class="o">&lt;=</span> <span class="mi">100</span><span class="p">],</span>
+                <span class="s1">&#39;step_length&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;1&lt;=n&lt;=1000&#39;</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">n</span><span class="p">:</span> <span class="mi">1</span> <span class="o">&lt;=</span> <span class="n">n</span> <span class="o">&lt;=</span> <span class="mi">1000</span><span class="p">],</span>
+                <span class="s1">&#39;beta_min&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;1/2000&lt;=beta&#39;</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">beta</span><span class="p">:</span> <span class="mi">1</span><span class="o">/</span><span class="mi">2000</span> <span class="o">&lt;=</span> <span class="n">beta</span><span class="p">],</span>
+                <span class="s1">&#39;beta_max&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;1/2000&lt;=beta&#39;</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">beta</span><span class="p">:</span> <span class="mi">1</span><span class="o">/</span><span class="mi">2000</span> <span class="o">&lt;=</span> <span class="n">beta</span><span class="p">]}</span>
 
-<span class="sd">            **kwargs:</span>
-<span class="sd">                Optional keyword arguments for the sampling method.</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">properties</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;System size&#39;</span><span class="p">:</span> <span class="s2">&quot;self._X, self._Y are size of 2D grid King&#39;s graph.&quot;</span><span class="p">}</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">nodelist</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;2-D lattice nodes</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            :obj:: `openjij.sampler.response.Response` object.</span>
-
-<span class="sd">        Examples:</span>
-<span class="sd">            This example submits a two-variable Ising problem.</span>
-
-<span class="sd">            &gt;&gt;&gt; import openjij as oj</span>
-<span class="sd">            &gt;&gt;&gt; sampler = oj.CMOSAnnealer(token=&quot;YOUR_TOKEN&quot;, iteration=10)</span>
-<span class="sd">            &gt;&gt;&gt; response = sampler.sample_ising({0: 1}, {(0, 1): -1, (1, 2): -1, (0, 80): 3})</span>
-<span class="sd">            &gt;&gt;&gt; print(response)</span>
-<span class="sd">            number of state: 10, minimun energy: -4.0, spin_type: ising</span>
-<span class="sd">            info:</span>
-<span class="sd">                averaged_spins: [[2, 0, 1.0], [0, 1, -1.0], [0, 0, 1.0], [1, 0, 1.0]]</span>
-<span class="sd">                averaged_energy: -4.0</span>
-<span class="sd">                execution_time: 58769171</span>
-<span class="sd">                job_id: XXXXXXXXXXXXXXXXX</span>
-
+<span class="sd">            [list of int]: 2-D lattice nodes</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_X</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_Y</span><span class="p">))</span>
 
-        <span class="n">var_type</span> <span class="o">=</span> <span class="s1">&#39;SPIN&#39;</span>
-        <span class="k">if</span> <span class="n">king_graph</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">_king_graph</span> <span class="o">=</span> <span class="n">KingGraph</span><span class="p">(</span><span class="n">machine_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">machine_type</span><span class="p">,</span> <span class="n">king_graph</span><span class="o">=</span><span class="n">king_graph</span><span class="p">,</span> <span class="n">var_type</span><span class="o">=</span><span class="n">var_type</span><span class="p">)</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sampling</span><span class="p">(</span><span class="n">_king_graph</span><span class="p">,</span> <span class="n">var_type</span><span class="o">=</span><span class="n">var_type</span><span class="p">,</span> <span class="n">token</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">token</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="p">(</span><span class="n">h</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">J</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
-            <span class="n">_king_graph</span> <span class="o">=</span> <span class="n">KingGraph</span><span class="p">(</span><span class="n">machine_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">machine_type</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="n">h</span><span class="p">,</span> <span class="n">J</span><span class="o">=</span><span class="n">J</span><span class="p">,</span> <span class="n">var_type</span><span class="o">=</span><span class="n">var_type</span><span class="p">)</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sampling</span><span class="p">(</span><span class="n">_king_graph</span><span class="p">,</span> <span class="n">var_type</span><span class="o">=</span><span class="n">var_type</span><span class="p">,</span> <span class="n">token</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">token</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;intput &quot;h and J&quot; or king_graph model&#39;</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="CMOSAnnealer.sample_qubo"><a class="viewcode-back" href="../../../apis/openjij.sampler.html#openjij.sampler.cmos_annealer.CMOSAnnealer.sample_qubo">[docs]</a>    <span class="k">def</span> <span class="nf">sample_qubo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Q</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">king_graph</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Sample from the specified QUBO.</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            Q (dict):</span>
-<span class="sd">                Coefficients of a quadratic unconstrained binary optimization (QUBO) model.</span>
-
-<span class="sd">            **kwargs:</span>
-<span class="sd">                Optional keyword arguments for the sampling method.</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">edgelist</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;King&#39;s graph</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            :obj:: `openjij.sampler.response.Response` object.</span>
-
-<span class="sd">        Examples:</span>
-<span class="sd">            This example submits a two-variable QUBO model.</span>
-
-<span class="sd">            &gt;&gt;&gt; import openjij as oj</span>
-<span class="sd">            &gt;&gt;&gt; sampler = oj.CMOSAnnealer(token=&quot;YOUR_TOKEN&quot;, iteration=10)</span>
-<span class="sd">            &gt;&gt;&gt; response = sampler.sample_qubo({(0, 0): 1, (0, 1): -1, (1, 2): -1, (0, 80): 3})</span>
-<span class="sd">            &gt;&gt;&gt; print(response)</span>
-<span class="sd">            number of state: 10, minimun energy: -4.0, spin_type: binary</span>
-<span class="sd">            info:</span>
-<span class="sd">                averaged_spins: [[2, 0, 1.0], [0, 1, -1.0], [0, 0, 1.0], [1, 0, 1.0]]</span>
-<span class="sd">                averaged_energy: -4.0</span>
-<span class="sd">                execution_time: 58769171</span>
-<span class="sd">                job_id: XXXXXXXXXXXXXXXXX</span>
-
+<span class="sd">            [list of tuple]: King&#39;s graph</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">edges</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">_x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_X</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">_y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_Y</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+                <span class="n">i</span> <span class="o">=</span> <span class="n">_x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_X</span> <span class="o">*</span> <span class="n">_y</span>
+                <span class="n">edges</span> <span class="o">+=</span> <span class="p">[</span>
+                    <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">_x</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_X</span> <span class="o">*</span> <span class="n">_y</span><span class="p">),</span>
+                    <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">_x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_X</span> <span class="o">*</span> <span class="p">(</span><span class="n">_y</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)),</span>
+                    <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">_x</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_X</span> <span class="o">*</span> <span class="p">(</span><span class="n">_y</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)),</span>
+                <span class="p">]</span>
+        <span class="k">return</span> <span class="n">edges</span>
 
-        <span class="n">var_type</span> <span class="o">=</span> <span class="s1">&#39;BINARY&#39;</span>
-        <span class="k">if</span> <span class="n">king_graph</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">_king_graph</span> <span class="o">=</span> <span class="n">KingGraph</span><span class="p">(</span><span class="n">machine_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">machine_type</span><span class="p">,</span> <span class="n">king_graph</span><span class="o">=</span><span class="n">king_graph</span><span class="p">,</span> <span class="n">var_type</span><span class="o">=</span><span class="n">var_type</span><span class="p">)</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sampling</span><span class="p">(</span><span class="n">_king_graph</span><span class="p">,</span> <span class="n">var_type</span><span class="o">=</span><span class="n">var_type</span><span class="p">,</span> <span class="n">token</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">token</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">Q</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">_king_graph</span> <span class="o">=</span> <span class="n">KingGraph</span><span class="p">(</span><span class="n">machine_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">machine_type</span><span class="p">,</span> <span class="n">Q</span><span class="o">=</span><span class="n">Q</span><span class="p">,</span> <span class="n">var_type</span><span class="o">=</span><span class="n">var_type</span><span class="p">)</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sampling</span><span class="p">(</span><span class="n">_king_graph</span><span class="p">,</span> <span class="n">var_type</span><span class="o">=</span><span class="n">var_type</span><span class="p">,</span> <span class="n">token</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">token</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;intput Q or king_graph model&#39;</span><span class="p">)</span></div>
+    <span class="k">def</span> <span class="nf">_validate_schedule</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_schedule_setting</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="mi">1</span><span class="p">](</span><span class="n">v</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s1">&#39;The value of </span><span class="si">{}</span><span class="s1"> is invalid.&#39;</span>
+                    <span class="s1">&#39; &quot;</span><span class="si">{}</span><span class="s1">: </span><span class="si">{}</span><span class="s1">&quot;.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="mi">0</span><span class="p">]))</span>
 
-    
-    <span class="k">def</span> <span class="nf">_sampling</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">king_graph</span><span class="p">,</span> <span class="n">var_type</span><span class="p">,</span> <span class="n">token</span><span class="p">):</span>
-        <span class="n">indices</span> <span class="o">=</span> <span class="n">king_graph</span><span class="o">.</span><span class="n">indices</span>
-        <span class="n">response</span> <span class="o">=</span> <span class="n">Response</span><span class="p">(</span><span class="n">var_type</span><span class="o">=</span><span class="n">var_type</span><span class="p">,</span> <span class="n">indices</span><span class="o">=</span><span class="n">indices</span><span class="p">)</span>
-        <span class="n">headers</span><span class="p">,</span> <span class="n">request</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_json_request</span><span class="p">(</span><span class="n">king_graph</span><span class="o">.</span><span class="n">get_ising_king_graph</span><span class="p">(),</span> <span class="n">token</span><span class="p">)</span>
-        
+<div class="viewcode-block" id="CMOSAnnealer.sample_ising"><a class="viewcode-back" href="../../../apis/openjij.sampler.html#openjij.sampler.cmos_annealer.CMOSAnnealer.sample_ising">[docs]</a>    <span class="k">def</span> <span class="nf">sample_ising</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">J</span><span class="p">,</span> <span class="n">num_reads</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                     <span class="n">num_sweeps</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">step_length</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                     <span class="n">beta_min</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">beta_max</span><span class="o">=</span><span class="kc">None</span><span class="p">,):</span>
+
+        <span class="c1"># settting annealing parameters and validation -------------</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_setting_overwrite</span><span class="p">(</span>
+            <span class="n">beta_min</span><span class="o">=</span><span class="n">beta_min</span><span class="p">,</span> <span class="n">beta_max</span><span class="o">=</span><span class="n">beta_max</span><span class="p">,</span>
+            <span class="n">num_sweeps</span><span class="o">=</span><span class="n">num_sweeps</span><span class="p">,</span> <span class="n">num_reads</span><span class="o">=</span><span class="n">num_reads</span><span class="p">,</span>
+            <span class="n">step_length</span><span class="o">=</span><span class="n">step_length</span>
+        <span class="p">)</span>
+        <span class="c1"># ------------- settting annealing parameters and validation</span>
+
+        <span class="c1"># Convert to CMOS Annealing Cloud Web API format [xi,yi,xj,yj,pij] ---</span>
+        <span class="c1"># from the Ising interaction dictionary.</span>
+        <span class="n">cmos_model</span> <span class="o">=</span> <span class="n">_cmos_annealer_format</span><span class="p">(</span>
+            <span class="n">h</span><span class="p">,</span> <span class="n">J</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_X</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_Y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_abs</span><span class="p">)</span>
+        <span class="n">beta_max</span><span class="p">,</span> <span class="n">beta_min</span> <span class="o">=</span> <span class="n">defalut_beta_range</span><span class="p">(</span>
+            <span class="n">cmos_model</span><span class="p">,</span>
+            <span class="n">beta_max</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_schedule_setting</span><span class="p">[</span><span class="s1">&#39;beta_max&#39;</span><span class="p">],</span>
+            <span class="n">beta_min</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_schedule_setting</span><span class="p">[</span><span class="s1">&#39;beta_min&#39;</span><span class="p">]</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_schedule_setting</span><span class="p">[</span><span class="s1">&#39;beta_max&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">beta_max</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_schedule_setting</span><span class="p">[</span><span class="s1">&#39;beta_min&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">beta_min</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_validate_schedule</span><span class="p">()</span>
+        <span class="n">headers</span><span class="p">,</span> <span class="n">request</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_json_request</span><span class="p">(</span>
+            <span class="n">cmos_model</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">token</span>
+        <span class="p">)</span>
+        <span class="c1"># --------------------------------------------------------------------</span>
+
+        <span class="c1"># POST to API -------------------------------------</span>
         <span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;https://annealing-cloud.com/api/v2/solve&#39;</span>
-        <span class="n">res</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">request</span><span class="p">),</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span>
+            <span class="n">request</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">NumpyEncoder</span><span class="p">),</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
         <span class="n">res_dict</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
-        
-        <span class="k">if</span> <span class="n">res_dict</span><span class="p">[</span><span class="s1">&#39;status&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Error status: </span><span class="si">{}</span><span class="s1">, message: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">res_dict</span><span class="p">[</span><span class="s1">&#39;status&#39;</span><span class="p">],</span> <span class="n">res_dict</span><span class="p">[</span><span class="s1">&#39;message&#39;</span><span class="p">]))</span>
-            
-        <span class="k">if</span> <span class="n">var_type</span> <span class="o">==</span> <span class="s2">&quot;SPIN&quot;</span><span class="p">:</span>
-            <span class="n">response</span><span class="o">.</span><span class="n">states</span> <span class="o">=</span> <span class="p">[[</span><span class="n">s</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">spins</span><span class="p">]</span> <span class="k">for</span> <span class="n">spins</span> <span class="ow">in</span> <span class="n">res_dict</span><span class="p">[</span><span class="s1">&#39;result&#39;</span><span class="p">][</span><span class="s1">&#39;spins&#39;</span><span class="p">]]</span>
-        <span class="k">else</span><span class="p">:</span> <span class="c1">#qubo</span>
-            <span class="n">response</span><span class="o">.</span><span class="n">states</span> <span class="o">=</span> <span class="p">[[</span><span class="nb">int</span><span class="p">((</span><span class="n">s</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">spins</span><span class="p">]</span> <span class="k">for</span> <span class="n">spins</span> <span class="ow">in</span> <span class="n">res_dict</span><span class="p">[</span><span class="s1">&#39;result&#39;</span><span class="p">][</span><span class="s1">&#39;spins&#39;</span><span class="p">]]</span>
-        <span class="n">response</span><span class="o">.</span><span class="n">indices</span> <span class="o">=</span> <span class="p">[</span><span class="n">king_graph</span><span class="o">.</span><span class="n">convert_to_index</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">res_dict</span><span class="p">[</span><span class="s1">&#39;result&#39;</span><span class="p">][</span><span class="s1">&#39;spins&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]]</span>
-        <span class="n">response</span><span class="o">.</span><span class="n">energies</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">res_dict</span><span class="p">[</span><span class="s1">&#39;result&#39;</span><span class="p">][</span><span class="s1">&#39;energies&#39;</span><span class="p">])</span> <span class="o">+</span> <span class="n">king_graph</span><span class="o">.</span><span class="n">energy_bias</span>
+        <span class="c1"># ------------------------------------- POST to API</span>
 
+        <span class="c1"># API Error handling</span>
+        <span class="k">if</span> <span class="n">res_dict</span><span class="p">[</span><span class="s1">&#39;status&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Error status: </span><span class="si">{}</span><span class="s1">, message: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">res_dict</span><span class="p">[</span><span class="s1">&#39;status&#39;</span><span class="p">],</span> <span class="n">res_dict</span><span class="p">[</span><span class="s1">&#39;message&#39;</span><span class="p">]))</span>
 
         <span class="c1"># more infomation see : https://annealing-cloud.com/web-api/reference/v2.html</span>
-        <span class="n">response</span><span class="o">.</span><span class="n">info</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">info</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;schedule&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;beta_max&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_schedule_setting</span><span class="p">[</span><span class="s1">&#39;beta_max&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;beta_min&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_schedule_setting</span><span class="p">[</span><span class="s1">&#39;beta_min&#39;</span><span class="p">]</span>
+            <span class="p">},</span>
             <span class="s2">&quot;averaged_spins&quot;</span><span class="p">:</span> <span class="n">res_dict</span><span class="p">[</span><span class="s1">&#39;result&#39;</span><span class="p">][</span><span class="s2">&quot;averaged_spins&quot;</span><span class="p">],</span>
             <span class="s2">&quot;averaged_energy&quot;</span><span class="p">:</span> <span class="n">res_dict</span><span class="p">[</span><span class="s1">&#39;result&#39;</span><span class="p">][</span><span class="s2">&quot;averaged_energy&quot;</span><span class="p">],</span>
-            <span class="s1">&#39;execution_time&#39;</span> <span class="p">:</span> <span class="n">res_dict</span><span class="p">[</span><span class="s1">&#39;result&#39;</span><span class="p">][</span><span class="s1">&#39;execution_time&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">),</span>
+            <span class="s1">&#39;execution_time&#39;</span><span class="p">:</span> <span class="n">res_dict</span><span class="p">[</span><span class="s1">&#39;result&#39;</span><span class="p">][</span><span class="s1">&#39;execution_time&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">),</span>
             <span class="s1">&#39;job_id&#39;</span><span class="p">:</span> <span class="n">res_dict</span><span class="p">[</span><span class="s1">&#39;job_id&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;posted_model&#39;</span><span class="p">:</span> <span class="n">cmos_model</span>
         <span class="p">}</span>
-        
-        <span class="k">return</span> <span class="n">response</span>
-    
+
+        <span class="n">bqm</span> <span class="o">=</span> <span class="n">openjij</span><span class="o">.</span><span class="n">BinaryQuadraticModel</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">J</span><span class="p">)</span>
+        <span class="n">samples</span> <span class="o">=</span> <span class="p">[{</span><span class="n">x</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">_X</span><span class="o">*</span><span class="n">y</span><span class="p">:</span> <span class="n">s</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">spins</span><span class="p">}</span>
+                   <span class="k">for</span> <span class="n">spins</span> <span class="ow">in</span> <span class="n">res_dict</span><span class="p">[</span><span class="s1">&#39;result&#39;</span><span class="p">][</span><span class="s1">&#39;spins&#39;</span><span class="p">]]</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">openjij</span><span class="o">.</span><span class="n">Response</span><span class="o">.</span><span class="n">from_samples_bqm</span><span class="p">(</span>
+            <span class="n">samples</span><span class="p">,</span> <span class="n">bqm</span><span class="p">,</span> <span class="n">info</span><span class="o">=</span><span class="n">info</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">response</span></div>
+
 <div class="viewcode-block" id="CMOSAnnealer.make_json_request"><a class="viewcode-back" href="../../../apis/openjij.sampler.html#openjij.sampler.cmos_annealer.CMOSAnnealer.make_json_request">[docs]</a>    <span class="k">def</span> <span class="nf">make_json_request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">token</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Make request for CMOS Annealer API.</span>
-<span class="sd"> </span>
+
 <span class="sd">        Args:</span>
 <span class="sd">            model (list):</span>
 <span class="sd">                A list of 5 integer values representing vertices</span>
@@ -358,25 +375,89 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Authorization&quot;</span><span class="p">:</span> <span class="s2">&quot;Bearer &quot;</span> <span class="o">+</span> <span class="n">token</span><span class="p">}</span>
-        <span class="n">headers</span><span class="o">.</span><span class="n">update</span><span class="p">({</span> <span class="s2">&quot;Accept&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span> <span class="p">})</span>
-        <span class="n">headers</span><span class="o">.</span><span class="n">update</span><span class="p">({</span> <span class="s1">&#39;content-type&#39;</span><span class="p">:</span> <span class="s1">&#39;application/json&#39;</span> <span class="p">})</span>
+        <span class="n">headers</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;Accept&quot;</span><span class="p">:</span> <span class="s2">&quot;application/json&quot;</span><span class="p">})</span>
+        <span class="n">headers</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;content-type&#39;</span><span class="p">:</span> <span class="s1">&#39;application/json&#39;</span><span class="p">})</span>
 
         <span class="n">request</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="n">request</span><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">model</span> <span class="c1"># modelのみ必須項目</span>
-        <span class="n">request</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">machine_type</span> <span class="o">==</span> <span class="s2">&quot;ASIC&quot;</span> <span class="k">else</span> <span class="mi">2</span> <span class="c1"># FPGA</span>
-        <span class="n">request</span><span class="p">[</span><span class="s2">&quot;num_executions&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cmos_parameters</span><span class="p">[</span><span class="s2">&quot;num_executions&quot;</span><span class="p">]</span>
-        <span class="n">request</span><span class="p">[</span><span class="s2">&quot;parameter&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;temperature_num_steps&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">cmos_parameters</span><span class="p">[</span><span class="s2">&quot;temperature_num_steps&quot;</span><span class="p">],</span>
-                                                    <span class="s2">&quot;temperature_step_length&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">cmos_parameters</span><span class="p">[</span><span class="s1">&#39;temperature_step_length&#39;</span><span class="p">],</span>
-                                                    <span class="s2">&quot;temperature_initial&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">cmos_parameters</span><span class="p">[</span><span class="s1">&#39;temperature_initial&#39;</span><span class="p">],</span>
-                                                    <span class="s2">&quot;temperature_target&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">cmos_parameters</span><span class="p">[</span><span class="s2">&quot;temperature_target&quot;</span><span class="p">]}</span>
+        <span class="n">request</span><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">model</span>  <span class="c1"># modelのみ必須項目</span>
+        <span class="n">request</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">machine_type</span> <span class="o">==</span> <span class="s2">&quot;ASIC&quot;</span> <span class="k">else</span> <span class="mi">2</span>  <span class="c1"># FPGA</span>
+        <span class="n">request</span><span class="p">[</span><span class="s2">&quot;num_executions&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_reads</span>
+        <span class="n">request</span><span class="p">[</span><span class="s2">&quot;parameter&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;temperature_num_steps&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_schedule_setting</span><span class="p">[</span><span class="s1">&#39;num_sweeps&#39;</span><span class="p">],</span>
+            <span class="s2">&quot;temperature_step_length&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_schedule_setting</span><span class="p">[</span><span class="s1">&#39;step_length&#39;</span><span class="p">],</span>
+            <span class="s2">&quot;temperature_initial&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">_schedule_setting</span><span class="p">[</span><span class="s1">&#39;beta_min&#39;</span><span class="p">],</span>
+            <span class="s2">&quot;temperature_target&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">_schedule_setting</span><span class="p">[</span><span class="s1">&#39;beta_max&#39;</span><span class="p">]}</span>
         <span class="n">request</span><span class="p">[</span><span class="s2">&quot;outputs&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;energies&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-                                                <span class="s2">&quot;spins&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-                                                <span class="s2">&quot;execution_time&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-                                                <span class="s2">&quot;num_outputs&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-                                                <span class="s2">&quot;averaged_spins&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-                                                <span class="s2">&quot;averaged_energy&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+                              <span class="s2">&quot;spins&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                              <span class="s2">&quot;execution_time&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                              <span class="s2">&quot;num_outputs&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                              <span class="s2">&quot;averaged_spins&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                              <span class="s2">&quot;averaged_energy&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
 
         <span class="k">return</span> <span class="n">headers</span><span class="p">,</span> <span class="n">request</span></div></div>
+
+
+<span class="k">def</span> <span class="nf">_cmos_annealer_format</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">J</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">max_abs</span><span class="p">):</span>
+
+    <span class="n">interactions</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span> <span class="nf">_2d_pos</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">pij</span><span class="p">):</span>
+        <span class="n">xi</span><span class="p">,</span> <span class="n">xj</span> <span class="o">=</span> <span class="n">i</span> <span class="o">%</span> <span class="n">X</span><span class="p">,</span> <span class="n">j</span> <span class="o">%</span> <span class="n">X</span>
+        <span class="n">yi</span><span class="p">,</span> <span class="n">yj</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">i</span><span class="o">-</span><span class="n">xi</span><span class="p">)</span><span class="o">/</span><span class="n">X</span><span class="p">),</span> <span class="nb">int</span><span class="p">((</span><span class="n">j</span><span class="o">-</span><span class="n">xj</span><span class="p">)</span><span class="o">/</span><span class="n">X</span><span class="p">)</span>
+        <span class="n">interactions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pij</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">xi</span><span class="p">,</span> <span class="n">yi</span><span class="p">,</span> <span class="n">xj</span><span class="p">,</span> <span class="n">yj</span><span class="p">,</span> <span class="n">pij</span><span class="p">]</span>
+
+    <span class="n">annealer_format</span> <span class="o">=</span> <span class="p">[</span><span class="n">_2d_pos</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">Jij</span><span class="p">)</span> <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">),</span> <span class="n">Jij</span> <span class="ow">in</span> <span class="n">J</span><span class="o">.</span><span class="n">items</span><span class="p">()]</span>
+    <span class="n">annealer_format</span> <span class="o">+=</span> <span class="p">[</span><span class="n">_2d_pos</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">hi</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">hi</span> <span class="ow">in</span> <span class="n">h</span><span class="o">.</span><span class="n">items</span><span class="p">()]</span>
+    <span class="c1"># degitalize to integer</span>
+    <span class="n">max_int</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">interactions</span><span class="p">))</span>
+    <span class="n">_interactions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">annealer_format</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+    <span class="n">_interactions</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">_interactions</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">max_abs</span><span class="o">/</span><span class="n">max_int</span>
+    <span class="n">_interactions</span> <span class="o">=</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">q</span><span class="p">)</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">_interactions</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)]</span>
+    <span class="k">return</span> <span class="n">_interactions</span>
+
+
+<div class="viewcode-block" id="defalut_beta_range"><a class="viewcode-back" href="../../../apis/openjij.sampler.html#openjij.sampler.cmos_annealer.defalut_beta_range">[docs]</a><span class="k">def</span> <span class="nf">defalut_beta_range</span><span class="p">(</span><span class="n">cmos_model</span><span class="p">,</span> <span class="n">beta_max</span><span class="p">,</span> <span class="n">beta_min</span><span class="p">):</span>
+
+    <span class="k">if</span> <span class="n">beta_min</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">beta_max</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">interactions</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">def</span> <span class="nf">add_interactions</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">interactions</span><span class="p">:</span>
+                <span class="n">interactions</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">interactions</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">v</span><span class="p">)]</span>
+
+        <span class="k">for</span> <span class="n">xi</span><span class="p">,</span> <span class="n">yi</span><span class="p">,</span> <span class="n">xj</span><span class="p">,</span> <span class="n">yj</span><span class="p">,</span> <span class="n">Jij</span> <span class="ow">in</span> <span class="n">cmos_model</span><span class="p">:</span>
+            <span class="n">add_interactions</span><span class="p">((</span><span class="n">xi</span><span class="p">,</span> <span class="n">yi</span><span class="p">),</span> <span class="n">Jij</span><span class="p">)</span>
+            <span class="n">add_interactions</span><span class="p">((</span><span class="n">xj</span><span class="p">,</span> <span class="n">yj</span><span class="p">),</span> <span class="n">Jij</span><span class="p">)</span>
+
+        <span class="n">abs_bias</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">interactions</span><span class="o">.</span><span class="n">values</span><span class="p">()])</span>
+        <span class="n">ising_interaction</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">cmos_model</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">min_delta_energy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">ising_interaction</span><span class="p">[</span><span class="n">ising_interaction</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">])</span>
+        <span class="n">max_delta_energy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">abs_bias</span><span class="p">[</span><span class="n">abs_bias</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">])</span>
+
+    <span class="n">beta_min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span>
+        <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="n">max_delta_energy</span> <span class="k">if</span> <span class="n">beta_min</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">beta_min</span>
+    <span class="n">beta_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span>
+        <span class="mi">100</span><span class="p">)</span> <span class="o">/</span> <span class="n">min_delta_energy</span> <span class="k">if</span> <span class="n">beta_max</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">beta_max</span>
+
+    <span class="n">beta_min</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">beta_min</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">2000</span><span class="p">)</span>
+    <span class="n">beta_max</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">beta_max</span><span class="p">,</span> <span class="mi">1</span><span class="o">/</span><span class="mi">2000</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">beta_max</span><span class="p">,</span> <span class="n">beta_min</span></div>
+
+
+<div class="viewcode-block" id="NumpyEncoder"><a class="viewcode-back" href="../../../apis/openjij.sampler.html#openjij.sampler.cmos_annealer.NumpyEncoder">[docs]</a><span class="k">class</span> <span class="nc">NumpyEncoder</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">JSONEncoder</span><span class="p">):</span>
+<div class="viewcode-block" id="NumpyEncoder.default"><a class="viewcode-back" href="../../../apis/openjij.sampler.html#openjij.sampler.cmos_annealer.NumpyEncoder.default">[docs]</a>    <span class="k">def</span> <span class="nf">default</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">integer</span><span class="p">):</span>
+            <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">floating</span><span class="p">):</span>
+            <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">obj</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">NumpyEncoder</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">default</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span></div></div>
 </pre></div>
 
            </div>
@@ -421,6 +502,7 @@
       <script type="text/javascript" src="../../../_static/underscore.js"></script>
       <script type="text/javascript" src="../../../_static/doctools.js"></script>
       <script type="text/javascript" src="../../../_static/language_data.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

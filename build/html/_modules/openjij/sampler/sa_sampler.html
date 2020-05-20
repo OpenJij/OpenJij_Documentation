@@ -80,12 +80,18 @@
           
             
             
-                <p class="caption"><span class="caption-text">Contents:</span></p>
+                <p class="caption"><span class="caption-text">API references:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../apis/openjij.html">openjij package</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../1-Introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../2-Install.html">Install</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../3-Minimum_sample.html">Minimum sample code</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../4-Parameters_customize.html">Parameters customize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../5-benchmark.html">Benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../6-HigherOrderModel.html">Higher order model</a></li>
 </ul>
 
             
@@ -150,11 +156,27 @@
            <div itemprop="articleBody">
             
   <h1>Source code for openjij.sampler.sa_sampler</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span></span><span class="c1"># Copyright 2019 Jij Inc.</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+
+<span class="c1">#     http://www.apache.org/licenses/LICENSE-2.0</span>
+
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">openjij</span>
-<span class="kn">from</span> <span class="nn">openjij.sampler</span> <span class="k">import</span> <span class="n">measure_time</span>
-<span class="kn">from</span> <span class="nn">openjij.sampler</span> <span class="k">import</span> <span class="n">BaseSampler</span>
-<span class="kn">from</span> <span class="nn">openjij.utils.decorator</span> <span class="k">import</span> <span class="n">deprecated_alias</span>
+<span class="kn">from</span> <span class="nn">openjij.sampler</span> <span class="kn">import</span> <span class="n">BaseSampler</span>
+<span class="kn">from</span> <span class="nn">openjij.utils.decorator</span> <span class="kn">import</span> <span class="n">deprecated_alias</span>
+<span class="kn">from</span> <span class="nn">openjij.utils.graph_utils</span> <span class="kn">import</span> <span class="n">qubo_to_ising</span>
+<span class="kn">from</span> <span class="nn">openjij.model</span> <span class="kn">import</span> <span class="n">BinaryHigherOrderModel</span>
+<span class="kn">from</span> <span class="nn">.hubo_simulated_annealing</span> <span class="kn">import</span> <span class="n">hubo_sa_sampling</span>
+<span class="kn">from</span> <span class="nn">.hubo_simulated_annealing</span> <span class="kn">import</span> <span class="n">default_schedule</span>
 <span class="kn">import</span> <span class="nn">cxxjij</span>
 
 
@@ -204,12 +226,17 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="nd">@deprecated_alias</span><span class="p">(</span><span class="n">iteration</span><span class="o">=</span><span class="s1">&#39;num_reads&#39;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;beta_min&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;parameters&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;beta_max&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;parameters&#39;</span><span class="p">],</span>
+        <span class="p">}</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                  <span class="n">beta_min</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">beta_max</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">num_sweeps</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">schedule</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">num_reads</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-                 <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+                 <span class="n">num_reads</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">beta_min</span> <span class="o">=</span> <span class="n">beta_min</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">beta_max</span> <span class="o">=</span> <span class="n">beta_max</span>
@@ -223,12 +250,19 @@
             <span class="s1">&#39;num_reads&#39;</span><span class="p">:</span> <span class="n">num_reads</span><span class="p">,</span>
         <span class="p">}</span>
 
-    <span class="k">def</span> <span class="nf">_setting_overwrite</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="k">if</span> <span class="n">value</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_schedule_setting</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_make_system</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;singlespinflip&#39;</span><span class="p">:</span> <span class="n">cxxjij</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">make_classical_ising</span><span class="p">,</span>
+            <span class="s1">&#39;swendsenwang&#39;</span><span class="p">:</span> <span class="n">cxxjij</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">make_classical_ising</span>
+        <span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_algorithm</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;singlespinflip&#39;</span><span class="p">:</span> <span class="n">cxxjij</span><span class="o">.</span><span class="n">algorithm</span><span class="o">.</span><span class="n">Algorithm_SingleSpinFlip_run</span><span class="p">,</span>
+            <span class="s1">&#39;swendsenwang&#39;</span><span class="p">:</span> <span class="n">cxxjij</span><span class="o">.</span><span class="n">algorithm</span><span class="o">.</span><span class="n">Algorithm_SwendsenWang_run</span>
+        <span class="p">}</span>
+
 
     <span class="k">def</span> <span class="nf">_convert_validation_schedule</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">schedule</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Checks if the schedule is valid and returns cxxjij schedule</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">schedule</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">)):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;schedule should be list or numpy.array&quot;</span><span class="p">)</span>
 
@@ -251,28 +285,59 @@
             <span class="n">_schedule</span><span class="o">.</span><span class="n">one_mc_step</span> <span class="o">=</span> <span class="n">step_length</span>
             <span class="n">_schedule</span><span class="o">.</span><span class="n">updater_parameter</span><span class="o">.</span><span class="n">beta</span> <span class="o">=</span> <span class="n">beta</span>
             <span class="n">cxxjij_schedule</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_schedule</span><span class="p">)</span>
+
         <span class="k">return</span> <span class="n">cxxjij_schedule</span>
 
-<div class="viewcode-block" id="SASampler.sample"><a class="viewcode-back" href="../../../apis/openjij.sampler.html#openjij.sampler.sa_sampler.SASampler.sample">[docs]</a>    <span class="nd">@deprecated_alias</span><span class="p">(</span><span class="n">iteration</span><span class="o">=</span><span class="s1">&#39;num_reads&#39;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">beta_min</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">beta_max</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-               <span class="n">num_sweeps</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">num_reads</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">schedule</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-               <span class="n">initial_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">updater</span><span class="o">=</span><span class="s1">&#39;single spin flip&#39;</span><span class="p">,</span>
-               <span class="n">reinitialize_state</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-               <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="SASampler.sample_ising"><a class="viewcode-back" href="../../../apis/openjij.sampler.html#openjij.sampler.sa_sampler.SASampler.sample_ising">[docs]</a>    <span class="k">def</span> <span class="nf">sample_ising</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">J</span><span class="p">,</span> <span class="n">beta_min</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">beta_max</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                     <span class="n">num_sweeps</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">num_reads</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">schedule</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                     <span class="n">initial_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">updater</span><span class="o">=</span><span class="s1">&#39;single spin flip&#39;</span><span class="p">,</span>
+                     <span class="n">reinitialize_state</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                     <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 
         <span class="n">model</span> <span class="o">=</span> <span class="n">openjij</span><span class="o">.</span><span class="n">BinaryQuadraticModel</span><span class="p">(</span>
-            <span class="n">linear</span><span class="o">=</span><span class="n">model</span><span class="o">.</span><span class="n">linear</span><span class="p">,</span> <span class="n">quadratic</span><span class="o">=</span><span class="n">model</span><span class="o">.</span><span class="n">quadratic</span><span class="p">,</span>
-            <span class="n">offset</span><span class="o">=</span><span class="n">model</span><span class="o">.</span><span class="n">offset</span><span class="p">,</span> <span class="n">var_type</span><span class="o">=</span><span class="n">model</span><span class="o">.</span><span class="n">vartype</span>
+            <span class="n">linear</span><span class="o">=</span><span class="n">h</span><span class="p">,</span> <span class="n">quadratic</span><span class="o">=</span><span class="n">J</span><span class="p">,</span> <span class="n">var_type</span><span class="o">=</span><span class="s1">&#39;SPIN&#39;</span>
         <span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sampling</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">beta_min</span><span class="p">,</span> <span class="n">beta_max</span><span class="p">,</span>
+                              <span class="n">num_sweeps</span><span class="p">,</span> <span class="n">num_reads</span><span class="p">,</span> <span class="n">schedule</span><span class="p">,</span>
+                              <span class="n">initial_state</span><span class="p">,</span> <span class="n">updater</span><span class="p">,</span>
+                              <span class="n">reinitialize_state</span><span class="p">,</span> <span class="n">seed</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_sampling</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">beta_min</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">beta_max</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                     <span class="n">num_sweeps</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">num_reads</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">schedule</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                     <span class="n">initial_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">updater</span><span class="o">=</span><span class="s1">&#39;single spin flip&#39;</span><span class="p">,</span>
+                     <span class="n">reinitialize_state</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">structure</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
+                     <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;sampling by using specified model</span>
+<span class="sd">        Args:</span>
+<span class="sd">            model (openjij.BinaryQuadraticModel): BinaryQuadraticModel</span>
+<span class="sd">            beta_min (float): minimal value of inverse temperature</span>
+<span class="sd">            beta_max (float): maximum value of inverse temperature</span>
+<span class="sd">            num_sweeps (int): number of sweeps</span>
+<span class="sd">            num_reads (int): number of reads</span>
+<span class="sd">            schedule (list): list of inverse temperature</span>
+<span class="sd">            initial_state (dict): initial state</span>
+<span class="sd">            update (str): updater algorithm</span>
+<span class="sd">            reinitialize_state (bool): if true reinitialize state for each run</span>
+<span class="sd">            seed (int): seed for Monte Carlo algorithm</span>
+<span class="sd">            structure (dict): specify the structure. </span>
+<span class="sd">            This argument is necessary if the model has a specific structure (e.g. Chimera graph) and the updater algorithm is structure-dependent.</span>
+<span class="sd">            structure must have two types of keys, namely &quot;size&quot; which shows the total size of spins and &quot;dict&quot; which is the map from model index (elements in model.indices) to the number.</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            [type]: [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">_updater_name</span> <span class="o">=</span> <span class="n">updater</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="c1"># swendsen wang algorithm runs only on sparse ising graphs.</span>
+        <span class="k">if</span> <span class="n">_updater_name</span> <span class="o">==</span> <span class="s1">&#39;swendsenwang&#39;</span><span class="p">:</span>
+            <span class="n">ising_graph</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">get_cxxjij_ising_graph</span><span class="p">(</span><span class="n">sparse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ising_graph</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">get_cxxjij_ising_graph</span><span class="p">()</span>
+
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_setting_overwrite</span><span class="p">(</span>
             <span class="n">beta_min</span><span class="o">=</span><span class="n">beta_min</span><span class="p">,</span> <span class="n">beta_max</span><span class="o">=</span><span class="n">beta_max</span><span class="p">,</span>
             <span class="n">num_sweeps</span><span class="o">=</span><span class="n">num_sweeps</span><span class="p">,</span> <span class="n">num_reads</span><span class="o">=</span><span class="n">num_reads</span>
         <span class="p">)</span>
 
-        <span class="n">ising_graph</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">get_cxxjij_ising_graph</span><span class="p">()</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">num_reads</span> <span class="o">=</span> <span class="n">num_reads</span> <span class="k">if</span> <span class="n">num_reads</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_reads</span>
 
         <span class="c1"># set annealing schedule -------------------------------</span>
         <span class="k">if</span> <span class="n">schedule</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">schedule</span><span class="p">:</span>
@@ -294,59 +359,100 @@
             <span class="p">}</span>
         <span class="c1"># ------------------------------- set annealing schedule</span>
 
-        <span class="c1"># make init state generator</span>
+        <span class="c1"># make init state generator --------------------------------</span>
         <span class="k">if</span> <span class="n">initial_state</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="c1"># if not reinitialize_state:</span>
-            <span class="c1">#     raise ValueError(</span>
-            <span class="c1">#         &#39;You need initial_state if reinitilize_state is False.&#39;)</span>
-
-            <span class="k">def</span> <span class="nf">_generate_init_state</span><span class="p">():</span> <span class="k">return</span> <span class="n">ising_graph</span><span class="o">.</span><span class="n">gen_spin</span><span class="p">()</span>
+            <span class="k">def</span> <span class="nf">_generate_init_state</span><span class="p">():</span> <span class="k">return</span> <span class="n">ising_graph</span><span class="o">.</span><span class="n">gen_spin</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span> <span class="k">if</span> <span class="n">seed</span> <span class="o">!=</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">ising_graph</span><span class="o">.</span><span class="n">gen_spin</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="c1"># validate initial_state size</span>
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">initial_state</span><span class="p">)</span> <span class="o">!=</span> <span class="n">ising_graph</span><span class="o">.</span><span class="n">size</span><span class="p">():</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="s2">&quot;the size of the initial state should be </span><span class="si">{}</span><span class="s2">&quot;</span>
-                    <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ising_graph</span><span class="o">.</span><span class="n">size</span><span class="p">()))</span>
-            <span class="k">if</span> <span class="n">model</span><span class="o">.</span><span class="n">var_type</span> <span class="o">==</span> <span class="n">openjij</span><span class="o">.</span><span class="n">SPIN</span><span class="p">:</span>
-                <span class="n">_init_state</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">initial_state</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>  <span class="c1"># BINARY</span>
-                <span class="n">_init_state</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">initial_state</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">initial_state</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="n">initial_state</span> <span class="o">=</span> <span class="p">[</span><span class="n">initial_state</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">indices</span><span class="p">]</span>
+            <span class="n">_init_state</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">initial_state</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">structure</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="c1"># validate initial_state size</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">initial_state</span><span class="p">)</span> <span class="o">!=</span> <span class="n">ising_graph</span><span class="o">.</span><span class="n">size</span><span class="p">():</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                        <span class="s2">&quot;the size of the initial state should be </span><span class="si">{}</span><span class="s2">&quot;</span>
+                        <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ising_graph</span><span class="o">.</span><span class="n">size</span><span class="p">()))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># resize _initial_state</span>
+                <span class="n">temp_state</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="nb">int</span><span class="p">(</span><span class="n">structure</span><span class="p">[</span><span class="s1">&#39;size&#39;</span><span class="p">])</span>
+                <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">ind</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">indices</span><span class="p">):</span>
+                    <span class="n">temp_state</span><span class="p">[</span><span class="n">structure</span><span class="p">[</span><span class="s1">&#39;dict&#39;</span><span class="p">][</span><span class="n">ind</span><span class="p">]]</span> <span class="o">=</span> <span class="n">_init_state</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+                <span class="n">_init_state</span> <span class="o">=</span> <span class="n">temp_state</span>
+
 
             <span class="k">def</span> <span class="nf">_generate_init_state</span><span class="p">():</span> <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">_init_state</span><span class="p">)</span>
+        <span class="c1"># -------------------------------- make init state generator</span>
 
-        <span class="c1"># choose updater</span>
+        <span class="c1"># choose updater -------------------------------------------</span>
         <span class="n">_updater_name</span> <span class="o">=</span> <span class="n">updater</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">_updater_name</span> <span class="o">==</span> <span class="s1">&#39;singlespinflip&#39;</span><span class="p">:</span>
-            <span class="n">algorithm</span> <span class="o">=</span> <span class="n">cxxjij</span><span class="o">.</span><span class="n">algorithm</span><span class="o">.</span><span class="n">Algorithm_SingleSpinFlip_run</span>
-            <span class="n">sa_system</span> <span class="o">=</span> <span class="n">cxxjij</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">make_classical_ising_Eigen</span><span class="p">(</span>
-                <span class="n">_generate_init_state</span><span class="p">(),</span> <span class="n">ising_graph</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">_updater_name</span> <span class="o">==</span> <span class="s1">&#39;swendsenwang&#39;</span><span class="p">:</span>
-            <span class="c1"># swendsen-wang is not support Eigen system</span>
-            <span class="n">algorithm</span> <span class="o">=</span> <span class="n">cxxjij</span><span class="o">.</span><span class="n">algorithm</span><span class="o">.</span><span class="n">Algorithm_SwendsenWang_run</span>
-            <span class="n">sa_system</span> <span class="o">=</span> <span class="n">cxxjij</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">make_classical_ising</span><span class="p">(</span>
-                <span class="n">_generate_init_state</span><span class="p">(),</span> <span class="n">ising_graph</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s1">&#39;updater is one of &quot;single spin flip or swendsen wang&quot;&#39;</span><span class="p">)</span>
-
-        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sampling</span><span class="p">(</span>
+        <span class="k">if</span> <span class="n">_updater_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_system</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;updater is one of &quot;single spin flip or swendsen wang&quot;&#39;</span><span class="p">)</span>
+        <span class="n">algorithm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_algorithm</span><span class="p">[</span><span class="n">_updater_name</span><span class="p">]</span>
+        <span class="n">sa_system</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_system</span><span class="p">[</span><span class="n">_updater_name</span><span class="p">](</span><span class="n">_generate_init_state</span><span class="p">(),</span> <span class="n">ising_graph</span><span class="p">)</span>
+        <span class="c1"># ------------------------------------------- choose updater</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cxxjij_sampling</span><span class="p">(</span>
             <span class="n">model</span><span class="p">,</span> <span class="n">_generate_init_state</span><span class="p">,</span>
-            <span class="n">algorithm</span><span class="p">,</span> <span class="n">sa_system</span><span class="p">,</span> <span class="n">initial_state</span><span class="p">,</span>
-            <span class="n">reinitialize_state</span><span class="p">,</span> <span class="n">seed</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+            <span class="n">algorithm</span><span class="p">,</span> <span class="n">sa_system</span><span class="p">,</span>
+            <span class="n">reinitialize_state</span><span class="p">,</span> <span class="n">seed</span><span class="p">,</span> <span class="n">structure</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
         <span class="p">)</span>
-
-        <span class="n">response</span><span class="o">.</span><span class="n">update_ising_states_energies</span><span class="p">(</span>
-            <span class="n">response</span><span class="o">.</span><span class="n">states</span><span class="p">,</span> <span class="n">response</span><span class="o">.</span><span class="n">energies</span><span class="p">)</span>
 
         <span class="n">response</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;schedule&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">schedule_info</span>
 
-        <span class="k">return</span> <span class="n">response</span></div>
+        <span class="k">return</span> <span class="n">response</span>
 
-    <span class="k">def</span> <span class="nf">_post_save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result_state</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
-        <span class="n">response</span><span class="o">.</span><span class="n">states</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result_state</span><span class="p">)</span>
-        <span class="n">response</span><span class="o">.</span><span class="n">energies</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">calc_energy</span><span class="p">(</span>
-            <span class="n">result_state</span><span class="p">,</span>
-            <span class="n">need_to_convert_from_spin</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span></div>
+<div class="viewcode-block" id="SASampler.sample_hubo"><a class="viewcode-back" href="../../../apis/openjij.sampler.html#openjij.sampler.sa_sampler.SASampler.sample_hubo">[docs]</a>    <span class="k">def</span> <span class="nf">sample_hubo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">interactions</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">var_type</span><span class="p">,</span>
+                    <span class="n">beta_min</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">beta_max</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">schedule</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="n">num_sweeps</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">num_reads</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                    <span class="n">init_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;sampling from higher order unconstrainted binary optimization</span>
+<span class="sd">        Args:</span>
+<span class="sd">            interactions (list of dict): ordered by degree of interaction. [linear, quadratic, ...]</span>
+<span class="sd">            var_type (str, openjij.VarType): &quot;SPIN&quot; or &quot;BINARY&quot;</span>
+<span class="sd">            beta_min (float, optional): Minimum beta (initial inverse temperature). Defaults to None.</span>
+<span class="sd">            beta_max (float, optional): Maximum beta (final inverse temperature). Defaults to None.</span>
+<span class="sd">            schedule (list, optional): [description]. Defaults to None.</span>
+<span class="sd">            num_sweeps (int, optional): [description]. Defaults to 100.</span>
+<span class="sd">            num_reads (int, optional): [description]. Defaults to 1.</span>
+<span class="sd">            init_state (list, optional): initial state. Defaults to None.</span>
+<span class="sd">            seed (int, optional): [description]. Defaults to None.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            [type]: [description]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_setting_overwrite</span><span class="p">(</span>
+            <span class="n">beta_min</span><span class="o">=</span><span class="n">beta_min</span><span class="p">,</span> <span class="n">beta_max</span><span class="o">=</span><span class="n">beta_max</span><span class="p">,</span>
+            <span class="n">num_sweeps</span><span class="o">=</span><span class="n">num_sweeps</span><span class="p">,</span> <span class="n">num_reads</span><span class="o">=</span><span class="n">num_reads</span>
+        <span class="p">)</span>
+
+        <span class="n">bhom</span> <span class="o">=</span> <span class="n">BinaryHigherOrderModel</span><span class="p">(</span><span class="n">interactions</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">schedule</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">schedule</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_schedule</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_convert_validation_schedule</span><span class="p">(</span>
+                <span class="n">schedule</span> <span class="k">if</span> <span class="n">schedule</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">schedule</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">schedule_info</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;schedule&#39;</span><span class="p">:</span> <span class="s1">&#39;custom schedule&#39;</span><span class="p">}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">schedule</span> <span class="o">=</span> <span class="n">default_schedule</span><span class="p">(</span>
+                <span class="n">bhom</span><span class="p">,</span>
+                <span class="n">beta_min</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_schedule_setting</span><span class="p">[</span><span class="s1">&#39;beta_min&#39;</span><span class="p">],</span>
+                <span class="n">beta_max</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_schedule_setting</span><span class="p">[</span><span class="s1">&#39;beta_max&#39;</span><span class="p">],</span>
+                <span class="n">num_sweeps</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_schedule_setting</span><span class="p">[</span><span class="s1">&#39;num_sweeps&#39;</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">schedule_info</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;beta_max&#39;</span><span class="p">:</span> <span class="n">schedule</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                <span class="s1">&#39;beta_min&#39;</span><span class="p">:</span> <span class="n">schedule</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                <span class="s1">&#39;num_sweeps&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_schedule_setting</span><span class="p">[</span><span class="s1">&#39;num_sweeps&#39;</span><span class="p">]</span>
+            <span class="p">}</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="n">hubo_sa_sampling</span><span class="p">(</span>
+            <span class="n">bhom</span><span class="p">,</span> <span class="n">var_type</span><span class="p">,</span>
+            <span class="n">schedule</span><span class="o">=</span><span class="n">schedule</span><span class="p">,</span> <span class="n">schedule_info</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">schedule_info</span><span class="p">,</span>
+            <span class="n">num_sweeps</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_schedule_setting</span><span class="p">[</span><span class="s1">&#39;num_sweeps&#39;</span><span class="p">],</span>
+            <span class="n">num_reads</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_schedule_setting</span><span class="p">[</span><span class="s1">&#39;num_reads&#39;</span><span class="p">],</span>
+            <span class="n">init_state</span><span class="o">=</span><span class="n">init_state</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">seed</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">response</span></div></div>
 
 
 <div class="viewcode-block" id="geometric_ising_beta_schedule"><a class="viewcode-back" href="../../../apis/openjij.sampler.html#openjij.sampler.sa_sampler.geometric_ising_beta_schedule">[docs]</a><span class="k">def</span> <span class="nf">geometric_ising_beta_schedule</span><span class="p">(</span><span class="n">model</span><span class="p">:</span> <span class="n">openjij</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">BinaryQuadraticModel</span><span class="p">,</span>
@@ -363,17 +469,28 @@
 <span class="sd">        list of cxxjij.utility.ClassicalSchedule, list of beta range [max, min]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">beta_min</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">beta_max</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">ising_interaction</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">ising_interactions</span><span class="p">())</span>
+        <span class="c1"># generate Ising matrix</span>
+        <span class="n">ising_interaction</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">interaction_matrix</span><span class="p">()</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">vartype</span> <span class="o">==</span> <span class="n">openjij</span><span class="o">.</span><span class="n">BINARY</span><span class="p">):</span>
+            <span class="c1"># convert to ising matrix</span>
+            <span class="n">qubo_to_ising</span><span class="p">(</span><span class="n">ising_interaction</span><span class="p">)</span>
+
+        <span class="n">ising_interaction</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">ising_interaction</span><span class="p">)</span>
+
+        <span class="c1">#automatical setting of min, max delta energy</span>
         <span class="n">abs_bias</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">ising_interaction</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
         <span class="n">min_delta_energy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">ising_interaction</span><span class="p">[</span><span class="n">ising_interaction</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">])</span>
         <span class="n">max_delta_energy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">abs_bias</span><span class="p">[</span><span class="n">abs_bias</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">])</span>
 
+    <span class="c1"># TODO: More optimal schedule ?</span>
+
     <span class="n">beta_min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="n">max_delta_energy</span> <span class="k">if</span> <span class="n">beta_min</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">beta_min</span>
     <span class="n">beta_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span> <span class="o">/</span> <span class="n">min_delta_energy</span> <span class="k">if</span> <span class="n">beta_max</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">beta_max</span>
 
-    <span class="n">num_sweeps_per_beta</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_sweeps</span> <span class="o">//</span> <span class="mf">1000.0</span><span class="p">)</span>
+    <span class="n">num_sweeps_per_beta</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_sweeps</span> <span class="o">//</span> <span class="mi">1000</span><span class="p">)</span>
 
+    <span class="c1"># set schedule to cxxjij</span>
     <span class="n">schedule</span> <span class="o">=</span> <span class="n">cxxjij</span><span class="o">.</span><span class="n">utility</span><span class="o">.</span><span class="n">make_classical_schedule_list</span><span class="p">(</span>
         <span class="n">beta_min</span><span class="o">=</span><span class="n">beta_min</span><span class="p">,</span> <span class="n">beta_max</span><span class="o">=</span><span class="n">beta_max</span><span class="p">,</span>
         <span class="n">one_mc_step</span><span class="o">=</span><span class="n">num_sweeps_per_beta</span><span class="p">,</span>
@@ -425,6 +542,7 @@
       <script type="text/javascript" src="../../../_static/underscore.js"></script>
       <script type="text/javascript" src="../../../_static/doctools.js"></script>
       <script type="text/javascript" src="../../../_static/language_data.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

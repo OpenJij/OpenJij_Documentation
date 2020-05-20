@@ -1,0 +1,308 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>openjij.sampler.csqa_sampler &mdash; OpenJij  documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
+    <link rel="top" title="OpenJij  documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> OpenJij
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <p class="caption"><span class="caption-text">API references:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../apis/openjij.html">openjij package</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../1-Introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../2-Install.html">Install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../3-Minimum_sample.html">Minimum sample code</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../4-Parameters_customize.html">Parameters customize</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../5-benchmark.html">Benchmark</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../6-HigherOrderModel.html">Higher order model</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">OpenJij</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>openjij.sampler.csqa_sampler</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for openjij.sampler.csqa_sampler</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">openjij</span>
+<span class="kn">from</span> <span class="nn">openjij.sampler</span> <span class="kn">import</span> <span class="n">measure_time</span>
+<span class="kn">from</span> <span class="nn">openjij.sampler</span> <span class="kn">import</span> <span class="n">SQASampler</span>
+<span class="kn">from</span> <span class="nn">openjij.utils.decorator</span> <span class="kn">import</span> <span class="n">deprecated_alias</span>
+<span class="kn">import</span> <span class="nn">cxxjij</span>
+
+
+<div class="viewcode-block" id="CSQASampler"><a class="viewcode-back" href="../../../apis/openjij.sampler.html#openjij.sampler.csqa_sampler.CSQASampler">[docs]</a><span class="k">class</span> <span class="nc">CSQASampler</span><span class="p">(</span><span class="n">SQASampler</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">beta</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+                 <span class="n">num_sweeps</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">schedule</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">num_reads</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">beta</span> <span class="o">=</span> <span class="n">beta</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">=</span> <span class="n">gamma</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_reads</span> <span class="o">=</span> <span class="n">num_reads</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_sweeps</span> <span class="o">=</span> <span class="n">num_sweeps</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">schedule</span> <span class="o">=</span> <span class="n">schedule</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">energy_bias</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_schedule_setting</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;beta&#39;</span><span class="p">:</span> <span class="n">beta</span><span class="p">,</span>
+            <span class="s1">&#39;gamma&#39;</span><span class="p">:</span> <span class="n">gamma</span><span class="p">,</span>
+            <span class="s1">&#39;num_sweeps&#39;</span><span class="p">:</span> <span class="n">num_sweeps</span><span class="p">,</span>
+            <span class="s1">&#39;num_reads&#39;</span><span class="p">:</span> <span class="n">num_reads</span><span class="p">,</span>
+        <span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">_get_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span> <span class="n">model</span><span class="p">):</span>
+        <span class="n">info</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">info</span><span class="p">[</span><span class="s1">&#39;spin_config&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">system</span><span class="o">.</span><span class="n">spin_config</span>
+
+        <span class="n">state</span> <span class="o">=</span> <span class="n">cxxjij</span><span class="o">.</span><span class="n">result</span><span class="o">.</span><span class="n">get_solution</span><span class="p">(</span><span class="n">system</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">state</span><span class="p">,</span> <span class="n">info</span>
+
+<div class="viewcode-block" id="CSQASampler.sample_ising"><a class="viewcode-back" href="../../../apis/openjij.sampler.html#openjij.sampler.csqa_sampler.CSQASampler.sample_ising">[docs]</a>    <span class="k">def</span> <span class="nf">sample_ising</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">J</span><span class="p">,</span>
+                     <span class="n">beta</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                     <span class="n">num_sweeps</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">schedule</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                     <span class="n">num_reads</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                     <span class="n">initial_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">updater</span><span class="o">=</span><span class="s1">&#39;swendsenwang&#39;</span><span class="p">,</span>
+                     <span class="n">reinitialize_state</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+        <span class="n">bqm</span> <span class="o">=</span> <span class="n">openjij</span><span class="o">.</span><span class="n">BinaryQuadraticModel</span><span class="p">(</span>
+            <span class="n">linear</span><span class="o">=</span><span class="n">h</span><span class="p">,</span> <span class="n">quadratic</span><span class="o">=</span><span class="n">J</span><span class="p">,</span> <span class="n">var_type</span><span class="o">=</span><span class="s1">&#39;SPIN&#39;</span>
+        <span class="p">)</span>
+
+        <span class="c1">#Continuous time ising system only supports sparse ising graph</span>
+
+        <span class="n">ising_graph</span> <span class="o">=</span> <span class="n">bqm</span><span class="o">.</span><span class="n">get_cxxjij_ising_graph</span><span class="p">(</span><span class="n">sparse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_setting_overwrite</span><span class="p">(</span>
+            <span class="n">beta</span><span class="o">=</span><span class="n">beta</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="n">gamma</span><span class="p">,</span>
+            <span class="n">num_sweeps</span><span class="o">=</span><span class="n">num_sweeps</span><span class="p">,</span> <span class="n">num_reads</span><span class="o">=</span><span class="n">num_reads</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_annealing_schedule_setting</span><span class="p">(</span>
+            <span class="n">bqm</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">gamma</span><span class="p">,</span> <span class="n">num_sweeps</span><span class="p">,</span> <span class="n">schedule</span><span class="p">)</span>
+
+        <span class="c1"># make init state generator --------------------------------</span>
+        <span class="k">if</span> <span class="n">initial_state</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">def</span> <span class="nf">init_generator</span><span class="p">():</span>
+                <span class="n">spin_config</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="nb">len</span><span class="p">(</span><span class="n">bqm</span><span class="o">.</span><span class="n">indices</span><span class="p">))</span>
+                <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">spin_config</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">def</span> <span class="nf">init_generator</span><span class="p">():</span> <span class="k">return</span> <span class="n">initial_state</span>
+        <span class="c1"># -------------------------------- make init state generator</span>
+
+        <span class="c1"># choose updater -------------------------------------------</span>
+        <span class="n">sqa_system</span> <span class="o">=</span> <span class="n">cxxjij</span><span class="o">.</span><span class="n">system</span><span class="o">.</span><span class="n">make_continuous_time_ising</span><span class="p">(</span>
+            <span class="n">init_generator</span><span class="p">(),</span> <span class="n">ising_graph</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span>
+        <span class="p">)</span>
+        <span class="n">_updater_name</span> <span class="o">=</span> <span class="n">updater</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">_updater_name</span> <span class="o">==</span> <span class="s1">&#39;swendsenwang&#39;</span><span class="p">:</span>
+            <span class="n">algorithm</span> <span class="o">=</span> <span class="n">cxxjij</span><span class="o">.</span><span class="n">algorithm</span><span class="o">.</span><span class="n">Algorithm_ContinuousTimeSwendsenWang_run</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;updater is one of &quot;swendsen wang&quot;&#39;</span><span class="p">)</span>
+        <span class="c1"># ------------------------------------------- choose updater</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cxxjij_sampling</span><span class="p">(</span>
+            <span class="n">bqm</span><span class="p">,</span> <span class="n">init_generator</span><span class="p">,</span>
+            <span class="n">algorithm</span><span class="p">,</span> <span class="n">sqa_system</span><span class="p">,</span>
+            <span class="n">reinitialize_state</span><span class="p">,</span> <span class="n">seed</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span>
+
+        <span class="n">response</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;schedule&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">schedule_info</span>
+
+        <span class="k">return</span> <span class="n">response</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Jij Inc..
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> and ❤️  using a custom <a href="https://github.com/LinxiFan/Sphinx-theme">theme</a> based on <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+      <script type="text/javascript" src="../../../_static/language_data.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
