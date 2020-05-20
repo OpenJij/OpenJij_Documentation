@@ -195,7 +195,6 @@
 <dt id="openjij.sampler.chimera_gpu.base_gpu_chimera.BaseGPUChimeraSampler">
 <em class="property">class </em><code class="sig-prename descclassname">openjij.sampler.chimera_gpu.base_gpu_chimera.</code><code class="sig-name descname">BaseGPUChimeraSampler</code><a class="reference internal" href="../_modules/openjij/sampler/chimera_gpu/base_gpu_chimera.html#BaseGPUChimeraSampler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#openjij.sampler.chimera_gpu.base_gpu_chimera.BaseGPUChimeraSampler" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">dimod.core.structured.Structured</span></code></p>
-<p>Abstract GPUChimera Sampler</p>
 <dl class="py method">
 <dt id="openjij.sampler.chimera_gpu.base_gpu_chimera.BaseGPUChimeraSampler.edgelist">
 <em class="property">property </em><code class="sig-name descname">edgelist</code><a class="headerlink" href="#openjij.sampler.chimera_gpu.base_gpu_chimera.BaseGPUChimeraSampler.edgelist" title="Permalink to this definition">¶</a></dt>
@@ -243,55 +242,99 @@
 <li><p><strong>num_sweeps</strong> (<em>int</em>) – Length of Monte Carlo step.</p></li>
 <li><p><strong>schedule_info</strong> (<em>dict</em>) – Information about a annealing schedule.</p></li>
 <li><p><strong>num_reads</strong> (<em>int</em>) – Number of iterations.</p></li>
-<li><p><strong>unit_num_L</strong> (<em>int</em>) – Length of one side of two-dimensional lattice in which chimera unit cells are arranged.</p></li>
+<li><p><strong>unit_num_L</strong> (<em>int</em>) – Length of one side of two-dimensional lattice
+in which chimera unit cells are arranged.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><ul class="simple">
+</dl>
+<dl class="py attribute">
+<dt id="openjij.sampler.chimera_gpu.gpu_sa_sampler.GPUChimeraSASampler.indices">
+<code class="sig-name descname">indices</code><a class="headerlink" href="#openjij.sampler.chimera_gpu.gpu_sa_sampler.GPUChimeraSASampler.indices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Indices of <cite>openjij.model.model.BinaryQuadraticModel</cite> model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="openjij.sampler.chimera_gpu.gpu_sa_sampler.GPUChimeraSASampler.energy_bias">
+<code class="sig-name descname">energy_bias</code><a class="headerlink" href="#openjij.sampler.chimera_gpu.gpu_sa_sampler.GPUChimeraSASampler.energy_bias" title="Permalink to this definition">¶</a></dt>
+<dd><p>Energy bias.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt>
+<code class="sig-name descname">model (</code></dt>
+<dd><p>obj:):
+<cite>openjij.model.model.BinaryQuadraticModel</cite> model.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="openjij.sampler.chimera_gpu.gpu_sa_sampler.GPUChimeraSASampler.var_type">
+<code class="sig-name descname">var_type</code><a class="headerlink" href="#openjij.sampler.chimera_gpu.gpu_sa_sampler.GPUChimeraSASampler.var_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Type of variables: ‘SPIN’ or ‘BINARY’ which mean {-1, 1} or {0, 1}.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt>
+<code class="sig-name descname">system_class (</code></dt>
+<dd><p>class:):
+<cite>cxxjij.system.QuantumIsing</cite> class.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="openjij.sampler.chimera_gpu.gpu_sa_sampler.GPUChimeraSASampler.sqa_kwargs">
+<code class="sig-name descname">sqa_kwargs</code><a class="headerlink" href="#openjij.sampler.chimera_gpu.gpu_sa_sampler.GPUChimeraSASampler.sqa_kwargs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameters of SQA: beta, gamma, and schedule_info.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="field-list simple">
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><ul class="simple">
 <li><p><strong>ValueError</strong> – If variables violate as below.</p></li>
 <li><p><strong>- trotter number is odd.</strong> – </p></li>
 <li><p><strong>- no input &quot;unit_num_L&quot; to an argument</strong><strong> or </strong><strong>this constructor.</strong> – </p></li>
 <li><p><strong>- given problem graph is incompatible with chimera graph.</strong> – </p></li>
 <li><p><strong>AttributeError</strong> – If GPU doesn’t work.</p></li>
+<li><p><strong>ValueError</strong> – [description]</p></li>
+<li><p><strong>AttributeError</strong> – [description]</p></li>
+<li><p><strong>ValueError</strong> – [description]</p></li>
+<li><p><strong>ValueError</strong> – [description]</p></li>
 </ul>
 </dd>
 </dl>
 <dl class="py method">
 <dt id="openjij.sampler.chimera_gpu.gpu_sa_sampler.GPUChimeraSASampler.sample_ising">
 <code class="sig-name descname">sample_ising</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">h</span></em>, <em class="sig-param"><span class="n">J</span></em>, <em class="sig-param"><span class="n">beta_min</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">beta_max</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">num_sweeps</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">num_reads</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">schedule</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">initial_state</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">updater</span><span class="o">=</span><span class="default_value">'single spin flip'</span></em>, <em class="sig-param"><span class="n">reinitialize_state</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">seed</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">unit_num_L</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/sampler/chimera_gpu/gpu_sa_sampler.html#GPUChimeraSASampler.sample_ising"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#openjij.sampler.chimera_gpu.gpu_sa_sampler.GPUChimeraSASampler.sample_ising" title="Permalink to this definition">¶</a></dt>
-<dd><p>sample with Ising model.</p>
+<dd><p>Sample from an Ising model using the implemented sample method.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>h</strong> (<em>dict</em>) – linear biases</p></li>
-<li><p><strong>J</strong> (<em>dict</em>) – quadratic biases</p></li>
-<li><p><strong>beta_min</strong> (<em>float</em>) – minimal value of inverse temperature</p></li>
-<li><p><strong>beta_max</strong> (<em>float</em>) – maximum value of inverse temperature</p></li>
-<li><p><strong>num_sweeps</strong> (<em>int</em>) – number of sweeps</p></li>
-<li><p><strong>num_reads</strong> (<em>int</em>) – number of reads</p></li>
-<li><p><strong>schedule</strong> (<em>list</em>) – list of inverse temperature</p></li>
-<li><p><strong>initial_state</strong> (<em>dict</em>) – initial state</p></li>
-<li><p><strong>updater</strong> (<em>str</em>) – updater algorithm</p></li>
-<li><p><strong>reinitialize_state</strong> (<em>bool</em>) – if true reinitialize state for each run</p></li>
-<li><p><strong>seed</strong> (<em>int</em>) – seed for Monte Carlo algorithm</p></li>
-<li><p><strong>unit_num_L</strong> (<em>int</em>) – number of chimera units</p></li>
-<li><p><strong>kwargs</strong> – </p></li>
+<li><p><strong>h</strong> (<em>dict</em>) – Linear biases</p></li>
+<li><p><strong>J</strong> (<em>dict</em>) – Quadratic biases</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>results</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="openjij.sampler.html#openjij.sampler.response.Response" title="openjij.sampler.response.Response"><code class="xref py py-class docutils literal notranslate"><span class="pre">openjij.sampler.response.Response</span></code></a></p>
+<dd class="field-even"><p>obj: <cite>.Sampleset</cite></p>
 </dd>
 </dl>
-<p>Examples:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sampler</span> <span class="o">=</span> <span class="n">oj</span><span class="o">.</span><span class="n">GPUChimeraSASampler</span><span class="p">(</span><span class="n">unit_num_L</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">J</span> <span class="o">=</span> <span class="p">{(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">):</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">):</span> <span class="o">-</span><span class="mi">1</span><span class="p">}</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">sampler</span><span class="o">.</span><span class="n">sample_ising</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">J</span><span class="p">)</span>
-</pre></div>
-</div>
 </dd></dl>
 
 </dd></dl>
@@ -304,21 +347,82 @@
 <em class="property">class </em><code class="sig-prename descclassname">openjij.sampler.chimera_gpu.gpu_sqa_sampler.</code><code class="sig-name descname">GPUChimeraSQASampler</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">beta</span><span class="o">=</span><span class="default_value">10.0</span></em>, <em class="sig-param"><span class="n">gamma</span><span class="o">=</span><span class="default_value">1.0</span></em>, <em class="sig-param"><span class="n">trotter</span><span class="o">=</span><span class="default_value">4</span></em>, <em class="sig-param"><span class="n">num_sweeps</span><span class="o">=</span><span class="default_value">100</span></em>, <em class="sig-param"><span class="n">schedule</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">num_reads</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">unit_num_L</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/sampler/chimera_gpu/gpu_sqa_sampler.html#GPUChimeraSQASampler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#openjij.sampler.chimera_gpu.gpu_sqa_sampler.GPUChimeraSQASampler" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="openjij.sampler.html#openjij.sampler.sqa_sampler.SQASampler" title="openjij.sampler.sqa_sampler.SQASampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">openjij.sampler.sqa_sampler.SQASampler</span></code></a>, <a class="reference internal" href="#openjij.sampler.chimera_gpu.base_gpu_chimera.BaseGPUChimeraSampler" title="openjij.sampler.chimera_gpu.base_gpu_chimera.BaseGPUChimeraSampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">openjij.sampler.chimera_gpu.base_gpu_chimera.BaseGPUChimeraSampler</span></code></a></p>
 <p>Sampler with Simulated Quantum Annealing (SQA) on GPU.</p>
-<p>Inherits from <a class="reference internal" href="openjij.sampler.html#openjij.sampler.sqa_sampler.SQASampler" title="openjij.sampler.sqa_sampler.SQASampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">openjij.sampler.sqa_sampler.SQASampler</span></code></a>.</p>
+<p>Inherits from <a class="reference internal" href="openjij.sampler.html#openjij.sampler.sampler.BaseSampler" title="openjij.sampler.sampler.BaseSampler"><code class="xref py py-class docutils literal notranslate"><span class="pre">openjij.sampler.sampler.BaseSampler</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>beta</strong> (<em>float</em>) – Inverse temperature.</p></li>
 <li><p><strong>gamma</strong> (<em>float</em>) – Amplitude of quantum fluctuation.</p></li>
 <li><p><strong>trotter</strong> (<em>int</em>) – Trotter number.</p></li>
-<li><p><strong>num_sweeps</strong> (<em>int</em>) – number of sweeps</p></li>
+<li><p><strong>num_sweeps</strong> (<em>int</em>) – </p></li>
 <li><p><strong>schedule_info</strong> (<em>dict</em>) – Information about a annealing schedule.</p></li>
-<li><p><strong>num_reads</strong> (<em>int</em>) – Number of iterations.</p></li>
-<li><p><strong>unit_num_L</strong> (<em>int</em>) – Length of one side of two-dimensional lattice in which chimera unit cells are arranged.</p></li>
+<li><p><strong>iteration</strong> (<em>int</em>) – Number of iterations.</p></li>
+<li><p><strong>unit_num_L</strong> (<em>int</em>) – Length of one side of two-dimensional lattice
+in which chimera unit cells are arranged.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Raises</dt>
-<dd class="field-even"><ul class="simple">
+</dl>
+<dl class="py attribute">
+<dt id="openjij.sampler.chimera_gpu.gpu_sqa_sampler.GPUChimeraSQASampler.indices">
+<code class="sig-name descname">indices</code><a class="headerlink" href="#openjij.sampler.chimera_gpu.gpu_sqa_sampler.GPUChimeraSQASampler.indices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Indices of <cite>openjij.model.model.BinaryQuadraticModel</cite> model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="openjij.sampler.chimera_gpu.gpu_sqa_sampler.GPUChimeraSQASampler.energy_bias">
+<code class="sig-name descname">energy_bias</code><a class="headerlink" href="#openjij.sampler.chimera_gpu.gpu_sqa_sampler.GPUChimeraSQASampler.energy_bias" title="Permalink to this definition">¶</a></dt>
+<dd><p>Energy bias.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt>
+<code class="sig-name descname">model (</code></dt>
+<dd><p>obj:):
+<cite>openjij.model.model.BinaryQuadraticModel</cite> model.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="openjij.sampler.chimera_gpu.gpu_sqa_sampler.GPUChimeraSQASampler.var_type">
+<code class="sig-name descname">var_type</code><a class="headerlink" href="#openjij.sampler.chimera_gpu.gpu_sqa_sampler.GPUChimeraSQASampler.var_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Type of variables: ‘SPIN’ or ‘BINARY’ which mean {-1, 1} or {0, 1}.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt>
+<code class="sig-name descname">system_class (</code></dt>
+<dd><p>class:):
+<cite>cxxjij.system.QuantumIsing</cite> class.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="openjij.sampler.chimera_gpu.gpu_sqa_sampler.GPUChimeraSQASampler.sqa_kwargs">
+<code class="sig-name descname">sqa_kwargs</code><a class="headerlink" href="#openjij.sampler.chimera_gpu.gpu_sqa_sampler.GPUChimeraSQASampler.sqa_kwargs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameters of SQA: beta, gamma, and schedule_info.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="field-list simple">
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><ul class="simple">
 <li><p><strong>ValueError</strong> – If variables violate as below.</p></li>
 <li><p><strong>- trotter number is odd.</strong> – </p></li>
 <li><p><strong>- no input &quot;unit_num_L&quot; to an argument</strong><strong> or </strong><strong>this constructor.</strong> – </p></li>
@@ -347,20 +451,16 @@
 <li><p><strong>seed</strong> (<em>int</em><em>, </em><em>optional</em>) – Sampling seed. Defaults to None.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>results</p>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>ValueError</strong> – [description]</p>
 </dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="openjij.sampler.html#openjij.sampler.response.Response" title="openjij.sampler.response.Response"><code class="xref py py-class docutils literal notranslate"><span class="pre">openjij.sampler.response.Response</span></code></a></p>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>[description]</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>[type]</p>
 </dd>
 </dl>
-<p>Examples:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sampler</span> <span class="o">=</span> <span class="n">oj</span><span class="o">.</span><span class="n">GPUChimeraSQASampler</span><span class="p">(</span><span class="n">unit_num_L</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">J</span> <span class="o">=</span> <span class="p">{(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">):</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">):</span> <span class="o">-</span><span class="mi">1</span><span class="p">}</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">res</span> <span class="o">=</span> <span class="n">sampler</span><span class="o">.</span><span class="n">sample_ising</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">J</span><span class="p">)</span>
-</pre></div>
-</div>
 </dd></dl>
 
 </dd></dl>

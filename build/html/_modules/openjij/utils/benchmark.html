@@ -191,18 +191,17 @@
 <span class="sd">        ref_energy (float): The ground (reference to calculate success probability and the residual energy) energy.</span>
 <span class="sd">        measure_with_energy (bool): use a energy as measure for success</span>
 <span class="sd">    Returns:</span>
-<span class="sd">        dict: dictionary which has the following keys:</span>
-
-<span class="sd">        * **time**: list of compuation time</span>
-<span class="sd">        * **success_prob** list of success probability at each computation time</span>
-<span class="sd">        * **tts**: list of time to solusion at each computation time</span>
-<span class="sd">        * **residual_energy**: list of residual energy at each computation time</span>
-<span class="sd">        * **se_lower_tts**: list of tts&#39;s lower standard error at each computation time</span>
-<span class="sd">        * **se_upper_tts**: list of tts&#39;s upper standard error at each computation time</span>
-<span class="sd">        * **se_success_prob**: list of success probability&#39;s standard error at each computation time</span>
-<span class="sd">        * **se_residual_energy**: list of residual_energy&#39;s standard error at each computation time</span>
-<span class="sd">        * **info** (dict): Parameter information for the benchmark</span>
-<span class="sd">            </span>
+<span class="sd">        dict: {</span>
+<span class="sd">                &quot;time&quot;: list of compuation time,</span>
+<span class="sd">                &quot;success_prob&quot; list of success probability at each computation time</span>
+<span class="sd">                &quot;tts&quot;: list of time to solusion at each computation time</span>
+<span class="sd">                &quot;residual_energy&quot;: list of residual energy at each computation time</span>
+<span class="sd">                &quot;se_lower_tts&quot;: list of tts&#39;s lower standard error at each computation time</span>
+<span class="sd">                &quot;se_upper_tts&quot;: list of tts&#39;s upper standard error at each computation time</span>
+<span class="sd">                &quot;se_success_prob&quot;: list of success probability&#39;s standard error at each computation time</span>
+<span class="sd">                &quot;se_residual_energy&quot;: list of residual_energy&#39;s standard error at each computation time</span>
+<span class="sd">                &quot;info&quot; (dict): Parameter information for the benchmark</span>
+<span class="sd">            }</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">measure_with_energy</span><span class="p">:</span>
@@ -267,8 +266,9 @@
 <span class="sd">        response (openjij.Response): response from solver (or sampler).</span>
 <span class="sd">        ref_energy (float): the reference energy (usually use the ground energy)</span>
 <span class="sd">    Returns:</span>
-<span class="sd">        float: Residual energy which is defined as :math:`\\langle E \\rangle - E_0` (:math:`\\langle...\\rangle` represents average, :math:`E_0` is the reference energy (usually use the ground energy)).</span>
-
+<span class="sd">        float: Residual energy which is defined as follow</span>
+<span class="sd">               &lt;E&gt; - E_0</span>
+<span class="sd">               (&lt;...&gt; represents average, E_0 is the reference energy (usually use the ground energy)).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">energies</span><span class="p">)</span> <span class="o">-</span> <span class="n">ref_energy</span></div>
 
@@ -291,10 +291,8 @@
 <span class="sd">        solutions (list[int]): true solutions.</span>
 <span class="sd">    Returns:</span>
 <span class="sd">        float: Success probability.</span>
-
-<span class="sd">        * When measure_with_energy is False, success is defined as getting the same state as solutions.</span>
-<span class="sd">        * When measure_with_energy is True, success is defined as getting a state which energy is below reference energy</span>
-
+<span class="sd">              When measure_with_energy is False, success is defined as getting the same state as solutions.</span>
+<span class="sd">              When measure_with_energy is True, success is defined as getting a state which energy is below reference energy</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="n">measure_with_energy</span><span class="p">:</span>
@@ -324,10 +322,8 @@
 <span class="sd">        solutions (list[int]): true solutions.</span>
 <span class="sd">    Returns:</span>
 <span class="sd">        float: Success probability&#39;s standard error.</span>
-
-<span class="sd">        * When measure_with_energy is False, success is defined as getting the same state as solutions.</span>
-<span class="sd">        * When measure_with_energy is True, success is defined as getting a state which energy is below reference energy</span>
-
+<span class="sd">              When measure_with_energy is False, success is defined as getting the same state as solutions.</span>
+<span class="sd">              When measure_with_energy is True, success is defined as getting a state which energy is below reference energy</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="n">measure_with_energy</span><span class="p">:</span>
@@ -356,8 +352,8 @@
 <span class="sd">        success_prob (float): success probability.</span>
 <span class="sd">        computation_time (float):</span>
 <span class="sd">        p_r (float): thereshold probability to calculate time to solution.</span>
-<span class="sd">    Returns:</span>
-<span class="sd">        float: time to solution :math:`\\tau * \\log(1-pr)/\\log(1-ps)` which pr is thereshold probability, ps is success probability and :math:`tau` is computation time.</span>
+<span class="sd">    Returens:</span>
+<span class="sd">        float: time to solution `tau * log(1-pr)/log(1-ps)` which pr is thereshold probability, ps is success probability and tau is computation time.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="n">success_prob</span> <span class="o">==</span> <span class="mf">1.0</span><span class="p">:</span>
@@ -376,8 +372,8 @@
 <span class="sd">        success_prob (float): success probability.</span>
 <span class="sd">        computation_time (float):</span>
 <span class="sd">        p_r (float): thereshold probability to calculate time to solution.</span>
-<span class="sd">    Returns:</span>
-<span class="sd">        float: time to solution :math:`\\tau * \\log(1-pr)/\\log(1-ps)` &#39;s standard error which pr is thereshold probability, ps is success probability and :math:`tau` is computation time.</span>
+<span class="sd">    Returens:</span>
+<span class="sd">        float: time to solution `tau * log(1-pr)/log(1-ps)` &#39;s standard error which pr is thereshold probability, ps is success probability and tau is computation time.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="n">success_prob</span> <span class="o">+</span> <span class="n">se_success_prob</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mf">0.0</span><span class="p">:</span>
@@ -400,7 +396,7 @@
 <span class="sd">        computation_time (float):</span>
 <span class="sd">        p_r (float): thereshold probability to calculate time to solution.</span>
 <span class="sd">    Returens:</span>
-<span class="sd">        float: time to solution :math:`\\tau * \\log(1-pr)/\\log(1-ps)` &#39;s standard error which pr is thereshold probability, ps is success probability and :math:`tau` is computation time.</span>
+<span class="sd">        float: time to solution `tau * log(1-pr)/log(1-ps)` &#39;s standard error which pr is thereshold probability, ps is success probability and tau is computation time.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="n">success_prob</span> <span class="o">==</span> <span class="mf">1.0</span><span class="p">:</span>

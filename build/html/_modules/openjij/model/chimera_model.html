@@ -176,8 +176,10 @@
 
 
 <div class="viewcode-block" id="make_ChimeraModel"><a class="viewcode-back" href="../../../apis/openjij.model.html#openjij.model.chimera_model.make_ChimeraModel">[docs]</a><span class="k">def</span> <span class="nf">make_ChimeraModel</span><span class="p">(</span><span class="n">linear</span><span class="p">,</span> <span class="n">quadratic</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;ChimeraModel factory.</span>
-
+    <span class="sd">&quot;&quot;&quot; ChimeraModel factory</span>
+<span class="sd">    Args:</span>
+<span class="sd">        linear (dict): linear biases</span>
+<span class="sd">        quadratic (dict): quadratic biases</span>
 <span class="sd">    Returns:</span>
 <span class="sd">        generated ChimeraModel class</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -186,7 +188,7 @@
 <span class="sd">        This model deal with chimera graph.</span>
 <span class="sd">        ChimeraModel provide methods to verify whether a given interaction graph matches a Chimera graph and to convert it to cxxjij.graph.Chimera.</span>
 <span class="sd">    </span>
-<span class="sd">        Examples::</span>
+<span class="sd">        Examples:</span>
 <span class="sd">            # This interactions satisfy chimera topology.</span>
 <span class="sd">            &gt;&gt;&gt; Q={(0, 4): -1, (4, 12): -1}</span>
 <span class="sd">            &gt;&gt;&gt; chimera_model = ChimeraModel(Q, unit_num_L=2)  # make</span>
@@ -376,12 +378,6 @@
             <span class="k">return</span> <span class="n">chimera</span>
     
         <span class="k">def</span> <span class="nf">energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sample</span><span class="p">,</span> <span class="n">convert_sample</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-            <span class="sd">&quot;&quot;&quot;calc energy of the BinaryQuadraticModel.</span>
-
-<span class="sd">            Args:</span>
-<span class="sd">                sample: samples</span>
-<span class="sd">                convert_sample: if true, the type of sample is automatically converted to self.vartype.</span>
-<span class="sd">            &quot;&quot;&quot;</span>
             <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="n">sample</span><span class="p">,</span> <span class="n">sparse</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">convert_sample</span><span class="o">=</span><span class="n">convert_sample</span><span class="p">)</span>
     
         <span class="k">def</span> <span class="nf">energies</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">samples_like</span><span class="p">,</span> <span class="n">convert_sample</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
@@ -424,10 +420,11 @@
     <span class="k">return</span> <span class="n">ChimeraModel</span></div>
 
 <div class="viewcode-block" id="make_ChimeraModel_from_JSON"><a class="viewcode-back" href="../../../apis/openjij.model.html#openjij.model.chimera_model.make_ChimeraModel_from_JSON">[docs]</a><span class="k">def</span> <span class="nf">make_ChimeraModel_from_JSON</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;make ChimeraModel from JSON.</span>
-
+    <span class="sd">&quot;&quot;&quot; ChimeraModel factory for JSON</span>
+<span class="sd">    Args:</span>
+<span class="sd">        obj (dict): JSON object</span>
 <span class="sd">    Returns:</span>
-<span class="sd">        corresponding ChimeraModel type</span>
+<span class="sd">        generated ChimeraModel class</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">label</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s1">&#39;variable_labels&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
@@ -438,34 +435,10 @@
 
     <span class="k">return</span> <span class="n">make_ChimeraModel</span><span class="p">(</span><span class="n">mock_linear</span><span class="p">,</span> <span class="p">{})</span></div>
 
-<div class="viewcode-block" id="ChimeraModel"><a class="viewcode-back" href="../../../apis/openjij.model.html#openjij.model.chimera_model.ChimeraModel">[docs]</a><span class="k">def</span> <span class="nf">ChimeraModel</span><span class="p">(</span><span class="n">linear</span><span class="p">:</span> <span class="nb">dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">quadratic</span><span class="p">:</span> <span class="nb">dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">offset</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">var_type</span><span class="o">=</span><span class="n">openjij</span><span class="o">.</span><span class="n">SPIN</span><span class="p">,</span>
-        <span class="n">unit_num_L</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">gpu</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;generate ChimeraModel object.</span>
-<span class="sd">    This model deal with chimera graph.</span>
-<span class="sd">    ChimeraModel provide methods to verify whether a given interaction graph matches a Chimera graph and to convert it to cxxjij.graph.Chimera.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        linear (dict): linear biases</span>
-<span class="sd">        quadratic (dict): quadratic biases</span>
-<span class="sd">        offset (float): offset</span>
-<span class="sd">        var_type: vartype (&#39;SPIN&#39; or &#39;BINARY&#39;)</span>
-<span class="sd">        unit_num_L (int): unit_num_L</span>
-<span class="sd">        model (BinaryQuadraticModel): if model is not None, the object is initialized by model.</span>
-<span class="sd">        gpu (bool): if true, this can be used for gpu samplers.</span>
-<span class="sd">    Returns:</span>
-<span class="sd">        generated ChimeraModel</span>
-
-<span class="sd">    Examples:</span>
-<span class="sd">        Example shows how to initialize ChimeraModel.::</span>
-<span class="sd">        </span>
-<span class="sd">            # This interactions satisfy chimera topology.</span>
-<span class="sd">            &gt;&gt;&gt; Q={(0, 4): -1, (4, 12): -1}</span>
-<span class="sd">            &gt;&gt;&gt; chimera_model = ChimeraModel(Q, unit_num_L=2)  # make</span>
-<span class="sd">            &gt;&gt;&gt; chimera_self.validate_chimera()</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="ChimeraModel"><a class="viewcode-back" href="../../../apis/openjij.model.html#openjij.model.chimera_model.ChimeraModel">[docs]</a><span class="k">def</span> <span class="nf">ChimeraModel</span><span class="p">(</span><span class="n">linear</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">quadratic</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                     <span class="n">offset</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">var_type</span><span class="o">=</span><span class="n">openjij</span><span class="o">.</span><span class="n">SPIN</span><span class="p">,</span>
+                     <span class="n">unit_num_L</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                     <span class="n">gpu</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 
     <span class="n">Model</span> <span class="o">=</span> <span class="n">make_ChimeraModel</span><span class="p">(</span><span class="n">linear</span><span class="p">,</span> <span class="n">quadratic</span><span class="p">)</span>
 
