@@ -91,7 +91,31 @@
 <li class="toctree-l1"><a class="reference internal" href="2-Install.html">Install</a></li>
 <li class="toctree-l1"><a class="reference internal" href="3-Minimum_sample.html">Minimum sample code</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Parameters customize</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#customize-annealing-schedule">Customize annealing schedule</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#customize-annealing-schedule">Customize annealing schedule</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#sasampler">SASampler</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#beta-min-float">beta_min (float)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#beta-max-float">beta_max (float)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#num-reads-int">num_reads (int)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#num-sweeps-int">num_sweeps (int)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#schedule-list">schedule (list)</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#sample-script-1">Sample script 1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sample-script-2">Sample script 2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sqasampler">SQASampler</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#beta-float">beta (float)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#gamma-float">Gamma (float)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#trotter-int">trotter (int)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id1">num_sweeps (int)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id2">num_reads (int)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#shcedule-list">shcedule (list)</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">Sample script 1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">Sample script 2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sample-script-3">Sample script 3</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="5-benchmark.html">Benchmark</a></li>
@@ -163,6 +187,37 @@
 <h1>Parameters customize<a class="headerlink" href="#parameters-customize" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="customize-annealing-schedule">
 <h2>Customize annealing schedule<a class="headerlink" href="#customize-annealing-schedule" title="Permalink to this headline">¶</a></h2>
+<p>In this page, let us show you how to set the parameters for annealing.</p>
+<div class="section" id="sasampler">
+<h3>SASampler<a class="headerlink" href="#sasampler" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">SASampler</span></code> has arguments as follows.</p>
+<div class="section" id="beta-min-float">
+<h4>beta_min (float)<a class="headerlink" href="#beta-min-float" title="Permalink to this headline">¶</a></h4>
+<p>The minimum value of inverse temperature. Default to None. This corresponds to the starting temperature for annealing.<br />If you do not specify anything, OpenJij will set the appropriate temperature automatically.</p>
+</div>
+<div class="section" id="beta-max-float">
+<h4>beta_max (float)<a class="headerlink" href="#beta-max-float" title="Permalink to this headline">¶</a></h4>
+<p>The maximum value of inverse temperature. Default to None. This corresponds to the ending temperature for annealing.<br />If you do not specify anything, OpenJij will set the appropriate temperature automatically.</p>
+</div>
+<div class="section" id="num-reads-int">
+<h4>num_reads (int)<a class="headerlink" href="#num-reads-int" title="Permalink to this headline">¶</a></h4>
+<p>The number of iteration of annealing. Default to 1. If num_reads is specified, response has numerical results for the number of num_reads.</p>
+</div>
+<div class="section" id="num-sweeps-int">
+<h4>num_sweeps (int)<a class="headerlink" href="#num-sweeps-int" title="Permalink to this headline">¶</a></h4>
+<p>The number of Monte-Carlo steps (hereafter we called MCsteps) during annealing. Default to 1000.</p>
+<blockquote>
+<div><p>-note- MCsteps means the number of times to flip all the spins in the system. e.g., the case of N spin system, during 1 MCstep, you will have to flip these spins N times.</p>
+</div></blockquote>
+</div>
+<div class="section" id="schedule-list">
+<h4>schedule (list)<a class="headerlink" href="#schedule-list" title="Permalink to this headline">¶</a></h4>
+<p>You can set the annealing schedule as you like. Default to None. If you want to calculate “alpha” MCsteps for a given inverse temperature “beta”, you can set it as [beta, alpha].</p>
+</div>
+</div>
+<div class="section" id="sample-script-1">
+<h3>Sample script 1<a class="headerlink" href="#sample-script-1" title="Permalink to this headline">¶</a></h3>
+<p>The following is an example of annealing with parameters <code class="docutils literal notranslate"><span class="pre">beta_min=0.1,</span> <span class="pre">beta_max=100,</span> <span class="pre">num_reads=1000,</span> <span class="pre">num_sweeps=100</span></code>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">openjij</span> <span class="k">as</span> <span class="nn">oj</span>
 
 <span class="n">n</span> <span class="o">=</span> <span class="mi">10</span>
@@ -171,17 +226,112 @@
     <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
         <span class="n">J</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
 
-<span class="c1"># customized annealing schedule</span>
-<span class="c1"># list of [beta, monte carlo steps in beta]</span>
-<span class="n">schedule</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
-    <span class="p">[</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span>
-    <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">10</span><span class="p">]</span>
-<span class="p">]</span>
+<span class="c1"># set parameters </span>
+<span class="n">bmin</span> <span class="o">=</span> <span class="mf">0.1</span>
+<span class="n">bmax</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">nreads</span> <span class="o">=</span> <span class="mi">1000</span>
+<span class="n">nsweeps</span> <span class="o">=</span> <span class="mi">100</span>
+
+<span class="n">sampler</span> <span class="o">=</span> <span class="n">SASampler</span><span class="p">()</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">sampler</span><span class="o">.</span><span class="n">sample_ising</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">J</span><span class="p">,</span> <span class="n">beta_min</span><span class="o">=</span><span class="n">bmin</span><span class="p">,</span> <span class="n">beta_max</span><span class="o">=</span><span class="n">bmax</span><span class="p">,</span> <span class="n">num_reads</span><span class="o">=</span><span class="n">nreads</span><span class="p">,</span> <span class="n">num_sweeps</span><span class="o">=</span><span class="n">nsweeps</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="sample-script-2">
+<h3>Sample script 2<a class="headerlink" href="#sample-script-2" title="Permalink to this headline">¶</a></h3>
+<p>Here, let me show you an example how to specify an annealing schedule for user. The following figure shows an image of annealing schedule.</p>
+<p><img alt="An example of SA schedule" src="_images/schedule.png" /></p>
+<p>At first, calculate 3 MCsteps with <code class="docutils literal notranslate"><span class="pre">beta=0.5</span></code>. Next, compute 5 MCsteps with <code class="docutils literal notranslate"><span class="pre">beta=5</span></code>. Finally, execute 6 MCsteps with <code class="docutils literal notranslate"><span class="pre">beta=10</span></code>.</p>
+<p>A example of script that does this is following.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">schedule</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">]]</span>
 
 <span class="n">sampler</span> <span class="o">=</span> <span class="n">SASampler</span><span class="p">()</span>
 <span class="n">response</span> <span class="o">=</span> <span class="n">sampler</span><span class="o">.</span><span class="n">sample_ising</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">J</span><span class="p">,</span> <span class="n">schedule</span><span class="o">=</span><span class="n">schedule</span><span class="p">)</span>
 </pre></div>
+</div>
+</div>
+<div class="section" id="sqasampler">
+<h3>SQASampler<a class="headerlink" href="#sqasampler" title="Permalink to this headline">¶</a></h3>
+<p>SQASampler considers the total Hamiltonian with the following quantum terms when the Hamiltonian of the problem you want to solve is $\hat{H}_p$,</p>
+<p>$
+\hat{H} = s\hat{H}<em>p + (1-s) \Gamma \sum</em>{i} \hat{\sigma}^x_i
+$</p>
+<p>and annealing is performed under the following statistical distribution,</p>
+<p>$
+P(\hat{H}) \propto e^{-\beta \hat{H}}
+$</p>
+<p><code class="docutils literal notranslate"><span class="pre">SQASampler</span></code> has arguments as follows.</p>
+<div class="section" id="beta-float">
+<h4>beta (float)<a class="headerlink" href="#beta-float" title="Permalink to this headline">¶</a></h4>
+<p>The inverse temperature. Default to 5.0.</p>
+</div>
+<div class="section" id="gamma-float">
+<h4>Gamma (float)<a class="headerlink" href="#gamma-float" title="Permalink to this headline">¶</a></h4>
+<p>The magnitude of the quantum term. Default to 1.0.</p>
+</div>
+<div class="section" id="trotter-int">
+<h4>trotter (int)<a class="headerlink" href="#trotter-int" title="Permalink to this headline">¶</a></h4>
+<p>The system Trotter decomposition number. Default to 4.</p>
+</div>
+<div class="section" id="id1">
+<h4>num_sweeps (int)<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h4>
+<p>The number of MCsteps required between changing the annealing schedule parameter <code class="docutils literal notranslate"><span class="pre">s</span></code> from 0 to 1. Default to 1000.</p>
+</div>
+<div class="section" id="id2">
+<h4>num_reads (int)<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h4>
+<p>The number of annealing iteration. Default to 1.</p>
+</div>
+<div class="section" id="shcedule-list">
+<h4>shcedule (list)<a class="headerlink" href="#shcedule-list" title="Permalink to this headline">¶</a></h4>
+<p>Set an annealing shcedule as you like. Default to None. For a given inverse temperature if you want to compute “alpha” MCsteps with the annealing schedule parameter “s”, you can set it as [s, alpha].<br />If you want to specify the inverse temperature “beta” and compute “alpha” MCsteps with the annealing schedule parameter “s”, you can specify it as [s, beta, alpha].</p>
+</div>
+</div>
+<div class="section" id="id3">
+<h3>Sample script 1<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<p>The following example shows an annealing computation with <code class="docutils literal notranslate"><span class="pre">beta=10,</span> <span class="pre">gamma=5,</span> <span class="pre">trotter=16,</span> <span class="pre">num_reads=1000,</span> <span class="pre">num_sweeps=100</span></code></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">openjij</span> <span class="k">as</span> <span class="nn">oj</span>
+
+<span class="n">n</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">h</span><span class="p">,</span> <span class="n">J</span> <span class="o">=</span> <span class="p">{},</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+        <span class="n">J</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+
+<span class="c1"># set parameters </span>
+<span class="n">beta</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">gamma</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">trotter</span> <span class="o">=</span> <span class="mi">16</span>
+<span class="n">nreads</span> <span class="o">=</span> <span class="mi">1000</span>
+<span class="n">nsweeps</span> <span class="o">=</span> <span class="mi">100</span>
+
+<span class="n">sampler</span> <span class="o">=</span> <span class="n">SQASampler</span><span class="p">()</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">sampler</span><span class="o">.</span><span class="n">sample_ising</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">J</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="n">beta</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="n">gamma</span><span class="p">,</span> <span class="n">trotter</span><span class="o">=</span><span class="n">trotter</span><span class="p">,</span> <span class="n">num_reads</span><span class="o">=</span><span class="n">nreads</span><span class="p">,</span> <span class="n">num_sweeps</span><span class="o">=</span><span class="n">nsweeps</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id4">
+<h3>Sample script 2<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<p>Here we introduce an example of a user-specified annealing schedule. The following figure shows an image of annealing schedule.</p>
+<p><img alt="An example of SQA schedule with constant beta" src="_images/schedule_sqa.png" /></p>
+<p>First, 5 MCsteps with <code class="docutils literal notranslate"><span class="pre">s=0.0</span></code>. Next, 10 MCsteps with <code class="docutils literal notranslate"><span class="pre">s=0.5</span></code>. Finally, 5 MCsteps with <code class="docutils literal notranslate"><span class="pre">s=1</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">schedule</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">]]</span>
+
+<span class="n">sampler</span> <span class="o">=</span> <span class="n">SQASampler</span><span class="p">()</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">sampler</span><span class="o">.</span><span class="n">sample_ising</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">J</span><span class="p">,</span> <span class="n">schedule</span><span class="o">=</span><span class="n">schedule</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="sample-script-3">
+<h3>Sample script 3<a class="headerlink" href="#sample-script-3" title="Permalink to this headline">¶</a></h3>
+<p>In this section, we show you an example of a user-defined annealing shcedule in more detail.</p>
+<p><img alt="An example of SQA schedule including beta" src="_images/schedule_sqa_2.png" /></p>
+<p>First, 5 MCsteps with <code class="docutils literal notranslate"><span class="pre">s=0.0,</span> <span class="pre">beta=0.5</span></code>. Next, 10 MCsteps with <code class="docutils literal notranslate"><span class="pre">s=0.5,</span> <span class="pre">beta=1.0</span></code>. Finally, 5 MCsteps with <code class="docutils literal notranslate"><span class="pre">s=1,</span> <span class="pre">beta=10</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">schedule</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">]]</span>
+
+<span class="n">sampler</span> <span class="o">=</span> <span class="n">SQASampler</span><span class="p">()</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">sampler</span><span class="o">.</span><span class="n">sample_ising</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">J</span><span class="p">,</span> <span class="n">schedule</span><span class="o">=</span><span class="n">schedule</span><span class="p">)</span>
+</pre></div>
+</div>
 </div>
 </div>
 </div>
