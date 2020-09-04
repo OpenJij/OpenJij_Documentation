@@ -89,19 +89,19 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="1-Introduction.html">Introduction</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Install</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#cmake-setup">CMake setup</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#macos">macOS</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#linux-ubuntu">Linux (Ubuntu)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pip">pip</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pip-without-binary">pip (without binary)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#cmake-setup">CMake setup</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#macos">macOS</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#linux-ubuntu">Linux (Ubuntu)</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#id1">Install</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#pip">pip</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#from-github">from Github</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id1">Install</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#from-github">from Github</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#note">Note</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#windows-enviroment">Windows enviroment</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#gpu-cuda">GPU (CUDA)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#report-an-installation-problem">Report an installation problem</a></li>
 </ul>
 </li>
@@ -109,8 +109,8 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="3-Minimum_sample.html">Minimum sample code</a></li>
 <li class="toctree-l1"><a class="reference internal" href="4-Parameters_customize.html">Parameters customize</a></li>
-<li class="toctree-l1"><a class="reference internal" href="5-benchmark.html">Benchmark</a></li>
-<li class="toctree-l1"><a class="reference internal" href="6-HigherOrderModel.html">Higher order model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="5-HigherOrderModel.html">Higher order model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="6-OpenJijTutorial.html">OpenJij Tutorial</a></li>
 </ul>
 
             
@@ -176,11 +176,20 @@
             
   <div class="section" id="install">
 <h1>Install<a class="headerlink" href="#install" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="pip">
+<h2>pip<a class="headerlink" href="#pip" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ pip install openjij
+</pre></div>
+</div>
+<p>For installation with GPU functions, see the topic below.</p>
+</div>
+<div class="section" id="pip-without-binary">
+<h2>pip (without binary)<a class="headerlink" href="#pip-without-binary" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="cmake-setup">
-<h2>CMake setup<a class="headerlink" href="#cmake-setup" title="Permalink to this headline">¶</a></h2>
+<h3>CMake setup<a class="headerlink" href="#cmake-setup" title="Permalink to this headline">¶</a></h3>
 <p>OpenJij needs cmake &gt;= 3.12.2</p>
 <div class="section" id="macos">
-<h3>macOS<a class="headerlink" href="#macos" title="Permalink to this headline">¶</a></h3>
+<h4>macOS<a class="headerlink" href="#macos" title="Permalink to this headline">¶</a></h4>
 <p>Install newest CMake</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ brew install cmake
 or
@@ -189,7 +198,7 @@ $ pip install cmake
 </div>
 </div>
 <div class="section" id="linux-ubuntu">
-<h3>Linux (Ubuntu)<a class="headerlink" href="#linux-ubuntu" title="Permalink to this headline">¶</a></h3>
+<h4>Linux (Ubuntu)<a class="headerlink" href="#linux-ubuntu" title="Permalink to this headline">¶</a></h4>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># if you installed old version by apt-get</span>
 $ apt-get purge cmake
 
@@ -203,20 +212,19 @@ $ ./bootstrap <span class="o">&amp;&amp;</span> make <span class="o">&amp;&amp;<
 </div>
 </div>
 <div class="section" id="id1">
-<h2>Install<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="pip">
-<h3>pip<a class="headerlink" href="#pip" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ pip install openjij
+<h3>Install<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ pip install openjij --no-binary :all: 
 </pre></div>
+</div>
+<p>If a CUDA compiler is found during installation, OpenJij will automatically compile for the GPU.</p>
 </div>
 </div>
 <div class="section" id="from-github">
-<h3>from Github<a class="headerlink" href="#from-github" title="Permalink to this headline">¶</a></h3>
+<h2>from Github<a class="headerlink" href="#from-github" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ git clone git@github.com:OpenJij/OpenJij.git
 $ <span class="nb">cd</span> openjij
 $ python setup.py install
 </pre></div>
-</div>
 </div>
 </div>
 <div class="section" id="note">
@@ -225,11 +233,6 @@ $ python setup.py install
 <h3>Windows enviroment<a class="headerlink" href="#windows-enviroment" title="Permalink to this headline">¶</a></h3>
 <p>It has been reported that the installation of OpenJij may fail on Windows.
 We recommend using Linux through WSL.</p>
-</div>
-<div class="section" id="gpu-cuda">
-<h3>GPU (CUDA)<a class="headerlink" href="#gpu-cuda" title="Permalink to this headline">¶</a></h3>
-<p>If a CUDA compiler is found during installation, OpenJij will automatically compile for the GPU.
-Compiling for GPU is planned to be optional, but it is not yet implemented (2019/11).</p>
 </div>
 <div class="section" id="report-an-installation-problem">
 <h3>Report an installation problem<a class="headerlink" href="#report-an-installation-problem" title="Permalink to this headline">¶</a></h3>

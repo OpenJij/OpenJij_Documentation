@@ -1,10 +1,20 @@
 # Install
 
-## CMake setup
+## pip
+
+```shell
+$ pip install openjij
+```
+
+For installation with GPU functions, see the topic below.
+
+## pip (without binary)
+
+### CMake setup
 
 OpenJij needs cmake >= 3.12.2
 
-### macOS
+#### macOS
 Install newest CMake
 ```shell
 $ brew install cmake
@@ -12,7 +22,7 @@ or
 $ pip install cmake
 ```
 
-### Linux (Ubuntu)
+#### Linux (Ubuntu)
 
 ```shell
 # if you installed old version by apt-get
@@ -25,15 +35,16 @@ $ cd cmake-3.13.2
 $ ./bootstrap && make && sudo make install 
 ```
 
-## Install
-
-### pip
+### Install
 
 ```shell
-$ pip install openjij
+$ pip install openjij --no-binary :all: 
 ```
 
-### from Github
+If a CUDA compiler is found during installation, OpenJij will automatically compile for the GPU.
+
+
+## from Github
 
 ```shell
 $ git clone git@github.com:OpenJij/OpenJij.git
@@ -46,11 +57,6 @@ $ python setup.py install
 ### Windows enviroment
 It has been reported that the installation of OpenJij may fail on Windows.
 We recommend using Linux through WSL.
-
-### GPU (CUDA)
-
-If a CUDA compiler is found during installation, OpenJij will automatically compile for the GPU.
-Compiling for GPU is planned to be optional, but it is not yet implemented (2019/11).
 
 
 ### Report an installation problem

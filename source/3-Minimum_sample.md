@@ -18,11 +18,14 @@ sampler = oj.SASampler()
 response = sampler.sample_ising(h, J, num_reads=100)
 
 # minimum energy state
-response.min_samples['states']
-# array([[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
-#       [ 1,  1,  1,  1,  1,  1,  1,  1,  1,  1]])
+print(response.first.sample)
+
+# {0: -1, 1: -1, 2: -1, 3: -1, 4: -1, 5: -1, 6: -1, 7: -1, 8: -1, 9: -1}
+# or
+# {0: 1, 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1}
 
 # indices (labels) of state (spins)
-response.indices
+print(response.indices)
+
 # [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 ```

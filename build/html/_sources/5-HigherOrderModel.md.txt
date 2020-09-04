@@ -24,7 +24,7 @@ K = {(0, 1, 2): 1}
 
 response = sampler.sample_hubo([h, J, K], var_type="SPIN")
 response.states[0]
-> [1, 1, -1]
+# {0: 1, 1: 1, 2: -1}
 ```
 
 ## Note
