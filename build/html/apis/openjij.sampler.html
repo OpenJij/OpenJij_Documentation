@@ -115,8 +115,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../2-Install.html">Install</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../3-Minimum_sample.html">Minimum sample code</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../4-Parameters_customize.html">Parameters customize</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../5-benchmark.html">Benchmark</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../6-HigherOrderModel.html">Higher order model</a></li>
 </ul>
 
             
@@ -410,7 +408,7 @@ implement default like this:</p>
 </dl>
 <dl class="py method">
 <dt id="openjij.sampler.csqa_sampler.CSQASampler.sample_ising">
-<code class="sig-name descname">sample_ising</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">h</span></em>, <em class="sig-param"><span class="n">J</span></em>, <em class="sig-param"><span class="n">beta</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">gamma</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">num_sweeps</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">schedule</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">num_reads</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">initial_state</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">updater</span><span class="o">=</span><span class="default_value">'swendsenwang'</span></em>, <em class="sig-param"><span class="n">reinitialize_state</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">seed</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/sampler/csqa_sampler.html#CSQASampler.sample_ising"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#openjij.sampler.csqa_sampler.CSQASampler.sample_ising" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">sample_ising</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">h</span></em>, <em class="sig-param"><span class="n">J</span></em>, <em class="sig-param"><span class="n">beta</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">gamma</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">num_sweeps</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">schedule</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">num_reads</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">initial_state</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">updater</span><span class="o">=</span><span class="default_value">'swendsenwang'</span></em>, <em class="sig-param"><span class="n">reinitialize_state</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">seed</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/sampler/csqa_sampler.html#CSQASampler.sample_ising"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#openjij.sampler.csqa_sampler.CSQASampler.sample_ising" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sampling from the Ising model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -429,7 +427,6 @@ implement default like this:</p>
 <li><p><strong>structure</strong> (<em>int</em><em>, </em><em>optional</em>) – specify the structure.</p></li>
 <li><p><strong>argument is necessary if the model has a specific structure</strong> (<em>This</em>) – </p></li>
 <li><p><strong>must have two types of keys</strong><strong>, </strong><strong>namely &quot;size&quot; which shows the total size of spins and &quot;dict&quot; which is the map from model index</strong> (<em>structure</em>) – </p></li>
-<li><p><strong>kwargs</strong> – </p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -502,23 +499,13 @@ implement default like this:</p>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="openjij.sampler.response.Response.min_sampels">
-<em class="property">property </em><code class="sig-name descname">min_sampels</code><a class="headerlink" href="#openjij.sampler.response.Response.min_sampels" title="Permalink to this definition">¶</a></dt>
+<dt id="openjij.sampler.response.Response.min_samples">
+<em class="property">property </em><code class="sig-name descname">min_samples</code><a class="headerlink" href="#openjij.sampler.response.Response.min_samples" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt id="openjij.sampler.response.Response.states">
 <em class="property">property </em><code class="sig-name descname">states</code><a class="headerlink" href="#openjij.sampler.response.Response.states" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="openjij.sampler.response.Response.update_ising_states_energies">
-<code class="sig-name descname">update_ising_states_energies</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">states</span></em>, <em class="sig-param"><span class="n">energies</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/sampler/response.html#Response.update_ising_states_energies"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#openjij.sampler.response.Response.update_ising_states_energies" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt id="openjij.sampler.response.Response.update_trotter_ising_states_energies">
-<code class="sig-name descname">update_trotter_ising_states_energies</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">trotter_states</span></em>, <em class="sig-param"><span class="n">q_energies</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/sampler/response.html#Response.update_trotter_ising_states_energies"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#openjij.sampler.response.Response.update_trotter_ising_states_energies" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -611,7 +598,7 @@ for k, v in iterable:</p>
 
 <dl class="py method">
 <dt id="openjij.sampler.sa_sampler.SASampler.sample_ising">
-<code class="sig-name descname">sample_ising</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">h</span></em>, <em class="sig-param"><span class="n">J</span></em>, <em class="sig-param"><span class="n">beta_min</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">beta_max</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">num_sweeps</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">num_reads</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">schedule</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">initial_state</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">updater</span><span class="o">=</span><span class="default_value">'single spin flip'</span></em>, <em class="sig-param"><span class="n">reinitialize_state</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">seed</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/sampler/sa_sampler.html#SASampler.sample_ising"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#openjij.sampler.sa_sampler.SASampler.sample_ising" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">sample_ising</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">h</span></em>, <em class="sig-param"><span class="n">J</span></em>, <em class="sig-param"><span class="n">beta_min</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">beta_max</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">num_sweeps</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">num_reads</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">schedule</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">initial_state</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">updater</span><span class="o">=</span><span class="default_value">'single spin flip'</span></em>, <em class="sig-param"><span class="n">reinitialize_state</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">seed</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/sampler/sa_sampler.html#SASampler.sample_ising"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#openjij.sampler.sa_sampler.SASampler.sample_ising" title="Permalink to this definition">¶</a></dt>
 <dd><p>sample Ising model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -627,7 +614,6 @@ for k, v in iterable:</p>
 <li><p><strong>updater</strong> (<em>str</em>) – updater algorithm</p></li>
 <li><p><strong>reinitialize_state</strong> (<em>bool</em>) – if true reinitialize state for each run</p></li>
 <li><p><strong>seed</strong> (<em>int</em>) – seed for Monte Carlo algorithm</p></li>
-<li><p><strong>kwargs</strong> – </p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -699,7 +685,7 @@ for k, v in iterable:</p>
 <dd><p>Sample from a binary quadratic model.
 :param bqm: Binary Qudratic Model
 :type bqm: openjij.BinaryQuadraticModel
-:param **kwargs: See the implemented sampling for additional keyword definitions.</p>
+:param **parameters: See the implemented sampling for additional keyword definitions.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>results</p>
@@ -815,7 +801,7 @@ for k, v in iterable:</p>
 
 <dl class="py method">
 <dt id="openjij.sampler.sqa_sampler.SQASampler.sample_ising">
-<code class="sig-name descname">sample_ising</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">h</span></em>, <em class="sig-param"><span class="n">J</span></em>, <em class="sig-param"><span class="n">beta</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">gamma</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">num_sweeps</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">schedule</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">num_reads</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">initial_state</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">updater</span><span class="o">=</span><span class="default_value">'single spin flip'</span></em>, <em class="sig-param"><span class="n">reinitialize_state</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">seed</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">structure</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/sampler/sqa_sampler.html#SQASampler.sample_ising"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#openjij.sampler.sqa_sampler.SQASampler.sample_ising" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">sample_ising</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">h</span></em>, <em class="sig-param"><span class="n">J</span></em>, <em class="sig-param"><span class="n">beta</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">gamma</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">num_sweeps</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">schedule</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">trotter</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">num_reads</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">initial_state</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">updater</span><span class="o">=</span><span class="default_value">'single spin flip'</span></em>, <em class="sig-param"><span class="n">reinitialize_state</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">seed</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">structure</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/sampler/sqa_sampler.html#SQASampler.sample_ising"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#openjij.sampler.sqa_sampler.SQASampler.sample_ising" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sampling from the Ising model</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -826,6 +812,7 @@ for k, v in iterable:</p>
 <li><p><strong>gamma</strong> (<em>float</em><em>, </em><em>optional</em>) – strangth of transverse field. Defaults to None.</p></li>
 <li><p><strong>num_sweeps</strong> (<em>int</em><em>, </em><em>optional</em>) – number of sweeps. Defaults to None.</p></li>
 <li><p><strong>schedule</strong> (<em>list</em><em>[</em><em>list</em><em>[</em><em>float</em><em>, </em><em>int</em><em>]</em><em>]</em><em>, </em><em>optional</em>) – List of annealing parameter. Defaults to None.</p></li>
+<li><p><strong>trotter</strong> (<em>int</em>) – Trotter number.</p></li>
 <li><p><strong>num_reads</strong> (<em>int</em><em>, </em><em>optional</em>) – number of sampling. Defaults to 1.</p></li>
 <li><p><strong>initial_state</strong> (<em>list</em><em>[</em><em>int</em><em>]</em><em>, </em><em>optional</em>) – Initial state. Defaults to None.</p></li>
 <li><p><strong>updater</strong> (<em>str</em><em>, </em><em>optional</em>) – update method. Defaults to ‘single spin flip’.</p></li>
@@ -868,6 +855,25 @@ for k, v in iterable:</p>
 <dt id="openjij.sampler.sqa_sampler.linear_ising_schedule">
 <code class="sig-prename descclassname">openjij.sampler.sqa_sampler.</code><code class="sig-name descname">linear_ising_schedule</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model</span></em>, <em class="sig-param"><span class="n">beta</span></em>, <em class="sig-param"><span class="n">gamma</span></em>, <em class="sig-param"><span class="n">num_sweeps</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/sampler/sqa_sampler.html#linear_ising_schedule"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#openjij.sampler.sqa_sampler.linear_ising_schedule" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate linear ising schedule.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model</strong> (<a class="reference internal" href="openjij.model.html#openjij.model.model.BinaryQuadraticModel" title="openjij.model.model.BinaryQuadraticModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">openjij.model.model.BinaryQuadraticModel</span></code></a>) – BinaryQuadraticModel</p></li>
+<li><p><strong>beta</strong> (<em>float</em>) – inverse temperature</p></li>
+<li><p><strong>gamma</strong> (<em>float</em>) – transverse field</p></li>
+<li><p><strong>num_sweeps</strong> (<em>int</em>) – number of steps</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>generated schedule</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="openjij.sampler.sqa_sampler.quartic_ising_schedule">
+<code class="sig-prename descclassname">openjij.sampler.sqa_sampler.</code><code class="sig-name descname">quartic_ising_schedule</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model</span></em>, <em class="sig-param"><span class="n">beta</span></em>, <em class="sig-param"><span class="n">gamma</span></em>, <em class="sig-param"><span class="n">num_sweeps</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/sampler/sqa_sampler.html#quartic_ising_schedule"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#openjij.sampler.sqa_sampler.quartic_ising_schedule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate quartic ising schedule based on S. Morita and H. Nishimori, Journal of Mathematical Physics 49, 125210 (2008).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">

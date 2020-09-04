@@ -20,6 +20,7 @@ schedule = [
     [0.5, 10]
 ]
 
-sampler = SASampler()
+sampler = oj.SASampler()
 response = sampler.sample_ising(h, J, schedule=schedule)
+print(response)
 ```

@@ -34,7 +34,6 @@
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
     <link rel="top" title="OpenJij  documentation" href="index.html"/>
-        <link rel="next" title="Benchmark" href="5-benchmark.html"/>
         <link rel="prev" title="Minimum sample code" href="3-Minimum_sample.html"/> 
 
   
@@ -94,8 +93,6 @@
 <li class="toctree-l2"><a class="reference internal" href="#customize-annealing-schedule">Customize annealing schedule</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="5-benchmark.html">Benchmark</a></li>
-<li class="toctree-l1"><a class="reference internal" href="6-HigherOrderModel.html">Higher order model</a></li>
 </ul>
 
             
@@ -179,8 +176,9 @@
     <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">10</span><span class="p">]</span>
 <span class="p">]</span>
 
-<span class="n">sampler</span> <span class="o">=</span> <span class="n">SASampler</span><span class="p">()</span>
+<span class="n">sampler</span> <span class="o">=</span> <span class="n">oj</span><span class="o">.</span><span class="n">SASampler</span><span class="p">()</span>
 <span class="n">response</span> <span class="o">=</span> <span class="n">sampler</span><span class="o">.</span><span class="n">sample_ising</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">J</span><span class="p">,</span> <span class="n">schedule</span><span class="o">=</span><span class="n">schedule</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -192,8 +190,6 @@
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="5-benchmark.html" class="btn btn-neutral float-right" title="Benchmark" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="3-Minimum_sample.html" class="btn btn-neutral" title="Minimum sample code" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>

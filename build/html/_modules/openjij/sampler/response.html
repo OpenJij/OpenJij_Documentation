@@ -90,8 +90,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../2-Install.html">Install</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../3-Minimum_sample.html">Minimum sample code</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../4-Parameters_customize.html">Parameters customize</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../5-benchmark.html">Benchmark</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../6-HigherOrderModel.html">Higher order model</a></li>
 </ul>
 
             
@@ -193,14 +191,9 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="o">.</span><span class="n">energy</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">min_sampels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">record</span><span class="o">.</span><span class="n">first</span>
+    <span class="k">def</span> <span class="nf">min_samples</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">first</span><span class="o">.</span><span class="n">sample</span></div>
 
-<div class="viewcode-block" id="Response.update_trotter_ising_states_energies"><a class="viewcode-back" href="../../../apis/openjij.sampler.html#openjij.sampler.response.Response.update_trotter_ising_states_energies">[docs]</a>    <span class="k">def</span> <span class="nf">update_trotter_ising_states_energies</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trotter_states</span><span class="p">,</span> <span class="n">q_energies</span><span class="p">):</span>
-        <span class="k">pass</span></div>
-
-<div class="viewcode-block" id="Response.update_ising_states_energies"><a class="viewcode-back" href="../../../apis/openjij.sampler.html#openjij.sampler.response.Response.update_ising_states_energies">[docs]</a>    <span class="k">def</span> <span class="nf">update_ising_states_energies</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">states</span><span class="p">,</span> <span class="n">energies</span><span class="p">):</span>
-        <span class="k">pass</span></div></div>
 </pre></div>
 
            </div>

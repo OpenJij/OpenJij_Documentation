@@ -97,8 +97,6 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="4-Parameters_customize.html">Parameters customize</a></li>
-<li class="toctree-l1"><a class="reference internal" href="5-benchmark.html">Benchmark</a></li>
-<li class="toctree-l1"><a class="reference internal" href="6-HigherOrderModel.html">Higher order model</a></li>
 </ul>
 
             
@@ -181,12 +179,15 @@
 <span class="n">response</span> <span class="o">=</span> <span class="n">sampler</span><span class="o">.</span><span class="n">sample_ising</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">J</span><span class="p">,</span> <span class="n">num_reads</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 
 <span class="c1"># minimum energy state</span>
-<span class="n">response</span><span class="o">.</span><span class="n">min_samples</span><span class="p">[</span><span class="s1">&#39;states&#39;</span><span class="p">]</span>
-<span class="c1"># array([[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],</span>
-<span class="c1">#       [ 1,  1,  1,  1,  1,  1,  1,  1,  1,  1]])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">first</span><span class="o">.</span><span class="n">sample</span><span class="p">)</span>
+
+<span class="c1"># {0: -1, 1: -1, 2: -1, 3: -1, 4: -1, 5: -1, 6: -1, 7: -1, 8: -1, 9: -1}</span>
+<span class="c1"># or</span>
+<span class="c1"># {0: 1, 1: 1, 2: 1, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 1, 9: 1}</span>
 
 <span class="c1"># indices (labels) of state (spins)</span>
-<span class="n">response</span><span class="o">.</span><span class="n">indices</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">indices</span><span class="p">)</span>
+
 <span class="c1"># [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]</span>
 </pre></div>
 </div>

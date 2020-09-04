@@ -90,8 +90,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../2-Install.html">Install</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../3-Minimum_sample.html">Minimum sample code</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../4-Parameters_customize.html">Parameters customize</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../5-benchmark.html">Benchmark</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../6-HigherOrderModel.html">Higher order model</a></li>
 </ul>
 
             
@@ -207,11 +205,11 @@
                  <span class="n">beta_min</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">beta_max</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">num_sweeps</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">schedule</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">num_reads</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">unit_num_L</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+                 <span class="p">):</span>
 
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">beta_min</span><span class="o">=</span><span class="n">beta_min</span><span class="p">,</span> <span class="n">beta_max</span><span class="o">=</span><span class="n">beta_max</span><span class="p">,</span> 
                          <span class="n">num_reads</span><span class="o">=</span><span class="n">num_reads</span><span class="p">,</span> <span class="n">num_sweeps</span><span class="o">=</span><span class="n">num_sweeps</span><span class="p">,</span> 
-                         <span class="n">schedule</span><span class="o">=</span><span class="n">schedule</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                         <span class="n">schedule</span><span class="o">=</span><span class="n">schedule</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">unit_num_L</span> <span class="o">=</span> <span class="n">unit_num_L</span>
 
@@ -226,7 +224,7 @@
                      <span class="n">num_sweeps</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">num_reads</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">schedule</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                      <span class="n">initial_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">updater</span><span class="o">=</span><span class="s1">&#39;single spin flip&#39;</span><span class="p">,</span>
                      <span class="n">reinitialize_state</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">unit_num_L</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                     <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+                     <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;sample with Ising model.</span>
 
 <span class="sd">        Args:</span>
@@ -242,7 +240,6 @@
 <span class="sd">            reinitialize_state (bool): if true reinitialize state for each run</span>
 <span class="sd">            seed (int): seed for Monte Carlo algorithm</span>
 <span class="sd">            unit_num_L (int): number of chimera units</span>
-<span class="sd">            kwargs:</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            :class:`openjij.sampler.response.Response`: results</span>
@@ -279,7 +276,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sampling</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">beta_min</span><span class="p">,</span> <span class="n">beta_max</span><span class="p">,</span>
                               <span class="n">num_sweeps</span><span class="p">,</span> <span class="n">num_reads</span><span class="p">,</span> <span class="n">schedule</span><span class="p">,</span>
                               <span class="n">initial_state</span><span class="p">,</span> <span class="n">updater</span><span class="p">,</span>
-                              <span class="n">reinitialize_state</span><span class="p">,</span> <span class="n">seed</span><span class="p">,</span> <span class="n">structure</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
+                              <span class="n">reinitialize_state</span><span class="p">,</span> <span class="n">seed</span><span class="p">,</span> <span class="n">structure</span><span class="p">)</span></div></div>
 
         
 
