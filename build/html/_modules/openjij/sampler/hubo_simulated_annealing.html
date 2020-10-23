@@ -273,8 +273,8 @@
     <span class="n">response</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;list_exec_times&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
         <span class="n">execution_time</span><span class="p">)</span> <span class="o">*</span> <span class="mi">10</span><span class="o">**</span><span class="mi">6</span>  <span class="c1"># micro sec</span>
 
-    <span class="n">response</span><span class="o">.</span><span class="n">update_ising_states_energies</span><span class="p">(</span>
-        <span class="n">response</span><span class="o">.</span><span class="n">states</span><span class="p">,</span> <span class="n">response</span><span class="o">.</span><span class="n">energies</span><span class="p">)</span>
+    <span class="c1">#response.update_ising_states_energies(</span>
+    <span class="c1">#    response.states, response.energies)</span>
 
     <span class="n">response</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;schedule&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">schedule_info</span>
     <span class="k">return</span> <span class="n">response</span></div>
