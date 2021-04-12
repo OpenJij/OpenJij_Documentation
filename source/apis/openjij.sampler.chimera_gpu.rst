@@ -28,7 +28,6 @@ openjij.sampler.chimera\_gpu.gpu\_sqa\_sampler module
    :undoc-members:
    :show-inheritance:
 
-
 Module contents
 ---------------
 

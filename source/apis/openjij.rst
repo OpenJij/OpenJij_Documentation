@@ -22,7 +22,6 @@ openjij.variable\_type module
    :undoc-members:
    :show-inheritance:
 
-
 Module contents
 ---------------
 

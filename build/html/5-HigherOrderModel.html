@@ -93,7 +93,6 @@
 <li class="toctree-l1"><a class="reference internal" href="4-Parameters_customize.html">Parameters customize</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Higher order model</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#sample-code">Sample code</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#note">Note</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="6-OpenJijTutorial.html">OpenJij Tutorial</a></li>
@@ -177,23 +176,21 @@
 <span class="n">sampler</span> <span class="o">=</span> <span class="n">oj</span><span class="o">.</span><span class="n">SASampler</span><span class="p">()</span>
 
 <span class="c1"># make HUBO</span>
-<span class="n">h</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">}</span>
-<span class="n">J</span> <span class="o">=</span> <span class="p">{(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span> <span class="o">-</span><span class="mi">1</span><span class="p">}</span>
-<span class="n">K</span> <span class="o">=</span> <span class="p">{(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span> <span class="mi">1</span><span class="p">}</span>
+<span class="n">J</span> <span class="o">=</span> <span class="p">{(</span><span class="mi">0</span><span class="p">,):</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">):</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">):</span> <span class="mi">1</span><span class="p">}</span>
 
-<span class="n">response</span> <span class="o">=</span> <span class="n">sampler</span><span class="o">.</span><span class="n">sample_hubo</span><span class="p">([</span><span class="n">h</span><span class="p">,</span> <span class="n">J</span><span class="p">,</span> <span class="n">K</span><span class="p">],</span> <span class="n">var_type</span><span class="o">=</span><span class="s2">&quot;SPIN&quot;</span><span class="p">)</span>
-<span class="n">response</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="c1"># {0: 1, 1: 1, 2: -1}</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">sampler</span><span class="o">.</span><span class="n">sample_hubo</span><span class="p">(</span><span class="n">J</span><span class="p">,</span> <span class="n">var_type</span><span class="o">=</span><span class="s2">&quot;SPIN&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+<span class="c1">#    0  1  2 energy num_oc.</span>
+<span class="c1"># 0 +1 +1 -1   -3.0       1</span>
+<span class="c1"># [&#39;SPIN&#39;, 1 rows, 1 samples, 3 variables]</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">sampler</span><span class="o">.</span><span class="n">sample_hubo</span><span class="p">(</span><span class="n">J</span><span class="p">,</span> <span class="n">var_type</span><span class="o">=</span><span class="s2">&quot;BINARY&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+<span class="c1">#    0  1  2 energy num_oc.</span>
+<span class="c1"># 0  1  1  0   -2.0       1</span>
+<span class="c1"># [&#39;BINARY&#39;, 1 rows, 1 samples, 3 variables]</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="note">
-<h2>Note<a class="headerlink" href="#note" title="Permalink to this headline">¶</a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">.sample_hubo</span></code></p>
-<ul class="simple">
-<li><p>The first argument (<code class="docutils literal notranslate"><span class="pre">interactions</span></code>) must be in ascending order.</p></li>
-<li><p>Need <code class="docutils literal notranslate"><span class="pre">var_type</span></code></p></li>
-</ul>
 </div>
 </div>
 
@@ -248,8 +245,7 @@
       <script type="text/javascript" src="_static/jquery.js"></script>
       <script type="text/javascript" src="_static/underscore.js"></script>
       <script type="text/javascript" src="_static/doctools.js"></script>
-      <script type="text/javascript" src="_static/language_data.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

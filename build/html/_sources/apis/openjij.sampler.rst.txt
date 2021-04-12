@@ -28,14 +28,6 @@ openjij.sampler.csqa\_sampler module
    :undoc-members:
    :show-inheritance:
 
-openjij.sampler.hubo\_simulated\_annealing module
--------------------------------------------------
-
-.. automodule:: openjij.sampler.hubo_simulated_annealing
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 openjij.sampler.response module
 -------------------------------
 
@@ -67,7 +59,6 @@ openjij.sampler.sqa\_sampler module
    :members:
    :undoc-members:
    :show-inheritance:
-
 
 Module contents
 ---------------

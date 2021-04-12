@@ -12,14 +12,6 @@ openjij.model.chimera\_model module
    :undoc-members:
    :show-inheritance:
 
-openjij.model.higher\_order\_model module
------------------------------------------
-
-.. automodule:: openjij.model.higher_order_model
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 openjij.model.king\_graph module
 --------------------------------
 
@@ -35,7 +27,6 @@ openjij.model.model module
    :members:
    :undoc-members:
    :show-inheritance:
-
 
 Module contents
 ---------------

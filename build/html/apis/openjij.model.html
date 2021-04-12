@@ -89,7 +89,6 @@
 <li class="toctree-l3 current"><a class="current reference internal" href="#">openjij.model package</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-openjij.model.chimera_model">openjij.model.chimera_model module</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#module-openjij.model.higher_order_model">openjij.model.higher_order_model module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-openjij.model.king_graph">openjij.model.king_graph module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-openjij.model.model">openjij.model.model module</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#module-openjij.model">Module contents</a></li>
@@ -187,7 +186,7 @@
 <span id="openjij-model-chimera-model-module"></span><h2>openjij.model.chimera_model module<a class="headerlink" href="#module-openjij.model.chimera_model" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
 <dt id="openjij.model.chimera_model.ChimeraModel">
-<code class="sig-prename descclassname">openjij.model.chimera_model.</code><code class="sig-name descname">ChimeraModel</code><span class="sig-paren">(</span><em class="sig-param">linear: dict = None</em>, <em class="sig-param">quadratic: dict = None</em>, <em class="sig-param">offset: float = 0.0</em>, <em class="sig-param">var_type=&lt;Vartype.SPIN: frozenset({1</em>, <em class="sig-param">-1})&gt;</em>, <em class="sig-param">unit_num_L: int = None</em>, <em class="sig-param">model=None</em>, <em class="sig-param">gpu: bool = False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/model/chimera_model.html#ChimeraModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#openjij.model.chimera_model.ChimeraModel" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">openjij.model.chimera_model.</span></code><code class="sig-name descname"><span class="pre">ChimeraModel</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">linear:</span> <span class="pre">Optional[dict]</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">quadratic:</span> <span class="pre">Optional[dict]</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">offset:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0.0</span></em>, <em class="sig-param"><span class="pre">var_type=&lt;Vartype.SPIN:</span> <span class="pre">frozenset({1</span></em>, <em class="sig-param"><span class="pre">-1})&gt;</span></em>, <em class="sig-param"><span class="pre">unit_num_L:</span> <span class="pre">Optional[int]</span> <span class="pre">=</span> <span class="pre">None</span></em>, <em class="sig-param"><span class="pre">model=None</span></em>, <em class="sig-param"><span class="pre">gpu:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/model/chimera_model.html#ChimeraModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openjij.model.chimera_model.ChimeraModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>generate ChimeraModel object.
 This model deal with chimera graph.
 ChimeraModel provide methods to verify whether a given interaction graph matches a Chimera graph and to convert it to cxxjij.graph.Chimera.</p>
@@ -219,7 +218,7 @@ ChimeraModel provide methods to verify whether a given interaction graph matches
 
 <dl class="py function">
 <dt id="openjij.model.chimera_model.make_ChimeraModel">
-<code class="sig-prename descclassname">openjij.model.chimera_model.</code><code class="sig-name descname">make_ChimeraModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">linear</span></em>, <em class="sig-param"><span class="n">quadratic</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/model/chimera_model.html#make_ChimeraModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#openjij.model.chimera_model.make_ChimeraModel" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">openjij.model.chimera_model.</span></code><code class="sig-name descname"><span class="pre">make_ChimeraModel</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">linear</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quadratic</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/model/chimera_model.html#make_ChimeraModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openjij.model.chimera_model.make_ChimeraModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>ChimeraModel factory.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -230,7 +229,7 @@ ChimeraModel provide methods to verify whether a given interaction graph matches
 
 <dl class="py function">
 <dt id="openjij.model.chimera_model.make_ChimeraModel_from_JSON">
-<code class="sig-prename descclassname">openjij.model.chimera_model.</code><code class="sig-name descname">make_ChimeraModel_from_JSON</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/model/chimera_model.html#make_ChimeraModel_from_JSON"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#openjij.model.chimera_model.make_ChimeraModel_from_JSON" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">openjij.model.chimera_model.</span></code><code class="sig-name descname"><span class="pre">make_ChimeraModel_from_JSON</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/model/chimera_model.html#make_ChimeraModel_from_JSON"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openjij.model.chimera_model.make_ChimeraModel_from_JSON" title="Permalink to this definition">¶</a></dt>
 <dd><p>make ChimeraModel from JSON.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -240,69 +239,11 @@ ChimeraModel provide methods to verify whether a given interaction graph matches
 </dd></dl>
 
 </div>
-<div class="section" id="module-openjij.model.higher_order_model">
-<span id="openjij-model-higher-order-model-module"></span><h2>openjij.model.higher_order_model module<a class="headerlink" href="#module-openjij.model.higher_order_model" title="Permalink to this headline">¶</a></h2>
-<dl class="py class">
-<dt id="openjij.model.higher_order_model.BinaryHigherOrderModel">
-<em class="property">class </em><code class="sig-prename descclassname">openjij.model.higher_order_model.</code><code class="sig-name descname">BinaryHigherOrderModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">interactions</span><span class="p">:</span> <span class="n">list</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/model/higher_order_model.html#BinaryHigherOrderModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#openjij.model.higher_order_model.BinaryHigherOrderModel" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Higher order model.</p>
-<dl class="py method">
-<dt id="openjij.model.higher_order_model.BinaryHigherOrderModel.adj_dict">
-<code class="sig-name descname">adj_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/model/higher_order_model.html#BinaryHigherOrderModel.adj_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#openjij.model.higher_order_model.BinaryHigherOrderModel.adj_dict" title="Permalink to this definition">¶</a></dt>
-<dd><p>adjacency list of each variables</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>key (variables key), value (list of tuple represents connected indices)</p>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>dict</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="openjij.model.higher_order_model.BinaryHigherOrderModel.calc_energy">
-<code class="sig-name descname">calc_energy</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">state</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/model/higher_order_model.html#BinaryHigherOrderModel.calc_energy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#openjij.model.higher_order_model.BinaryHigherOrderModel.calc_energy" title="Permalink to this definition">¶</a></dt>
-<dd><p>alias of <cite>energy</cite></p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>state</strong> (<em>list of int</em>) – list of SPIN or BINARY</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>energy of state</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>float</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="openjij.model.higher_order_model.BinaryHigherOrderModel.energy">
-<code class="sig-name descname">energy</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">state</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/model/higher_order_model.html#BinaryHigherOrderModel.energy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#openjij.model.higher_order_model.BinaryHigherOrderModel.energy" title="Permalink to this definition">¶</a></dt>
-<dd><p>calculate energy of state</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>state</strong> (<em>list of int</em>) – list of SPIN or BINARY</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>energy of state</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>float</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-</div>
 <div class="section" id="module-openjij.model.king_graph">
 <span id="openjij-model-king-graph-module"></span><h2>openjij.model.king_graph module<a class="headerlink" href="#module-openjij.model.king_graph" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
 <dt id="openjij.model.king_graph.KingGraph">
-<code class="sig-prename descclassname">openjij.model.king_graph.</code><code class="sig-name descname">KingGraph</code><span class="sig-paren">(</span><em class="sig-param">linear=None</em>, <em class="sig-param">quadratic=None</em>, <em class="sig-param">offset=0.0</em>, <em class="sig-param">king_graph=None</em>, <em class="sig-param">var_type=&lt;Vartype.SPIN: frozenset({1</em>, <em class="sig-param">-1})&gt;</em>, <em class="sig-param">machine_type=''</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/model/king_graph.html#KingGraph"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#openjij.model.king_graph.KingGraph" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">openjij.model.king_graph.</span></code><code class="sig-name descname"><span class="pre">KingGraph</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">linear=None</span></em>, <em class="sig-param"><span class="pre">quadratic=None</span></em>, <em class="sig-param"><span class="pre">offset=0.0</span></em>, <em class="sig-param"><span class="pre">king_graph=None</span></em>, <em class="sig-param"><span class="pre">var_type=&lt;Vartype.SPIN:</span> <span class="pre">frozenset({1</span></em>, <em class="sig-param"><span class="pre">-1})&gt;</span></em>, <em class="sig-param"><span class="pre">machine_type=''</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/model/king_graph.html#KingGraph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openjij.model.king_graph.KingGraph" title="Permalink to this definition">¶</a></dt>
 <dd><p>generate KingGraph model.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -341,14 +282,14 @@ Each spins are decided by 2-d corrdinate x, y.</p>
 
 <dl class="py function">
 <dt id="openjij.model.king_graph.make_KingGraph">
-<code class="sig-prename descclassname">openjij.model.king_graph.</code><code class="sig-name descname">make_KingGraph</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">linear</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">quadratic</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">king_graph</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/model/king_graph.html#make_KingGraph"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#openjij.model.king_graph.make_KingGraph" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">openjij.model.king_graph.</span></code><code class="sig-name descname"><span class="pre">make_KingGraph</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">linear</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quadratic</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">king_graph</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/model/king_graph.html#make_KingGraph"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openjij.model.king_graph.make_KingGraph" title="Permalink to this definition">¶</a></dt>
 <dd><p>KingGraph factory
 :returns: generated KingGraph class</p>
 </dd></dl>
 
 <dl class="py function">
 <dt id="openjij.model.king_graph.make_KingGraph_from_JSON">
-<code class="sig-prename descclassname">openjij.model.king_graph.</code><code class="sig-name descname">make_KingGraph_from_JSON</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/model/king_graph.html#make_KingGraph_from_JSON"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#openjij.model.king_graph.make_KingGraph_from_JSON" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">openjij.model.king_graph.</span></code><code class="sig-name descname"><span class="pre">make_KingGraph_from_JSON</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/model/king_graph.html#make_KingGraph_from_JSON"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openjij.model.king_graph.make_KingGraph_from_JSON" title="Permalink to this definition">¶</a></dt>
 <dd><p>KingGraph factory for JSON
 :param obj: JSON object
 :type obj: dict</p>
@@ -377,12 +318,17 @@ Each spins are decided by 2-d corrdinate x, y.</p>
 <div class="line">The methods and usage are basically the same as <a class="reference external" href="https://github.com/dwavesystems/dimod">dimod</a>.</div>
 </div>
 <dl class="py function">
+<dt id="openjij.model.model.BinaryPolynomialModel">
+<code class="sig-prename descclassname"><span class="pre">openjij.model.model.</span></code><code class="sig-name descname"><span class="pre">BinaryPolynomialModel</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">interactions:</span> <span class="pre">dict</span></em>, <em class="sig-param"><span class="pre">var_type=&lt;Vartype.SPIN:</span> <span class="pre">frozenset({1</span></em>, <em class="sig-param"><span class="pre">-1})&gt;</span></em>, <em class="sig-param"><span class="pre">**kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/model/model.html#BinaryPolynomialModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openjij.model.model.BinaryPolynomialModel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
 <dt id="openjij.model.model.BinaryQuadraticModel">
-<code class="sig-prename descclassname">openjij.model.model.</code><code class="sig-name descname">BinaryQuadraticModel</code><span class="sig-paren">(</span><em class="sig-param">linear: dict</em>, <em class="sig-param">quadratic: dict</em>, <em class="sig-param">offset: float = 0.0</em>, <em class="sig-param">var_type=&lt;Vartype.SPIN: frozenset({1</em>, <em class="sig-param">-1})&gt;</em>, <em class="sig-param">gpu: bool = False</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/model/model.html#BinaryQuadraticModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#openjij.model.model.BinaryQuadraticModel" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">openjij.model.model.</span></code><code class="sig-name descname"><span class="pre">BinaryQuadraticModel</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">linear:</span> <span class="pre">dict</span></em>, <em class="sig-param"><span class="pre">quadratic:</span> <span class="pre">dict</span></em>, <em class="sig-param"><span class="pre">offset:</span> <span class="pre">float</span> <span class="pre">=</span> <span class="pre">0.0</span></em>, <em class="sig-param"><span class="pre">var_type=&lt;Vartype.SPIN:</span> <span class="pre">frozenset({1</span></em>, <em class="sig-param"><span class="pre">-1})&gt;</span></em>, <em class="sig-param"><span class="pre">gpu:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></em>, <em class="sig-param"><span class="pre">**kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/model/model.html#BinaryQuadraticModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openjij.model.model.BinaryQuadraticModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>generate BinaryQuadraticModel object.</p>
 <dl class="py attribute">
 <dt id="openjij.model.model.var_type">
-<code class="sig-prename descclassname">openjij.model.model.</code><code class="sig-name descname">var_type</code><a class="headerlink" href="#openjij.model.model.var_type" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">openjij.model.model.</span></code><code class="sig-name descname"><span class="pre">var_type</span></code><a class="headerlink" href="#openjij.model.model.var_type" title="Permalink to this definition">¶</a></dt>
 <dd><p>variable type SPIN or BINARY</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -393,7 +339,7 @@ Each spins are decided by 2-d corrdinate x, y.</p>
 
 <dl class="py attribute">
 <dt id="openjij.model.model.linear">
-<code class="sig-prename descclassname">openjij.model.model.</code><code class="sig-name descname">linear</code><a class="headerlink" href="#openjij.model.model.linear" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">openjij.model.model.</span></code><code class="sig-name descname"><span class="pre">linear</span></code><a class="headerlink" href="#openjij.model.model.linear" title="Permalink to this definition">¶</a></dt>
 <dd><p>represents linear term</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -404,7 +350,7 @@ Each spins are decided by 2-d corrdinate x, y.</p>
 
 <dl class="py attribute">
 <dt id="openjij.model.model.quadratic">
-<code class="sig-prename descclassname">openjij.model.model.</code><code class="sig-name descname">quadratic</code><a class="headerlink" href="#openjij.model.model.quadratic" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">openjij.model.model.</span></code><code class="sig-name descname"><span class="pre">quadratic</span></code><a class="headerlink" href="#openjij.model.model.quadratic" title="Permalink to this definition">¶</a></dt>
 <dd><p>represents quadratic term</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -415,7 +361,7 @@ Each spins are decided by 2-d corrdinate x, y.</p>
 
 <dl class="py attribute">
 <dt id="openjij.model.model.adj">
-<code class="sig-prename descclassname">openjij.model.model.</code><code class="sig-name descname">adj</code><a class="headerlink" href="#openjij.model.model.adj" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">openjij.model.model.</span></code><code class="sig-name descname"><span class="pre">adj</span></code><a class="headerlink" href="#openjij.model.model.adj" title="Permalink to this definition">¶</a></dt>
 <dd><p>represents adjacency</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -426,7 +372,7 @@ Each spins are decided by 2-d corrdinate x, y.</p>
 
 <dl class="py attribute">
 <dt id="openjij.model.model.indices">
-<code class="sig-prename descclassname">openjij.model.model.</code><code class="sig-name descname">indices</code><a class="headerlink" href="#openjij.model.model.indices" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">openjij.model.model.</span></code><code class="sig-name descname"><span class="pre">indices</span></code><a class="headerlink" href="#openjij.model.model.indices" title="Permalink to this definition">¶</a></dt>
 <dd><p>labels of each variables sorted by results variables.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -437,7 +383,7 @@ Each spins are decided by 2-d corrdinate x, y.</p>
 
 <dl class="py attribute">
 <dt id="openjij.model.model.offset">
-<code class="sig-prename descclassname">openjij.model.model.</code><code class="sig-name descname">offset</code><a class="headerlink" href="#openjij.model.model.offset" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">openjij.model.model.</span></code><code class="sig-name descname"><span class="pre">offset</span></code><a class="headerlink" href="#openjij.model.model.offset" title="Permalink to this definition">¶</a></dt>
 <dd><p>represents constant energy term when convert to SPIN from BINARY</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -477,8 +423,18 @@ Each spins are decided by 2-d corrdinate x, y.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt id="openjij.model.model.make_BinaryPolynomialModel">
+<code class="sig-prename descclassname"><span class="pre">openjij.model.model.</span></code><code class="sig-name descname"><span class="pre">make_BinaryPolynomialModel</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interactions</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/model/model.html#make_BinaryPolynomialModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openjij.model.model.make_BinaryPolynomialModel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="openjij.model.model.make_BinaryPolynomialModel_from_JSON">
+<code class="sig-prename descclassname"><span class="pre">openjij.model.model.</span></code><code class="sig-name descname"><span class="pre">make_BinaryPolynomialModel_from_JSON</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/model/model.html#make_BinaryPolynomialModel_from_JSON"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openjij.model.model.make_BinaryPolynomialModel_from_JSON" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
 <dt id="openjij.model.model.make_BinaryQuadraticModel">
-<code class="sig-prename descclassname">openjij.model.model.</code><code class="sig-name descname">make_BinaryQuadraticModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">linear</span><span class="p">:</span> <span class="n">dict</span></em>, <em class="sig-param"><span class="n">quadratic</span><span class="p">:</span> <span class="n">dict</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/model/model.html#make_BinaryQuadraticModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#openjij.model.model.make_BinaryQuadraticModel" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">openjij.model.model.</span></code><code class="sig-name descname"><span class="pre">make_BinaryQuadraticModel</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">linear</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quadratic</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/model/model.html#make_BinaryQuadraticModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openjij.model.model.make_BinaryQuadraticModel" title="Permalink to this definition">¶</a></dt>
 <dd><p>BinaryQuadraticModel factory.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -489,7 +445,7 @@ Each spins are decided by 2-d corrdinate x, y.</p>
 
 <dl class="py function">
 <dt id="openjij.model.model.make_BinaryQuadraticModel_from_JSON">
-<code class="sig-prename descclassname">openjij.model.model.</code><code class="sig-name descname">make_BinaryQuadraticModel_from_JSON</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span><span class="p">:</span> <span class="n">dict</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/model/model.html#make_BinaryQuadraticModel_from_JSON"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#openjij.model.model.make_BinaryQuadraticModel_from_JSON" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname"><span class="pre">openjij.model.model.</span></code><code class="sig-name descname"><span class="pre">make_BinaryQuadraticModel_from_JSON</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/model/model.html#make_BinaryQuadraticModel_from_JSON"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openjij.model.model.make_BinaryQuadraticModel_from_JSON" title="Permalink to this definition">¶</a></dt>
 <dd><p>make BinaryQuadraticModel from JSON.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -555,8 +511,7 @@ Each spins are decided by 2-d corrdinate x, y.</p>
       <script type="text/javascript" src="../_static/jquery.js"></script>
       <script type="text/javascript" src="../_static/underscore.js"></script>
       <script type="text/javascript" src="../_static/doctools.js"></script>
-      <script type="text/javascript" src="../_static/language_data.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

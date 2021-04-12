@@ -44,7 +44,6 @@ openjij.utils.time\_measure module
    :undoc-members:
    :show-inheritance:
 
-
 Module contents
 ---------------
 

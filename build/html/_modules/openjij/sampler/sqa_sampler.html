@@ -447,7 +447,6 @@
     <span class="n">schedule</span> <span class="o">=</span> <span class="n">cxxjij</span><span class="o">.</span><span class="n">utility</span><span class="o">.</span><span class="n">make_transverse_field_schedule_list</span><span class="p">(</span>
         <span class="n">beta</span><span class="o">=</span><span class="n">beta</span><span class="p">,</span> <span class="n">one_mc_step</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_call_updater</span><span class="o">=</span><span class="n">num_sweeps</span>
     <span class="p">)</span>
-    <span class="n">gamma</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="k">return</span> <span class="n">schedule</span><span class="p">,</span> <span class="p">[</span><span class="n">beta</span><span class="p">,</span> <span class="n">gamma</span><span class="p">]</span></div>
 
 <span class="c1">#TODO: more optimal schedule?</span>
@@ -466,7 +465,6 @@
     <span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">num_sweeps</span><span class="p">)</span>
     <span class="n">fs</span> <span class="o">=</span> <span class="n">s</span><span class="o">**</span><span class="mi">4</span><span class="o">*</span><span class="p">(</span><span class="mi">35</span><span class="o">-</span><span class="mi">84</span><span class="o">*</span><span class="n">s</span><span class="o">+</span><span class="mi">70</span><span class="o">*</span><span class="n">s</span><span class="o">**</span><span class="mi">2</span><span class="o">-</span><span class="mi">20</span><span class="o">*</span><span class="n">s</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span>
     <span class="n">schedule</span> <span class="o">=</span> <span class="p">[((</span><span class="n">beta</span><span class="p">,</span> <span class="n">elem</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">fs</span><span class="p">]</span>
-    <span class="n">gamma</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="k">return</span> <span class="n">schedule</span><span class="p">,</span> <span class="p">[</span><span class="n">beta</span><span class="p">,</span> <span class="n">gamma</span><span class="p">]</span></div>
 
 </pre></div>
@@ -512,8 +510,6 @@
       <script type="text/javascript" src="../../../_static/jquery.js"></script>
       <script type="text/javascript" src="../../../_static/underscore.js"></script>
       <script type="text/javascript" src="../../../_static/doctools.js"></script>
-      <script type="text/javascript" src="../../../_static/language_data.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 
