@@ -178,7 +178,7 @@
 <span class="kn">import</span> <span class="nn">openjij</span>
 <span class="kn">import</span> <span class="nn">dimod</span>
 <span class="kn">from</span> <span class="nn">dimod.core.sampler</span> <span class="kn">import</span> <span class="n">samplemixinmethod</span>
-<span class="kn">import</span> <span class="nn">cimod</span>
+<span class="kn">from</span> <span class="nn">cimod.utils</span> <span class="kn">import</span> <span class="n">get_state_and_energy</span>
 
 <span class="kn">import</span> <span class="nn">time</span>
 
@@ -225,7 +225,7 @@
     <span class="k">def</span> <span class="nf">_cxxjij_sampling</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">init_generator</span><span class="p">,</span>
                          <span class="n">algorithm</span><span class="p">,</span> <span class="n">system</span><span class="p">,</span>
                          <span class="n">reinitialize_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                         <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">structure</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+                         <span class="n">seed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Basic sampling function: for cxxjij sampling</span>
 
 <span class="sd">        Args:</span>
@@ -235,7 +235,7 @@
 <span class="sd">            system (:obj:): [description]</span>
 <span class="sd">            reinitialize_state (bool, optional): [description]. Defaults to None.</span>
 <span class="sd">            seed (int, optional): seed for algorithm. Defaults to None.</span>
-<span class="sd">            structure (dict): structure dictionary that must have keys &quot;size&quot; and &quot;dict&quot;</span>
+<span class="sd">            offset (float): an offset which is added to the calculated energy</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            :class:`openjij.sampler.response.Response`: results </span>
@@ -273,25 +273,12 @@
                 <span class="c1"># ex. _sys_info save trotterized quantum state.</span>
                 <span class="n">result_state</span><span class="p">,</span> <span class="n">_sys_info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_result</span><span class="p">(</span><span class="n">system</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
 
-                <span class="c1"># resize result_state if structure is not None.</span>
-                <span class="k">if</span> <span class="n">structure</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">temp_state</span> <span class="o">=</span> <span class="p">{}</span>
-                    <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">indices</span><span class="p">:</span>
-                        <span class="n">temp_state</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span> <span class="o">=</span> <span class="n">result_state</span><span class="p">[</span><span class="n">structure</span><span class="p">[</span><span class="s1">&#39;dict&#39;</span><span class="p">][</span><span class="n">ind</span><span class="p">]]</span>
-
-                    <span class="n">result_state</span> <span class="o">=</span> <span class="n">temp_state</span>
-
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="c1"># no structure</span>
-                    <span class="c1"># replace indices</span>
-                    <span class="n">temp_state</span> <span class="o">=</span> <span class="p">{}</span>
-                    <span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">indices</span><span class="p">)):</span>
-                        <span class="n">temp_state</span><span class="p">[</span><span class="n">model</span><span class="o">.</span><span class="n">indices</span><span class="p">[</span><span class="n">num</span><span class="p">]]</span> <span class="o">=</span> <span class="n">result_state</span><span class="p">[</span><span class="n">num</span><span class="p">]</span>
-                    <span class="n">result_state</span> <span class="o">=</span> <span class="n">temp_state</span>
+                <span class="c1"># convert result_state to cimod style</span>
+                <span class="n">result_state</span><span class="p">,</span> <span class="n">energy</span> <span class="o">=</span> <span class="n">get_state_and_energy</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">result_state</span><span class="p">,</span> <span class="n">offset</span><span class="p">)</span>
 
                 <span class="c1"># store result (state and energy)</span>
                 <span class="n">states</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result_state</span><span class="p">)</span>
-                <span class="n">energies</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">energy</span><span class="p">(</span><span class="n">result_state</span><span class="p">))</span>
+                <span class="n">energies</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">energy</span><span class="p">)</span>
 
                 <span class="k">if</span> <span class="n">_sys_info</span><span class="p">:</span>
                     <span class="n">system_info</span><span class="p">[</span><span class="s1">&#39;system&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">_sys_info</span><span class="p">)</span>
@@ -373,7 +360,7 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            :class:`openjij.sampler.response.Response`: results </span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">bqm</span> <span class="o">=</span> <span class="n">openjij</span><span class="o">.</span><span class="n">BinaryQuadraticModel</span><span class="o">.</span><span class="n">from_ising</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">J</span><span class="p">)</span>
+        <span class="n">bqm</span> <span class="o">=</span> <span class="n">openjij</span><span class="o">.</span><span class="n">BinaryQuadraticModel</span><span class="o">.</span><span class="n">from_ising</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">J</span><span class="p">,</span> <span class="n">sparse</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;sparse&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">))</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">bqm</span><span class="p">,</span> <span class="o">**</span><span class="n">parameters</span><span class="p">)</span></div>
 
 
@@ -387,7 +374,7 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            :class:`openjij.sampler.response.Response`: results </span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">bqm</span> <span class="o">=</span> <span class="n">openjij</span><span class="o">.</span><span class="n">BinaryQuadraticModel</span><span class="o">.</span><span class="n">from_qubo</span><span class="p">(</span><span class="n">Q</span><span class="p">)</span>
+        <span class="n">bqm</span> <span class="o">=</span> <span class="n">openjij</span><span class="o">.</span><span class="n">BinaryQuadraticModel</span><span class="o">.</span><span class="n">from_qubo</span><span class="p">(</span><span class="n">Q</span><span class="p">,</span> <span class="n">sparse</span><span class="o">=</span><span class="n">parameters</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;sparse&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">))</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">bqm</span><span class="p">,</span> <span class="o">**</span><span class="n">parameters</span><span class="p">)</span></div></div>
 
 </pre></div>
@@ -433,8 +420,6 @@
       <script type="text/javascript" src="../../../_static/jquery.js"></script>
       <script type="text/javascript" src="../../../_static/underscore.js"></script>
       <script type="text/javascript" src="../../../_static/doctools.js"></script>
-      <script type="text/javascript" src="../../../_static/language_data.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

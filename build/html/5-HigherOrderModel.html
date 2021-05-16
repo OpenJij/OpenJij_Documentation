@@ -178,13 +178,13 @@
 <span class="c1"># make HUBO</span>
 <span class="n">J</span> <span class="o">=</span> <span class="p">{(</span><span class="mi">0</span><span class="p">,):</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">):</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">):</span> <span class="mi">1</span><span class="p">}</span>
 
-<span class="n">response</span> <span class="o">=</span> <span class="n">sampler</span><span class="o">.</span><span class="n">sample_hubo</span><span class="p">(</span><span class="n">J</span><span class="p">,</span> <span class="n">var_type</span><span class="o">=</span><span class="s2">&quot;SPIN&quot;</span><span class="p">)</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">sampler</span><span class="o">.</span><span class="n">sample_hubo</span><span class="p">(</span><span class="n">J</span><span class="p">,</span> <span class="n">vartype</span><span class="o">=</span><span class="s2">&quot;SPIN&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
 <span class="c1">#    0  1  2 energy num_oc.</span>
 <span class="c1"># 0 +1 +1 -1   -3.0       1</span>
 <span class="c1"># [&#39;SPIN&#39;, 1 rows, 1 samples, 3 variables]</span>
 
-<span class="n">response</span> <span class="o">=</span> <span class="n">sampler</span><span class="o">.</span><span class="n">sample_hubo</span><span class="p">(</span><span class="n">J</span><span class="p">,</span> <span class="n">var_type</span><span class="o">=</span><span class="s2">&quot;BINARY&quot;</span><span class="p">)</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">sampler</span><span class="o">.</span><span class="n">sample_hubo</span><span class="p">(</span><span class="n">J</span><span class="p">,</span> <span class="n">vartype</span><span class="o">=</span><span class="s2">&quot;BINARY&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
 <span class="c1">#    0  1  2 energy num_oc.</span>
 <span class="c1"># 0  1  1  0   -2.0       1</span>

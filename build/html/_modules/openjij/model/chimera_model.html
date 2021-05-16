@@ -194,15 +194,15 @@
 <span class="sd">        &quot;&quot;&quot;</span>
     
         <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">linear</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">quadratic</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                     <span class="n">offset</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">var_type</span><span class="o">=</span><span class="n">openjij</span><span class="o">.</span><span class="n">SPIN</span><span class="p">,</span>
+                     <span class="n">offset</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">vartype</span><span class="o">=</span><span class="n">openjij</span><span class="o">.</span><span class="n">SPIN</span><span class="p">,</span>
                      <span class="n">unit_num_L</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                      <span class="n">gpu</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">gpu</span> <span class="o">=</span> <span class="n">gpu</span>
             <span class="k">if</span> <span class="n">model</span><span class="p">:</span>
                 <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">linear</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">quadratic</span><span class="p">,</span>
-                                 <span class="n">model</span><span class="o">.</span><span class="n">offset</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">var_type</span><span class="p">,</span> <span class="n">gpu</span><span class="o">=</span><span class="n">gpu</span><span class="p">)</span>
+                                 <span class="n">model</span><span class="o">.</span><span class="n">offset</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">vartype</span><span class="p">,</span> <span class="n">gpu</span><span class="o">=</span><span class="n">gpu</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">linear</span><span class="p">,</span> <span class="n">quadratic</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">var_type</span><span class="p">,</span> <span class="n">gpu</span><span class="o">=</span><span class="n">gpu</span><span class="p">)</span>
+                <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">linear</span><span class="p">,</span> <span class="n">quadratic</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">vartype</span><span class="p">,</span> <span class="n">gpu</span><span class="o">=</span><span class="n">gpu</span><span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">unit_num_L</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                     <span class="s1">&#39;Input unit_num_L which is the length of the side of the two-dimensional grid where chimera unit cells are arranged.&#39;</span><span class="p">)</span>
@@ -439,7 +439,7 @@
     <span class="k">return</span> <span class="n">make_ChimeraModel</span><span class="p">(</span><span class="n">mock_linear</span><span class="p">,</span> <span class="p">{})</span></div>
 
 <div class="viewcode-block" id="ChimeraModel"><a class="viewcode-back" href="../../../apis/openjij.model.html#openjij.model.chimera_model.ChimeraModel">[docs]</a><span class="k">def</span> <span class="nf">ChimeraModel</span><span class="p">(</span><span class="n">linear</span><span class="p">:</span> <span class="nb">dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">quadratic</span><span class="p">:</span> <span class="nb">dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">offset</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">var_type</span><span class="o">=</span><span class="n">openjij</span><span class="o">.</span><span class="n">SPIN</span><span class="p">,</span>
+        <span class="n">offset</span><span class="p">:</span> <span class="nb">float</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">vartype</span><span class="o">=</span><span class="n">openjij</span><span class="o">.</span><span class="n">SPIN</span><span class="p">,</span>
         <span class="n">unit_num_L</span><span class="p">:</span> <span class="nb">int</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">gpu</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;generate ChimeraModel object.</span>
@@ -450,7 +450,7 @@
 <span class="sd">        linear (dict): linear biases</span>
 <span class="sd">        quadratic (dict): quadratic biases</span>
 <span class="sd">        offset (float): offset</span>
-<span class="sd">        var_type: vartype (&#39;SPIN&#39; or &#39;BINARY&#39;)</span>
+<span class="sd">        vartype: vartype (&#39;SPIN&#39; or &#39;BINARY&#39;)</span>
 <span class="sd">        unit_num_L (int): unit_num_L</span>
 <span class="sd">        model (BinaryQuadraticModel): if model is not None, the object is initialized by model.</span>
 <span class="sd">        gpu (bool): if true, this can be used for gpu samplers.</span>
@@ -469,7 +469,7 @@
 
     <span class="n">Model</span> <span class="o">=</span> <span class="n">make_ChimeraModel</span><span class="p">(</span><span class="n">linear</span><span class="p">,</span> <span class="n">quadratic</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">Model</span><span class="p">(</span><span class="n">linear</span><span class="p">,</span> <span class="n">quadratic</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">var_type</span><span class="p">,</span> <span class="n">unit_num_L</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">gpu</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">Model</span><span class="p">(</span><span class="n">linear</span><span class="p">,</span> <span class="n">quadratic</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">vartype</span><span class="p">,</span> <span class="n">unit_num_L</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">gpu</span><span class="p">)</span></div>
 
 <span class="c1">#classmethods</span>
 <span class="n">ChimeraModel</span><span class="o">.</span><span class="n">from_qubo</span> <span class="o">=</span> \
@@ -524,8 +524,6 @@
       <script type="text/javascript" src="../../../_static/jquery.js"></script>
       <script type="text/javascript" src="../../../_static/underscore.js"></script>
       <script type="text/javascript" src="../../../_static/doctools.js"></script>
-      <script type="text/javascript" src="../../../_static/language_data.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

@@ -1,24 +1,8 @@
 openjij.sampler package
 =======================
 
-Subpackages
------------
-
-.. toctree::
-   :maxdepth: 2
-
-   openjij.sampler.chimera_gpu
-
 Submodules
 ----------
-
-openjij.sampler.cmos\_annealer module
--------------------------------------
-
-.. automodule:: openjij.sampler.cmos_annealer
-   :members:
-   :undoc-members:
-   :show-inheritance:
 
 openjij.sampler.csqa\_sampler module
 ------------------------------------
