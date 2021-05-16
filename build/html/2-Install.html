@@ -5,7 +5,8 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <title>Install &mdash; OpenJij  documentation</title>
@@ -27,6 +28,10 @@
     <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   
 
+  
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   
 
   
@@ -174,21 +179,21 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="install">
+  <section id="install">
 <h1>Install<a class="headerlink" href="#install" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="pip">
+<section id="pip">
 <h2>pip<a class="headerlink" href="#pip" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ pip install openjij
 </pre></div>
 </div>
 <p>For installation with GPU functions, see the topic below.</p>
-</div>
-<div class="section" id="pip-without-binary">
+</section>
+<section id="pip-without-binary">
 <h2>pip (without binary)<a class="headerlink" href="#pip-without-binary" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="cmake-setup">
+<section id="cmake-setup">
 <h3>CMake setup<a class="headerlink" href="#cmake-setup" title="Permalink to this headline">¶</a></h3>
 <p>OpenJij needs cmake &gt;= 3.12.2</p>
-<div class="section" id="macos">
+<section id="macos">
 <h4>macOS<a class="headerlink" href="#macos" title="Permalink to this headline">¶</a></h4>
 <p>Install newest CMake</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ brew install cmake
@@ -196,8 +201,8 @@ or
 $ pip install cmake
 </pre></div>
 </div>
-</div>
-<div class="section" id="linux-ubuntu">
+</section>
+<section id="linux-ubuntu">
 <h4>Linux (Ubuntu)<a class="headerlink" href="#linux-ubuntu" title="Permalink to this headline">¶</a></h4>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># if you installed old version by apt-get</span>
 $ apt-get purge cmake
@@ -209,38 +214,38 @@ $ <span class="nb">cd</span> cmake-3.13.2
 $ ./bootstrap <span class="o">&amp;&amp;</span> make <span class="o">&amp;&amp;</span> sudo make install 
 </pre></div>
 </div>
-</div>
-</div>
-<div class="section" id="id1">
+</section>
+</section>
+<section id="id1">
 <h3>Install<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ pip install openjij --no-binary :all: 
 </pre></div>
 </div>
 <p>If a CUDA compiler is found during installation, OpenJij will automatically compile for the GPU.</p>
-</div>
-</div>
-<div class="section" id="from-github">
+</section>
+</section>
+<section id="from-github">
 <h2>from Github<a class="headerlink" href="#from-github" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ git clone git@github.com:OpenJij/OpenJij.git
 $ <span class="nb">cd</span> openjij
 $ python setup.py install
 </pre></div>
 </div>
-</div>
-<div class="section" id="note">
+</section>
+<section id="note">
 <h2>Note<a class="headerlink" href="#note" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="windows-enviroment">
+<section id="windows-enviroment">
 <h3>Windows enviroment<a class="headerlink" href="#windows-enviroment" title="Permalink to this headline">¶</a></h3>
 <p>It has been reported that the installation of OpenJij may fail on Windows.
 We recommend using Linux through WSL.</p>
-</div>
-<div class="section" id="report-an-installation-problem">
+</section>
+<section id="report-an-installation-problem">
 <h3>Report an installation problem<a class="headerlink" href="#report-an-installation-problem" title="Permalink to this headline">¶</a></h3>
 <p>Please report the problem to the issue on Github.</p>
 <p><a class="reference external" href="https://github.com/OpenJij/OpenJij/issues">https://github.com/OpenJij/OpenJij/issues</a></p>
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
 
 
            </div>
@@ -290,6 +295,7 @@ We recommend using Linux through WSL.</p>
             SOURCELINK_SUFFIX: '.txt'
         };
     </script>
+      <script type="text/javascript" src="_static/documentation_options.js"></script>
       <script type="text/javascript" src="_static/jquery.js"></script>
       <script type="text/javascript" src="_static/underscore.js"></script>
       <script type="text/javascript" src="_static/doctools.js"></script>

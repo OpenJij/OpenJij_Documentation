@@ -5,7 +5,8 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <title>openjij.utils package &mdash; OpenJij  documentation</title>
@@ -27,6 +28,10 @@
     <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   
 
+  
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   
 
   
@@ -179,16 +184,16 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="openjij-utils-package">
+  <section id="openjij-utils-package">
 <h1>openjij.utils package<a class="headerlink" href="#openjij-utils-package" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="submodules">
+<section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
-</div>
-<div class="section" id="module-openjij.utils.benchmark">
+</section>
+<section id="module-openjij.utils.benchmark">
 <span id="openjij-utils-benchmark-module"></span><h2>openjij.utils.benchmark module<a class="headerlink" href="#module-openjij.utils.benchmark" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
-<dt id="openjij.utils.benchmark.residual_energy">
-<code class="sig-prename descclassname"><span class="pre">openjij.utils.benchmark.</span></code><code class="sig-name descname"><span class="pre">residual_energy</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">response</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_energy</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/utils/benchmark.html#residual_energy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openjij.utils.benchmark.residual_energy" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="openjij.utils.benchmark.residual_energy">
+<span class="sig-prename descclassname"><span class="pre">openjij.utils.benchmark.</span></span><span class="sig-name descname"><span class="pre">residual_energy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">response</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_energy</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/utils/benchmark.html#residual_energy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openjij.utils.benchmark.residual_energy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate redisual energy from measure energy
 :param response: response from solver (or sampler).
 :type response: openjij.Response
@@ -205,8 +210,8 @@
 </dd></dl>
 
 <dl class="py function">
-<dt id="openjij.utils.benchmark.se_lower_tts">
-<code class="sig-prename descclassname"><span class="pre">openjij.utils.benchmark.</span></code><code class="sig-name descname"><span class="pre">se_lower_tts</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">success_prob</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">computation_time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">se_success_prob</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/utils/benchmark.html#se_lower_tts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openjij.utils.benchmark.se_lower_tts" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="openjij.utils.benchmark.se_lower_tts">
+<span class="sig-prename descclassname"><span class="pre">openjij.utils.benchmark.</span></span><span class="sig-name descname"><span class="pre">se_lower_tts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">success_prob</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">computation_time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">se_success_prob</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/utils/benchmark.html#se_lower_tts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openjij.utils.benchmark.se_lower_tts" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -225,8 +230,8 @@
 </dd></dl>
 
 <dl class="py function">
-<dt id="openjij.utils.benchmark.se_residual_energy">
-<code class="sig-prename descclassname"><span class="pre">openjij.utils.benchmark.</span></code><code class="sig-name descname"><span class="pre">se_residual_energy</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">response</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_energy</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/utils/benchmark.html#se_residual_energy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openjij.utils.benchmark.se_residual_energy" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="openjij.utils.benchmark.se_residual_energy">
+<span class="sig-prename descclassname"><span class="pre">openjij.utils.benchmark.</span></span><span class="sig-name descname"><span class="pre">se_residual_energy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">response</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_energy</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/utils/benchmark.html#se_residual_energy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openjij.utils.benchmark.se_residual_energy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate redisual energy’s standard error from measure energy
 :param response: response from solver (or sampler).
 :type response: openjij.Response
@@ -243,8 +248,8 @@
 </dd></dl>
 
 <dl class="py function">
-<dt id="openjij.utils.benchmark.se_success_probability">
-<code class="sig-prename descclassname"><span class="pre">openjij.utils.benchmark.</span></code><code class="sig-name descname"><span class="pre">se_success_probability</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">response</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solutions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_energy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">measure_with_energy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/utils/benchmark.html#se_success_probability"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openjij.utils.benchmark.se_success_probability" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="openjij.utils.benchmark.se_success_probability">
+<span class="sig-prename descclassname"><span class="pre">openjij.utils.benchmark.</span></span><span class="sig-name descname"><span class="pre">se_success_probability</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">response</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solutions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_energy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">measure_with_energy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/utils/benchmark.html#se_success_probability"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openjij.utils.benchmark.se_success_probability" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate success probability’s standard error from openjij.response
 :param response: response from solver (or sampler).
 :type response: openjij.Response
@@ -266,8 +271,8 @@
 </dd></dl>
 
 <dl class="py function">
-<dt id="openjij.utils.benchmark.se_upper_tts">
-<code class="sig-prename descclassname"><span class="pre">openjij.utils.benchmark.</span></code><code class="sig-name descname"><span class="pre">se_upper_tts</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">success_prob</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">computation_time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">se_success_prob</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/utils/benchmark.html#se_upper_tts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openjij.utils.benchmark.se_upper_tts" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="openjij.utils.benchmark.se_upper_tts">
+<span class="sig-prename descclassname"><span class="pre">openjij.utils.benchmark.</span></span><span class="sig-name descname"><span class="pre">se_upper_tts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">success_prob</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">computation_time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">se_success_prob</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/utils/benchmark.html#se_upper_tts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openjij.utils.benchmark.se_upper_tts" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -284,8 +289,8 @@
 </dd></dl>
 
 <dl class="py function">
-<dt id="openjij.utils.benchmark.solver_benchmark">
-<code class="sig-prename descclassname"><span class="pre">openjij.utils.benchmark.</span></code><code class="sig-name descname"><span class="pre">solver_benchmark</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">solver</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solutions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.99</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_energy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">measure_with_energy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'execution_time'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/utils/benchmark.html#solver_benchmark"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openjij.utils.benchmark.solver_benchmark" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="openjij.utils.benchmark.solver_benchmark">
+<span class="sig-prename descclassname"><span class="pre">openjij.utils.benchmark.</span></span><span class="sig-name descname"><span class="pre">solver_benchmark</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">solver</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solutions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.99</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_energy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">measure_with_energy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'execution_time'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/utils/benchmark.html#solver_benchmark"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openjij.utils.benchmark.solver_benchmark" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate ‘success probability’, ‘TTS’, ‘Residual energy’,’Standard Error’ with computation time
 :param solver: returns openjij.Response, and solver has arguments ‘time’ and ‘<a href="#id1"><span class="problematic" id="id2">**</span></a>args’
 :type solver: callable
@@ -324,8 +329,8 @@
 </dd></dl>
 
 <dl class="py function">
-<dt id="openjij.utils.benchmark.success_probability">
-<code class="sig-prename descclassname"><span class="pre">openjij.utils.benchmark.</span></code><code class="sig-name descname"><span class="pre">success_probability</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">response</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solutions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_energy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">measure_with_energy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/utils/benchmark.html#success_probability"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openjij.utils.benchmark.success_probability" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="openjij.utils.benchmark.success_probability">
+<span class="sig-prename descclassname"><span class="pre">openjij.utils.benchmark.</span></span><span class="sig-name descname"><span class="pre">success_probability</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">response</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solutions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_energy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">measure_with_energy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/utils/benchmark.html#success_probability"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openjij.utils.benchmark.success_probability" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate success probability from openjij.response
 :param response: response from solver (or sampler).
 :type response: openjij.Response
@@ -347,8 +352,8 @@
 </dd></dl>
 
 <dl class="py function">
-<dt id="openjij.utils.benchmark.time_to_solution">
-<code class="sig-prename descclassname"><span class="pre">openjij.utils.benchmark.</span></code><code class="sig-name descname"><span class="pre">time_to_solution</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">success_prob</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">computation_time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_r</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/utils/benchmark.html#time_to_solution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openjij.utils.benchmark.time_to_solution" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="openjij.utils.benchmark.time_to_solution">
+<span class="sig-prename descclassname"><span class="pre">openjij.utils.benchmark.</span></span><span class="sig-name descname"><span class="pre">time_to_solution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">success_prob</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">computation_time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p_r</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/utils/benchmark.html#time_to_solution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openjij.utils.benchmark.time_to_solution" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -366,30 +371,30 @@
 </dl>
 </dd></dl>
 
-</div>
-<div class="section" id="module-openjij.utils.decorator">
+</section>
+<section id="module-openjij.utils.decorator">
 <span id="openjij-utils-decorator-module"></span><h2>openjij.utils.decorator module<a class="headerlink" href="#module-openjij.utils.decorator" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
-<dt id="openjij.utils.decorator.deprecated_alias">
-<code class="sig-prename descclassname"><span class="pre">openjij.utils.decorator.</span></code><code class="sig-name descname"><span class="pre">deprecated_alias</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">aliases</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/utils/decorator.html#deprecated_alias"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openjij.utils.decorator.deprecated_alias" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="openjij.utils.decorator.deprecated_alias">
+<span class="sig-prename descclassname"><span class="pre">openjij.utils.decorator.</span></span><span class="sig-name descname"><span class="pre">deprecated_alias</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">aliases</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/utils/decorator.html#deprecated_alias"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openjij.utils.decorator.deprecated_alias" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
-<dt id="openjij.utils.decorator.disabled">
-<code class="sig-prename descclassname"><span class="pre">openjij.utils.decorator.</span></code><code class="sig-name descname"><span class="pre">disabled</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/utils/decorator.html#disabled"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openjij.utils.decorator.disabled" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="openjij.utils.decorator.disabled">
+<span class="sig-prename descclassname"><span class="pre">openjij.utils.decorator.</span></span><span class="sig-name descname"><span class="pre">disabled</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/utils/decorator.html#disabled"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openjij.utils.decorator.disabled" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
-<dt id="openjij.utils.decorator.rename_kwargs">
-<code class="sig-prename descclassname"><span class="pre">openjij.utils.decorator.</span></code><code class="sig-name descname"><span class="pre">rename_kwargs</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kwargs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aliases</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/utils/decorator.html#rename_kwargs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openjij.utils.decorator.rename_kwargs" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="openjij.utils.decorator.rename_kwargs">
+<span class="sig-prename descclassname"><span class="pre">openjij.utils.decorator.</span></span><span class="sig-name descname"><span class="pre">rename_kwargs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kwargs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aliases</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/utils/decorator.html#rename_kwargs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openjij.utils.decorator.rename_kwargs" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-</div>
-<div class="section" id="module-openjij.utils.graph_utils">
+</section>
+<section id="module-openjij.utils.graph_utils">
 <span id="openjij-utils-graph-utils-module"></span><h2>openjij.utils.graph_utils module<a class="headerlink" href="#module-openjij.utils.graph_utils" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
-<dt id="openjij.utils.graph_utils.chimera_to_ind">
-<code class="sig-prename descclassname"><span class="pre">openjij.utils.graph_utils.</span></code><code class="sig-name descname"><span class="pre">chimera_to_ind</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">L</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/utils/graph_utils.html#chimera_to_ind"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openjij.utils.graph_utils.chimera_to_ind" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="openjij.utils.graph_utils.chimera_to_ind">
+<span class="sig-prename descclassname"><span class="pre">openjij.utils.graph_utils.</span></span><span class="sig-name descname"><span class="pre">chimera_to_ind</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">L</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/utils/graph_utils.html#chimera_to_ind"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openjij.utils.graph_utils.chimera_to_ind" title="Permalink to this definition">¶</a></dt>
 <dd><p>[summary]</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -413,8 +418,8 @@
 </dd></dl>
 
 <dl class="py function">
-<dt id="openjij.utils.graph_utils.qubo_to_ising">
-<code class="sig-prename descclassname"><span class="pre">openjij.utils.graph_utils.</span></code><code class="sig-name descname"><span class="pre">qubo_to_ising</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mat</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/utils/graph_utils.html#qubo_to_ising"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openjij.utils.graph_utils.qubo_to_ising" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="openjij.utils.graph_utils.qubo_to_ising">
+<span class="sig-prename descclassname"><span class="pre">openjij.utils.graph_utils.</span></span><span class="sig-name descname"><span class="pre">qubo_to_ising</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mat</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/utils/graph_utils.html#qubo_to_ising"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openjij.utils.graph_utils.qubo_to_ising" title="Permalink to this definition">¶</a></dt>
 <dd><p>inplace-convert numpy matrix from qubo to ising.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -423,22 +428,22 @@
 </dl>
 </dd></dl>
 
-</div>
-<div class="section" id="module-openjij.utils.res_convertor">
+</section>
+<section id="module-openjij.utils.res_convertor">
 <span id="openjij-utils-res-convertor-module"></span><h2>openjij.utils.res_convertor module<a class="headerlink" href="#module-openjij.utils.res_convertor" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
-<dt id="openjij.utils.res_convertor.convert_response">
-<code class="sig-prename descclassname"><span class="pre">openjij.utils.res_convertor.</span></code><code class="sig-name descname"><span class="pre">convert_response</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">response</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/utils/res_convertor.html#convert_response"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openjij.utils.res_convertor.convert_response" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="openjij.utils.res_convertor.convert_response">
+<span class="sig-prename descclassname"><span class="pre">openjij.utils.res_convertor.</span></span><span class="sig-name descname"><span class="pre">convert_response</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">response</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/openjij/utils/res_convertor.html#convert_response"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#openjij.utils.res_convertor.convert_response" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-</div>
-<div class="section" id="module-openjij.utils.time_measure">
+</section>
+<section id="module-openjij.utils.time_measure">
 <span id="openjij-utils-time-measure-module"></span><h2>openjij.utils.time_measure module<a class="headerlink" href="#module-openjij.utils.time_measure" title="Permalink to this headline">¶</a></h2>
-</div>
-<div class="section" id="module-openjij.utils">
+</section>
+<section id="module-openjij.utils">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-openjij.utils" title="Permalink to this headline">¶</a></h2>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
@@ -488,10 +493,11 @@
             SOURCELINK_SUFFIX: '.txt'
         };
     </script>
+      <script type="text/javascript" src="../_static/documentation_options.js"></script>
       <script type="text/javascript" src="../_static/jquery.js"></script>
       <script type="text/javascript" src="../_static/underscore.js"></script>
       <script type="text/javascript" src="../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
   
 
