@@ -177,13 +177,13 @@
 
 <span class="n">Vartype</span> <span class="o">=</span> <span class="n">dimod</span><span class="o">.</span><span class="n">Vartype</span>
 
-<div class="viewcode-block" id="cast_var_type"><a class="viewcode-back" href="../../apis/openjij.html#openjij.variable_type.cast_var_type">[docs]</a><span class="k">def</span> <span class="nf">cast_var_type</span><span class="p">(</span><span class="n">var_type</span><span class="p">):</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">var_type</span><span class="p">,</span> <span class="n">dimod</span><span class="o">.</span><span class="n">Vartype</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">var_type</span>
-    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">var_type</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">var_type</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;SPIN&#39;</span><span class="p">:</span>
+<div class="viewcode-block" id="cast_vartype"><a class="viewcode-back" href="../../apis/openjij.html#openjij.variable_type.cast_vartype">[docs]</a><span class="k">def</span> <span class="nf">cast_vartype</span><span class="p">(</span><span class="n">vartype</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">vartype</span><span class="p">,</span> <span class="n">dimod</span><span class="o">.</span><span class="n">Vartype</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">vartype</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">vartype</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">vartype</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;SPIN&#39;</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">SPIN</span>
-        <span class="k">elif</span> <span class="n">var_type</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;BINARY&#39;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">vartype</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;BINARY&#39;</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">BINARY</span></div>
 </pre></div>
 
@@ -228,8 +228,6 @@
       <script type="text/javascript" src="../../_static/jquery.js"></script>
       <script type="text/javascript" src="../../_static/underscore.js"></script>
       <script type="text/javascript" src="../../_static/doctools.js"></script>
-      <script type="text/javascript" src="../../_static/language_data.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
   
 

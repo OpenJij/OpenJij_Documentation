@@ -20,13 +20,13 @@ sampler = oj.SASampler()
 # make HUBO
 J = {(0,): -1, (0,1): -1, (0,1,2): 1}
 
-response = sampler.sample_hubo(J, var_type="SPIN")
+response = sampler.sample_hubo(J, vartype="SPIN")
 print(response)
 #    0  1  2 energy num_oc.
 # 0 +1 +1 -1   -3.0       1
 # ['SPIN', 1 rows, 1 samples, 3 variables]
 
-response = sampler.sample_hubo(J, var_type="BINARY")
+response = sampler.sample_hubo(J, vartype="BINARY")
 print(response)
 #    0  1  2 energy num_oc.
 # 0  1  1  0   -2.0       1
