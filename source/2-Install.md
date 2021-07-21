@@ -12,8 +12,12 @@ For installation with GPU functions, see the topic below.
 
 ### CMake setup
 
-OpenJij needs cmake >= 3.12.2
-
+OpenJij needs cmake >= 3.17  
+If you want to use setup.py instead of PIP, You will need to install CMake>=3.17.  
+We are Highly recommended install CMake via PYPI.  
+```shell
+$ pip install -U cmake
+```
 #### macOS
 Install newest CMake
 ```shell
@@ -49,7 +53,7 @@ If a CUDA compiler is found during installation, OpenJij will automatically comp
 ```shell
 $ git clone git@github.com:OpenJij/OpenJij.git
 $ cd openjij
-$ python setup.py install
+$ python -m pip install .
 ```
 
 ## Note
