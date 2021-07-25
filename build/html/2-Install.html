@@ -192,7 +192,10 @@
 <h2>pip (without binary)<a class="headerlink" href="#pip-without-binary" title="Permalink to this headline">¶</a></h2>
 <section id="cmake-setup">
 <h3>CMake setup<a class="headerlink" href="#cmake-setup" title="Permalink to this headline">¶</a></h3>
-<p>OpenJij needs cmake &gt;= 3.12.2</p>
+<p>OpenJij needs cmake &gt;= 3.17<br />If you want to use setup.py instead of PIP, You will need to install CMake&gt;=3.17.<br />We are Highly recommended install CMake via PYPI.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ pip install -U cmake
+</pre></div>
+</div>
 <section id="macos">
 <h4>macOS<a class="headerlink" href="#macos" title="Permalink to this headline">¶</a></h4>
 <p>Install newest CMake</p>
@@ -228,7 +231,7 @@ $ ./bootstrap <span class="o">&amp;&amp;</span> make <span class="o">&amp;&amp;<
 <h2>from Github<a class="headerlink" href="#from-github" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ git clone git@github.com:OpenJij/OpenJij.git
 $ <span class="nb">cd</span> openjij
-$ python setup.py install
+$ python -m pip install .
 </pre></div>
 </div>
 </section>

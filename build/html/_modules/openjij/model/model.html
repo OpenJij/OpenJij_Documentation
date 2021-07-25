@@ -160,7 +160,7 @@
            <div itemprop="articleBody">
             
   <h1>Source code for openjij.model.model</h1><div class="highlight"><pre>
-<span></span><span class="c1"># Copyright 2019 Jij Inc.</span>
+<span></span><span class="c1"># Copyright 2021 Jij Inc.</span>
 
 <span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
 <span class="c1"># you may not use this file except in compliance with the License.</span>
@@ -339,22 +339,43 @@
 
     <span class="n">Model</span> <span class="o">=</span> <span class="n">make_BinaryQuadraticModel</span><span class="p">(</span><span class="n">linear</span><span class="p">,</span> <span class="n">quadratic</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;sparse&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">))</span>
 
-    <span class="c1"># offset and vartype</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="p">[</span><span class="n">offset</span><span class="p">,</span> <span class="n">vartype</span><span class="p">]</span> <span class="o">=</span> <span class="n">args</span>
-        <span class="k">return</span> <span class="n">Model</span><span class="p">(</span><span class="n">linear</span><span class="p">,</span> <span class="n">quadratic</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">vartype</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="s1">&#39;vartype&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
-        <span class="p">[</span><span class="n">offset</span><span class="p">]</span> <span class="o">=</span> <span class="n">args</span>
-        <span class="n">vartype</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;vartype&#39;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">Model</span><span class="p">(</span><span class="n">linear</span><span class="p">,</span> <span class="n">quadratic</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">vartype</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="p">[</span><span class="n">vartype</span><span class="p">]</span> <span class="o">=</span> <span class="n">args</span>
-        <span class="k">return</span> <span class="n">Model</span><span class="p">(</span><span class="n">linear</span><span class="p">,</span> <span class="n">quadratic</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">vartype</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="s1">&#39;vartype&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
-        <span class="n">vartype</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;vartype&#39;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">Model</span><span class="p">(</span><span class="n">linear</span><span class="p">,</span> <span class="n">quadratic</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">vartype</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Offset or vartype is configured incorrectly, offset must not be a keyword variable and vartype must be set.&quot;</span><span class="p">)</span></div>
+    <span class="k">def</span> <span class="nf">__extract_offset_and_vartype</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">kwargs</span> <span class="o">==</span> <span class="p">{}:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Offset or vartype is configured incorrectly. Vartype must be set.&quot;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">offset</span> <span class="o">=</span> <span class="mf">0.0</span>
+                <span class="p">[</span><span class="n">vartype</span><span class="p">]</span> <span class="o">=</span> <span class="n">args</span>
+            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="p">[</span><span class="n">offset</span><span class="p">,</span> <span class="n">vartype</span><span class="p">]</span> <span class="o">=</span> <span class="n">args</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Offset or vartype is configured incorrectly. Vartype must be set.&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s1">&#39;offset&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span> <span class="ow">and</span> <span class="s1">&#39;vartype&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                <span class="n">offset</span>  <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;offset&#39;</span><span class="p">]</span>
+                <span class="n">vartype</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;vartype&#39;</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="s1">&#39;offset&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Offset or vartype is configured incorrectly. Vartype must be set.&quot;</span><span class="p">)</span>
+                <span class="n">offset</span>  <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;offset&#39;</span><span class="p">]</span>
+                <span class="p">[</span><span class="n">vartype</span><span class="p">]</span> <span class="o">=</span> <span class="n">args</span>
+            <span class="k">elif</span> <span class="s1">&#39;vartype&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Offset or vartype is configured incorrectly. Vartype must be set.&quot;</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">offset</span> <span class="o">=</span> <span class="mf">0.0</span>
+                <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="p">[</span><span class="n">offset</span><span class="p">]</span> <span class="o">=</span> <span class="n">args</span>
+                <span class="n">vartype</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;vartype&#39;</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Offset or vartype is configured incorrectly. Vartype must be set.&quot;</span><span class="p">)</span>
+                
+        <span class="k">return</span> <span class="n">offset</span><span class="p">,</span><span class="n">vartype</span>
+
+    <span class="n">offset</span><span class="p">,</span> <span class="n">vartype</span> <span class="o">=</span> <span class="n">__extract_offset_and_vartype</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">Model</span><span class="p">(</span><span class="n">linear</span><span class="p">,</span> <span class="n">quadratic</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">vartype</span><span class="p">)</span></div>
+
 
 
 <span class="c1">#classmethods</span>
