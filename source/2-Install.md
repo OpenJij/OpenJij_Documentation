@@ -18,31 +18,12 @@ We are Highly recommended install CMake via PYPI.
 ```shell
 $ pip install -U cmake
 ```
-#### macOS
-Install newest CMake
-```shell
-$ brew install cmake
-or
-$ pip install cmake
-```
 
-#### Linux (Ubuntu)
-
-```shell
-# if you installed old version by apt-get
-$ apt-get purge cmake
-
-# install cmake 
-$ wget https://cmake.org/files/v3.13/cmake-3.13.2.tar.gz
-$ tar xvf cmake-3.13.2.tar.gz
-$ cd cmake-3.13.2
-$ ./bootstrap && make && sudo make install 
-```
 
 ### Install
 
 ```shell
-$ pip install openjij --no-binary :all: 
+$ pip install --no-binary=openjij openjij 
 ```
 
 If a CUDA compiler is found during installation, OpenJij will automatically compile for the GPU.
@@ -53,7 +34,7 @@ If a CUDA compiler is found during installation, OpenJij will automatically comp
 ```shell
 $ git clone git@github.com:OpenJij/OpenJij.git
 $ cd openjij
-$ python -m pip install .
+$ python -m pip install -vvv .
 ```
 
 ## Note
