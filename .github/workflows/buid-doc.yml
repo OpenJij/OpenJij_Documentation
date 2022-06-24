@@ -68,6 +68,8 @@ jobs:
       - name: Sphinx
         shell: bash
         run: |
+          set -eux 
+          sphinx-apidoc --help
           sphinx-apidoc -f -o ./source/apis ./OpenJij-*/openjij -d 2
       - name: Make
         shell: bash
