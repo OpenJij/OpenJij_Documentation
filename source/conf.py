@@ -21,7 +21,7 @@ sys.path.insert(0, os.path.abspath('../OpenJij'))
 # -- Project information -----------------------------------------------------
 
 project = 'OpenJij'
-copyright = '2019, Jij Inc.'
+copyright = '2022, Jij Inc.'
 author = 'Jij Inc.'
 
 
@@ -38,6 +38,7 @@ extensions = [
     'sphinx.ext.doctest',
     'sphinx.ext.mathjax',
     'sphinx.ext.viewcode',
+    'sphinx_gitstamp'
 ]
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -90,6 +91,8 @@ source_suffix = {
 
 github_doc_root = 'https://github.com/rtfd/recommonmark/tree/master/doc/'
 
+# Date format for git timestamps
+gitstamp_fmt = "%b %d, %Y"
 
 def setup(app):
     app.add_config_value('recommonmark_config', {
