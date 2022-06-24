@@ -25,7 +25,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Tar 
         run: |
-          find ./ -iname *.tar.gz | xargs -zxvf
+          find ./ -iname *.tar.gz | xargs tar -zxvf
       - name: du -a
         shell: bash
         run: du -a
