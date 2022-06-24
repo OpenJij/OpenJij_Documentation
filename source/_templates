@@ -1,1 +1,0 @@
-{%- if gitstamp %} This page was last updated on {{ gitstamp }}. {%- endif %}
