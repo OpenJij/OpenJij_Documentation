@@ -32,7 +32,6 @@ jobs:
         shell: bash
         run: |
           pip install pip-tools 
-          pip-compile
           pip-compile doc-requirements.in
       - name: pip cache
         uses: actions/cache@v3
