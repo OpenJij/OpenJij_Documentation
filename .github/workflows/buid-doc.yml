@@ -23,6 +23,9 @@ jobs:
           gh release download --repo OpenJij/OpenJij --archive=tar.gz
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Tar 
+        run: |
+          find ./ -iname *.tar.gz | xargs -zxvf
       - name: du -a
         shell: bash
         run: du -a
