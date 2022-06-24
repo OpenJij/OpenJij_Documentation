@@ -1,0 +1,22 @@
+-c requirements.txt
+
+# Dependency 
+jij-cimod 
+dimod
+scipy
+
+# Documentation 
+Sphinx 
+recommonmark 
+furo
+sphinx-rtd-theme 
+numpydoc
+sphinx-autodoc-typehints
+sphinx-gitstamp
+
+mkdocs[i18n]
+mkdocs-material 
+mkdocs-rtd-dropdown
+mkdocstrings[python]
+mkdocs-git-revision-date-localized-plugin
+mkdocs-static-i18n
