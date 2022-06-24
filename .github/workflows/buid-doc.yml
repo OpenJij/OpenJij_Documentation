@@ -43,44 +43,31 @@ jobs:
            path: ${{ steps.pip-cache.outputs.dir }}
            key: ${{ runner.os }}-pip-${{ hashFiles('/tmp/python_version.txt') }}-${{ hashFiles('requirements.txt') }}-${{ hashFiles('doc-requirements.txt') }}
            restore-keys: |
-              ${{ runner.os }}-pip-
+              ${{ runner.os }}-pip-${{ hashFiles('/tmp/python_version.txt') }}-${{ hashFiles('requirements.txt') }}-${{ hashFiles('doc-requirements.txt') }}
+              ${{ runner.os }}-pip-${{ hashFiles('/tmp/python_version.txt') }}-${{ hashFiles('requirements.txt') }}
+              ${{ runner.os }}-pip-${{ hashFiles('/tmp/python_version.txt') }}
       - name: Update
         run: | 
-         pip install --upgrade pip wheel setuptools build cmake ninja 
+         pip install --upgrade pip wheel setuptools 
       - name: Install Dependencies
         shell: bash
         run: |
           set -eux
-          pip-sync requirements.txt dev-requirements.txt
-      - name: Install Dep
+          pip-sync requirements.txt doc-requirements.txt
+      - name: Get Openjij Source
         run: | 
-         pip install typing-extensions
-         sudo apt-get install -y libeigen3-dev lcov graphviz mscgen dia pdf2svg astyle
-         sudo apt-get install -y doxygen doxygen-doxyparse fonts-liberation python3-breathe
-      - name: Prepare 
+          gh release download --repo OpenJij/OpenJij
+      - name: du -a
         shell: bash
-        run: mkdir build
-      - name: CMake Configure
-        shell: bash
-        run: >
-          cmake 
-          -DBUILD_DOCS=ON
-          -G Ninja
-          -S .
-          -B build
-      - name: CMake Build
-        shell: bash
-        run: >
-          cmake  
-          --build build
-          --parallel
-          --verbose
-          --target cxxjij_header_only_docs
-      - name: Copy Doc
+        run: du -a
+      - name: Sphinx
         shell: bash
         run: |
-          set -eux
-          cp -r ./build/html/* ./public/
+          python -m sphinx-apidoc -f -o ./source/apis ./OpenJij/openjij -d 2
+      - name: Make
+        shell: bash
+        run: |
+          make html
       - name: du -a 
         shell: bash
         if: always()
@@ -94,7 +81,7 @@ jobs:
           echo "::set-output name=tag_name::${TAG_NAME}"
           echo "::set-output name=deploy_tag_name::deploy-${TAG_NAME}"
       - name: Deploy
-        #if: ${{github.event_name == 'release'}}
+        if: ${{github.event_name == 'release'}}
         uses: peaceiris/actions-gh-pages@v3
         with:
          github_token: ${{ secrets.GITHUB_TOKEN }}
