@@ -93,7 +93,7 @@ source_suffix = {
 github_doc_root = 'https://github.com/rtfd/recommonmark/tree/master/doc/'
 
 # Date format for git timestamps
-gitstamp_fmt = "%b %d, %Y"
+#gitstamp_fmt = "%b %d, %Y"
 
 def setup(app):
     app.add_config_value('recommonmark_config', {
