@@ -68,7 +68,7 @@ jobs:
       - name: Sphinx
         shell: bash
         run: |
-          python -m sphinx-apidoc -f -o ./source/apis ./OpenJij/openjij -d 2
+          sphinx-apidoc -f -o ./source/apis ./OpenJij-*/openjij -d 2
       - name: Make
         shell: bash
         run: |
