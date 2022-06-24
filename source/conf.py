@@ -12,10 +12,10 @@
 #
 from recommonmark.transform import AutoStructify
 from recommonmark.parser import CommonMarkParser
-import sphinx_theme
+#import sphinx_theme
 import os
 import sys
-sys.path.insert(0, os.path.abspath('../OpenJij'))
+sys.path.insert(0, os.path.abspath("../OpenJij-*"))
 
 
 # -- Project information -----------------------------------------------------
@@ -77,8 +77,8 @@ html_static_path = ['_static']
 #
 # html_sidebars = {}
 # ---sphinx-themes-----
-html_theme = 'neo_rtd_theme'
-html_theme_path = [sphinx_theme.get_html_theme_path('neo-rtd-theme')]
+html_theme = 'furo'
+#html_theme_path = [sphinx_theme.get_html_theme_path('neo-rtd-theme')]
 
 
 # -- for Markdown ----------------------------------------
